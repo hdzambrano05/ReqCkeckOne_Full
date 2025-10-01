@@ -3,8 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   standalone: false,
   selector: 'app-home',
-  template: `<div class="container mt-4"><h3>Bienvenido</h3><p>Zona segura</p></div>`
+  templateUrl: './home.html',
+  styleUrls: ['./home.css']
 })
-export class Home {
-
-}
+export class Home {}  // ya no necesitamos AuthService ni Router

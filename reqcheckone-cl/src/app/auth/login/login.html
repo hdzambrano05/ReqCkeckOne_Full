@@ -1,42 +1,61 @@
-<div class="row justify-content-center">
-  <div class="col-md-4">
-    <h3>Iniciar Sesión</h3>
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <div class="mb-3">
-        <input
-          type="text"
-          formControlName="username"
-          class="form-control"
-          placeholder="Usuario o Email"
-        />
-        <div
-          *ngIf="form.get('username')?.touched && form.get('username')?.invalid"
-          class="text-danger"
-        >
-          Usuario o Email requerido
+<div class="d-flex align-items-center justify-content-center vh-100 bg-gradient">
+  <div class="card shadow-lg border-0 rounded-4 auth-card">
+    <div class="card-body p-5">
+
+      <!-- Logo / Marca -->
+      <div class="text-center mb-4">
+        <div class="logo-circle mx-auto mb-2">
+          <span class="logo-text">JH</span>
         </div>
+        <h2 class="fw-bold text-dark">MiApp</h2>
+        <p class="text-muted">Ingresa tus credenciales para continuar</p>
       </div>
 
-      <div class="mb-3">
-        <input
-          type="password"
-          formControlName="password"
-          class="form-control"
-          placeholder="Contraseña"
-        />
-        <div
-          *ngIf="form.get('password')?.touched && form.get('password')?.invalid"
-          class="text-danger"
-        >
-          Contraseña requerida (mínimo 6 caracteres)
+      <!-- Formulario -->
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            formControlName="username"
+            class="form-control stylish-input"
+            id="username"
+            placeholder="Usuario o Email"
+          />
+          <label for="username">Usuario o Email</label>
         </div>
+
+        <div class="form-floating mb-3 position-relative">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            class="form-control stylish-input pe-5"
+            id="password"
+            placeholder="Contraseña"
+          />
+          <label for="password">Contraseña</label>
+
+          <!-- Botón para mostrar/ocultar -->
+          <button
+            type="button"
+            class="btn btn-sm toggle-password"
+            (click)="showPassword = !showPassword">
+            <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+          </button>
+        </div>
+
+        <button
+          class="btn btn-primary w-100 stylish-btn py-2"
+          [disabled]="form.invalid || loading">
+          {{ loading ? 'Entrando...' : 'Entrar' }}
+        </button>
+      </form>
+
+      <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
+
+      <div class="text-center mt-4">
+        <span class="text-muted">¿No tienes cuenta?</span>
+        <a [routerLink]="['/register']" class="fw-bold text-primary ms-1">Regístrate aquí</a>
       </div>
-
-      <button class="btn btn-primary w-100" [disabled]="form.invalid || loading">
-        {{ loading ? 'Entrando...' : 'Entrar' }}
-      </button>
-    </form>
-
-    <div *ngIf="error" class="alert alert-danger mt-2">{{ error }}</div>
+    </div>
   </div>
 </div>

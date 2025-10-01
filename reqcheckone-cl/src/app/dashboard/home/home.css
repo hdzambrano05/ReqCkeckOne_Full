@@ -1,0 +1,62 @@
+/* Efecto glass en tarjetas */
+.glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border-radius: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover de las tarjetas */
+.card-hover:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Iconos circulares con gradiente animado */
+.icon-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    font-size: 2rem;
+    color: #fff;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.icon-wrapper:hover {
+    transform: scale(1.3);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Gradientes de los iconos */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+}
+
+.bg-gradient-success {
+    background: linear-gradient(135deg, #28a745, #85e085);
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(135deg, #ffc107, #ffd966);
+}
+
+/* Títulos y texto */
+.card-title {
+    font-size: 1.4rem;
+    margin-top: 0.5rem;
+    color: #333;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #6c757d;
+}
+
+/* Gráficos */
+canvas {
+    width: 100% !important;
+    height: auto !important;
+}

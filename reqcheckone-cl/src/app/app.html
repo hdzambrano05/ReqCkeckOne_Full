@@ -1,1 +1,16 @@
-<router-outlet></router-outlet>
+<div class="layout">
+  <!-- Sidebar solo si hay sesión -->
+  <app-sidebar
+    *ngIf="authService.isLoggedIn()"
+    [(isSidebarOpen)]="isSidebarOpen"
+  ></app-sidebar>
+
+  <!-- Contenido -->
+  <main
+    class="content"
+    [class.collapsed]="authService.isLoggedIn() && !isSidebarOpen"
+    [class.full]="!authService.isLoggedIn()"
+  >
+    <router-outlet></router-outlet>
+  </main>
+</div>

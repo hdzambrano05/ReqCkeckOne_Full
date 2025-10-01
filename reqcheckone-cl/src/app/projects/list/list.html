@@ -1,0 +1,23 @@
+<div class="header">
+  <h2>Mis Proyectos</h2>
+  <button class="btn-create" (click)="createProject()">Crear Proyecto</button>
+</div>
+
+<div *ngIf="loading" class="status-message loading">Cargando proyectos...</div>
+<div *ngIf="error" class="status-message error">{{ error }}</div>
+
+<div class="projects-list" *ngIf="!loading && !error">
+  <div *ngFor="let project of projects" class="project-card">
+    <h3>{{ project.name }}</h3>
+    <p class="description">{{ project.description }}</p>
+    <p class="status" *ngIf="project.status"><strong>Estado:</strong> {{ project.status }}</p>
+    <p class="deadline" *ngIf="project.deadline">
+      <strong>Fecha límite:</strong> {{ project.deadline }}
+    </p>
+    <button class="btn-details" (click)="viewProject(project.id)">Ver Detalles</button>
+  </div>
+</div>
+
+<div *ngIf="!loading && !error && projects.length === 0" class="status-message empty">
+  No tienes proyectos registrados.
+</div>

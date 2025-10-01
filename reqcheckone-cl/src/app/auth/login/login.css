@@ -1,0 +1,113 @@
+/* Fondo degradado animado */
+.bg-gradient {
+    background: linear-gradient(-45deg, #4e54c8, #8f94fb, #6dd5ed, #2193b0);
+    background-size: 400% 400%;
+    animation: gradientBG 12s ease infinite;
+}
+
+/* Card estilo moderno */
+.auth-card {
+    background: #ffffffcc;
+    backdrop-filter: blur(14px);
+    color: #000;
+    max-width: 420px;
+    width: 100%;
+    border-radius: 1rem;
+}
+
+/* Logo circular animado con JH */
+.logo-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffda79, #ff6b6b);
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 15px rgba(255, 107, 107, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* Texto JH centrado */
+.logo-text {
+    color: white;
+    font-size: 1.5rem;
+    user-select: none;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Inputs modernos */
+.stylish-input {
+    background: rgba(255, 255, 255, 0.7);
+    color: #000;
+    border: none;
+    border-radius: 0.75rem;
+}
+
+.stylish-input:focus {
+    box-shadow: 0 0 12px rgba(78, 84, 200, 0.6);
+    border: 1px solid #4e54c8;
+}
+
+/* Botón */
+.stylish-btn {
+    border-radius: 0.75rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.stylish-btn:hover {
+    background: linear-gradient(135deg, #3e4095, #6a75f0);
+    transform: translateY(-2px);
+}
+
+/* Botón ver/ocultar contraseña */
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #6c757d;
+    cursor: pointer;
+}
+
+.toggle-password:hover {
+    color: #4e54c8;
+}
+
+/* Animaciones */
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 12px rgba(255, 107, 107, 0.5);
+    }
+
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 22px rgba(255, 107, 107, 0.8);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 12px rgba(255, 107, 107, 0.5);
+    }
+}

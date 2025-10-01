@@ -6,18 +6,20 @@ import { Router } from '@angular/router';
 @Component({
   standalone: false,
   selector: 'app-login',
-  templateUrl: './login.html'
+  templateUrl: './login.html',
+  styleUrls: ['./login.css']
 })
 export class Login implements OnInit {
   form!: FormGroup;
   error = '';
   loading = false;
+  showPassword = false; // 👈 para ver/ocultar contraseña
 
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      username: ['', [Validators.required]], // coincidir con formControlName del HTML
+      username: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }

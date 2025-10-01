@@ -14,32 +14,19 @@ module.exports = {
             .catch((error) => { res.status(400).send(error); });
     },
 
-    listFull(req, res) {
-        return projects
-            .findAll({
-                include: [
-                    {
-                        model: users,
-                    },
-                    {
-                        model: users,
-                        as: 'collaboratedProjects',
-                        through: {
-                            attributes: ['role', 'joined_at'] // 👈 columnas de user_projects
-                        }
-                    },
-                    {
-                        model: requirements,
-                    },
-                    {
-                        model: tasks,
-                    },
-                ]
-            })
-            .then(users => res.status(200).send(users))
-            .catch(error => res.status(400).send(error));
-    },
+    listUserProjects(req, res) {
+        const userId = req.user?.id;
+        if (!userId) return res.status(401).send({ message: 'Usuario no encontrado en token' });
 
+        return projects.findAll({
+            where: { owner_id: userId } // solo los proyectos que posee el usuario
+        })
+            .then(projects => res.status(200).send(projects))
+            .catch(error => {
+                console.error(error);
+                res.status(400).send(error);
+            });
+    },
 
     getById(req, res) {
         return projects

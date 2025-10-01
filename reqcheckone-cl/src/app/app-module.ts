@@ -4,6 +4,7 @@ import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 /* Components */
 import { Login } from './auth/login/login';
@@ -13,20 +14,26 @@ import { Home } from './dashboard/home/home';
 /* Core */
 import { AuthInterceptor } from './core/auth-interceptor';
 import { AuthGuard } from './core/auth-guard';
+import { Sidebar } from './shared/sidebar/sidebar';
+import { List } from './projects/list/list';
 
 @NgModule({
   declarations: [
     App,
     Login,
     Register,
+    List,
     Home,
+    Sidebar,
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    RouterModule
   ],
   providers: [
     AuthGuard,

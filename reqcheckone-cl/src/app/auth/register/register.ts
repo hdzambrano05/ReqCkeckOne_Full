@@ -12,13 +12,16 @@ function passwordMatchValidator(control: AbstractControl) {
 @Component({
   standalone: false,
   selector: 'app-register',
-  templateUrl: './register.html'
+  templateUrl: './register.html',
+  styleUrls: ['./register.css']
 })
 export class Register implements OnInit {
   form!: FormGroup;
   error = '';
   success = '';
   loading = false;
+  showPassword = false;
+  showConfirm = false;
 
   constructor(
     private fb: FormBuilder,
@@ -36,7 +39,6 @@ export class Register implements OnInit {
           [
             Validators.required,
             Validators.minLength(8),
-            // al menos 1 mayúscula, 1 minúscula, 1 número y 1 símbolo
             Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/)
           ]
         ],
@@ -46,7 +48,7 @@ export class Register implements OnInit {
     );
   }
 
-  // ✅ Getters para acceder en el HTML sin errores TS4111
+  // Getters
   get username() { return this.form.get('username'); }
   get email() { return this.form.get('email'); }
   get password() { return this.form.get('password'); }

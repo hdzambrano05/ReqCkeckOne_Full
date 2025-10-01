@@ -22,16 +22,21 @@ export class AuthService {
         if (res?.token) {
           localStorage.setItem('token', res.token);
         }
+        if (res?.user?.username) {
+          localStorage.setItem('username', res.user.username);
+          localStorage.setItem('id', res.user.id);
+        }
       })
     );
   }
-
   register(payload: { username: string; email: string; password: string }): Observable<any> {
     return this.http.post(`${this.base}/users`, payload);
   }
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    localStorage.removeItem('id');
   }
 
   getToken(): string | null {
