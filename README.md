@@ -201,7 +201,7 @@ ng build --prod
 ## 👨‍💻 Autor
 
 * Harold Zambrano · [@hdzambrano05](https://github.com/hdzambrano05)
-* Jeisin Maigula · @JeisonCol
+* Jeison Maigual · [@JeisonCol](https://github.com/JeisonCol))
 
 ---
 
