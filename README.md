@@ -50,10 +50,6 @@ Configuración rápida (ejemplo PowerShell)
 
 1) Clona el repositorio y ve a las carpetas correspondientes:
 
-```powershell
-cd 'c:\Users\Harold Zambrano\Documents\Universidad\Investigacion\ReqCkeckOne_Full'
-```
-
 2) Backend — instalar dependencias:
 
 ```powershell
