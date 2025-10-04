@@ -4,6 +4,9 @@ import { Login } from './auth/login/login';
 import { Register } from './auth/register/register';
 import { Home } from './dashboard/home/home';
 import { List } from './projects/list/list';
+import { Create } from './projects/create/create';
+import { Detail } from './projects/detail/detail';
+import { CreateRequirement } from './requirements/create-requirement/create-requirement';
 import { AuthGuard } from './core/auth-guard';
 
 const routes: Routes = [
@@ -11,6 +14,9 @@ const routes: Routes = [
   { path: 'register', component: Register },
   { path: 'home', component: Home, canActivate: [AuthGuard] },
   { path: 'projects', component: List, canActivate: [AuthGuard] },
+  { path: 'projects/create', component: Create, canActivate: [AuthGuard] },
+  { path: 'projects/:id', component: Detail, canActivate: [AuthGuard] },
+  { path: 'projects/:id/requirements/create', component: CreateRequirement, canActivate: [AuthGuard] },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '**', redirectTo: 'login' }
 ];

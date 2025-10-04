@@ -1,0 +1,72 @@
+/* create.css */
+.text-gradient {
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    -webkit-background-clip: text;
+    /* Compatibilidad WebKit */
+    background-clip: text;
+    /* Estándar */
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    /* fallback */
+}
+
+.stylish-input {
+    border-radius: 12px;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    transition: all 0.2s ease;
+}
+
+.stylish-input:focus {
+    border-color: #4e54c8;
+    box-shadow: 0 0 6px rgba(78, 84, 200, 0.4);
+}
+
+.btn-gradient {
+    background: linear-gradient(135deg, #43cea2, #185a9d);
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    transition: all 0.3s;
+    border-radius: 50px;
+}
+
+.btn-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+.badge-collab {
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    color: #fff;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    cursor: default;
+    border-radius: 30px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.badge-collab i {
+    cursor: pointer;
+    margin-left: 6px;
+    font-size: 1rem;
+}
+
+.user-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.user-item {
+    background: #f9f9f9;
+    border: 1px solid #ececec;
+    margin-bottom: 6px;
+    transition: all 0.2s;
+    border-radius: 10px;
+}
+
+.user-item:hover {
+    background: #eef1ff;
+    transform: translateX(3px);
+}

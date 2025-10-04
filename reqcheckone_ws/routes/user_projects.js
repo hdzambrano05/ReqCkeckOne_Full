@@ -1,12 +1,17 @@
-var express = require('express');
-var router = express.Router();
-const user_projectsController = require('../controllers').user_projectsController;
+const express = require('express');
+const router = express.Router();
+const userProjectsController = require('../controllers/user_projectsController');
 
-router.get('/',user_projectsController.list);
-router.get('/:id',user_projectsController.getById);
-router.post('/',user_projectsController.add);
-router.put('/:id',user_projectsController.update);
-router.delete('/:id',user_projectsController.delete);
+// GET todos
+router.get('/', userProjectsController.list);
 
+// POST → añadir colaborador
+router.post('/', userProjectsController.add);
+
+// PUT → cambiar rol
+router.put('/:user_id/:project_id', userProjectsController.update);
+
+// DELETE → quitar colaborador
+router.delete('/:user_id/:project_id', userProjectsController.delete);
 
 module.exports = router;

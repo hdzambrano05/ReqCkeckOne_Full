@@ -16,6 +16,11 @@ import { AuthInterceptor } from './core/auth-interceptor';
 import { AuthGuard } from './core/auth-guard';
 import { Sidebar } from './shared/sidebar/sidebar';
 import { List } from './projects/list/list';
+import { Create } from './projects/create/create';
+import { Detail } from './projects/detail/detail';
+import { CreateRequirement } from './requirements/create-requirement/create-requirement';
+
+
 
 @NgModule({
   declarations: [
@@ -25,6 +30,10 @@ import { List } from './projects/list/list';
     List,
     Home,
     Sidebar,
+    Create,
+    Detail,
+    Create,
+    CreateRequirement,
     
   ],
   imports: [

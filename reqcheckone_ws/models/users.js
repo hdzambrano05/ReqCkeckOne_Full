@@ -82,6 +82,7 @@ module.exports = sequelize => {
   UsersModel.associate = function (models) {
     UsersModel.hasMany(models.projects_model, {
       foreignKey: 'owner_id',
+      as: 'ownedProjects'
     });
 
     UsersModel.hasMany(models.requirements_model, {
@@ -95,10 +96,9 @@ module.exports = sequelize => {
     UsersModel.hasMany(models.comments_model, { foreignKey: 'user_id' });
 
     UsersModel.belongsToMany(models.projects_model, {
-      through: models.user_projects_model,
-      foreignKey: 'user_id',
-      otherKey: 'project_id',
-      as: 'collaboratedProjects'
+      through: { model: 'user_projects', unique: false },  // 👈
+      as: 'projects',
+      foreignKey: 'user_id'
     });
   };
 

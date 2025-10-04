@@ -1,0 +1,96 @@
+<div class="container mt-4" *ngIf="project">
+  <!-- Flecha para regresar -->
+  <button
+    class="btn btn-outline-secondary btn-sm mb-3 d-flex align-items-center gap-1"
+    (click)="goBack()"
+  >
+    <i class="bi bi-arrow-left"></i> Regresar
+  </button>
+
+  <!-- Tarjeta principal -->
+  <div class="card shadow-lg border-0 rounded-3">
+    <div class="card-body">
+      <!-- Título y descripción -->
+      <h2 class="fw-bold text-primary mb-2">
+        <i class="bi bi-folder2-open"></i> {{ project.name }}
+      </h2>
+      <p class="text-muted mb-3">{{ project.description || 'Sin descripción' }}</p>
+
+      <!-- Meta info -->
+      <div class="d-flex flex-wrap gap-4 mb-4">
+        <span class="badge bg-info text-dark">
+          <i class="bi bi-check2-circle"></i> Estado: {{ project.status || '—' }}
+        </span>
+        <span class="badge bg-warning text-dark">
+          <i class="bi bi-calendar-event"></i> Fecha límite: {{ project.deadline || '—' }}
+        </span>
+      </div>
+
+      <!-- Creador -->
+      <div class="mb-4">
+        <h6 class="text-uppercase text-secondary fw-semibold mb-1">
+          <i class="bi bi-person-circle"></i> Creador
+        </h6>
+        <p class="fw-semibold text-dark mb-0">{{ project.owner?.username }}</p>
+        <small class="text-muted">{{ project.owner?.email }}</small>
+      </div>
+
+      <!-- Colaboradores -->
+      <div class="mb-4">
+        <h6 class="text-uppercase text-secondary fw-semibold mb-2">
+          <i class="bi bi-people"></i> Colaboradores
+        </h6>
+        <div *ngIf="project.collaborators?.length; else noCollabs" class="d-flex flex-wrap gap-2">
+          <span
+            *ngFor="let c of project.collaborators"
+            class="badge bg-dark-subtle text-dark border rounded-pill px-3 py-2 shadow-sm"
+          >
+            <i class="bi bi-person"></i> {{ c.username }}
+            <span class="ms-1 text-primary fw-semibold">({{ c.role }})</span>
+          </span>
+        </div>
+        <ng-template #noCollabs>
+          <p class="text-muted fst-italic">No hay colaboradores asignados.</p>
+        </ng-template>
+      </div>
+
+      <!-- Requisitos -->
+      <div>
+        <h6 class="text-uppercase text-secondary fw-semibold mb-3 d-flex align-items-center gap-1">
+          <i class="bi bi-list-check"></i> Requisitos del Proyecto
+        </h6>
+        <ul class="list-group list-group-flush mb-4">
+          <li
+            *ngFor="let req of requirements"
+            class="list-group-item d-flex flex-column align-items-start"
+          >
+            <strong class="text-dark d-flex align-items-center gap-1">
+              <i class="bi bi-file-earmark-text"></i> {{ req.title }}
+            </strong>
+            <p class="mb-1 text-muted">{{ req.text }}</p>
+            <small class="text-secondary d-flex align-items-center gap-3">
+              <span
+                ><i class="bi bi-exclamation-triangle-fill text-warning me-1"></i> Prioridad:
+                <span class="fw-semibold">{{ req.priority }}</span></span
+              >
+              <span
+                ><i class="bi bi-pin-angle-fill text-primary me-1"></i> Estado:
+                <span class="fw-semibold">{{ req.status }}</span></span
+              >
+            </small>
+          </li>
+          <li *ngIf="!requirements.length" class="list-group-item text-muted fst-italic">
+            No hay requisitos aún.
+          </li>
+        </ul>
+      </div>
+
+      <!-- Botón agregar requisito -->
+      <div class="text-end">
+        <button class="btn btn-primary btn-lg shadow-sm" (click)="goToAddRequirement()">
+          <i class="bi bi-plus-circle"></i> Agregar requisito
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

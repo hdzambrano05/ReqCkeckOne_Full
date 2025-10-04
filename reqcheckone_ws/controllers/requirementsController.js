@@ -30,6 +30,20 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
+    async listByProject(req, res) {
+        try {
+            const { projectId } = req.params;
+            const requirementsList = await requirements.findAll({
+                where: { project_id: projectId },
+                order: [['created_at', 'DESC']]
+            });
+            return res.status(200).send(requirementsList);
+        } catch (error) {
+            console.error(error);
+            return res.status(400).send(error);
+        }
+    },
+
     getById(req, res) {
         return requirements
             .findByPk(req.params.id)
@@ -53,36 +67,60 @@ module.exports = {
             .catch((error) => res.status(400).send(error));
     },
 
+    async analyze(req, res) {
+        try {
+            console.log("Petición recibida en Node.js:", req.body);
+
+            // Generar un ID temporal si no viene del frontend
+            const requirement = {
+                id: req.body.id && req.body.id.trim().length > 0 ? req.body.id : `TEMP-${Date.now()}`,
+                project_id: Number(req.body.project_id),
+                text: req.body.text,
+                context: req.body.context || ""
+            };
+
+            const response = await axios.post(
+                "http://127.0.0.1:8000/analyze",
+                requirement,
+                { headers: { "Content-Type": "application/json" } }
+            );
+
+            console.log("Respuesta de FastAPI:", response.data);
+            res.status(200).send(response.data);
+
+        } catch (error) {
+            console.error("Error en analyze Node.js:", error.message);
+
+            if (error.response) {
+                console.error("Status FastAPI:", error.response.status);
+                console.error("Data FastAPI:", error.response.data);
+                return res.status(error.response.status).send(error.response.data);
+            }
+
+            res.status(500).send({ error: "Error al analizar el requisito" });
+        }
+    },
+
 
     add(req, res) {
-        const requirement = {
-            id: req.body.project_id,  // o usa otro campo como ID
+        const payload = {
+            project_id: req.body.project_id,
+            title: req.body.title,
             text: req.body.text,
-            context: req.body.context || ""
+            context: req.body.context,
+            status: req.body.status || 'draft',
+            priority: req.body.priority || 'medium',
+            due_date: req.body.due_date,
+            version: req.body.version || 1,
+            analysis: JSON.stringify(req.body.analysis), // viene del frontend
+            created_by: req.body.created_by
         };
 
-        axios.post("http://localhost:8000/analyze", requirement) // FastAPI corre en 8000 por defecto
-            .then(response => {
-                // Aquí recibes el análisis de Python
-                const analysis = response.data;
-
-                // Si quieres, lo guardas en tu DB de Node
-                return requirements.create({
-                    project_id: req.body.project_id,
-                    title: req.body.title,
-                    text: req.body.text,
-                    context: req.body.context,
-                    status: req.body.status,
-                    priority: req.body.priority,
-                    due_date: req.body.due_date,
-                    version: req.body.version,
-                    analysis: JSON.stringify(analysis), // Guardar análisis como JSON
-                    created_by: req.body.created_by,
-                });
-            })
+        requirements.create(payload)
             .then(saved => res.status(201).send(saved))
             .catch(error => res.status(400).send(error));
     },
+
 
     update(req, res) {
         return requirements

@@ -1,0 +1,150 @@
+.create-requirement h3 {
+    font-weight: 700;
+}
+
+.card {
+    transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+    font-weight: 500;
+    text-align: center;
+    line-height: 20px;
+    transition: width 1s ease-in-out;
+}
+
+pre {
+    font-family: 'Fira Code', monospace;
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+    border-radius: 10px;
+    overflow-x: auto;
+}
+
+.modal-backdrop {
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1050;
+}
+
+.modal-content {
+    animation: fadeInScale 0.3s ease-in-out;
+}
+
+/* Fondo semi-transparente */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.35);
+    /* transparente elegante */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+    backdrop-filter: blur(3px);
+}
+
+/* Modal principal */
+.modal-content {
+    background: #fff;
+    padding: 2rem 1.5rem;
+    border-radius: 15px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+    transform: translateY(-50px);
+    opacity: 0;
+    animation: fadeInUp 0.4s forwards;
+    position: relative;
+}
+
+/* Animación de aparición */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Iconos según tipo */
+.modal-success {
+    border-left: 6px solid #28a745;
+}
+
+.modal-error {
+    border-left: 6px solid #dc3545;
+}
+
+.modal-info {
+    border-left: 6px solid #007bff;
+}
+
+/* Texto */
+.modal-content p {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+/* Botón cerrar */
+.modal-content button {
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.modal-content button:hover {
+    opacity: 0.85;
+}
+
+.modal-success button {
+    background: #28a745;
+    color: #fff;
+}
+
+.modal-error button {
+    background: #dc3545;
+    color: #fff;
+}
+
+.modal-info button {
+    background: #007bff;
+    color: #fff;
+}
+
+/* Modal de espera más elegante */
+.modal-loading .modal-content {
+    background: rgba(255, 255, 255, 0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+}
+
+.modal-loading .spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+
+@keyframes fadeInScale {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

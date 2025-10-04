@@ -21,6 +21,7 @@ export class AuthService {
       tap((res: any) => {
         if (res?.token) {
           localStorage.setItem('token', res.token);
+          localStorage.setItem('token_time', Date.now().toString()); // ⏳ guarda el tiempo
         }
         if (res?.user?.username) {
           localStorage.setItem('username', res.user.username);
@@ -29,14 +30,13 @@ export class AuthService {
       })
     );
   }
+
   register(payload: { username: string; email: string; password: string }): Observable<any> {
     return this.http.post(`${this.base}/users`, payload);
   }
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    localStorage.removeItem('id');
+    localStorage.clear();
   }
 
   getToken(): string | null {
@@ -44,6 +44,22 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    const token = this.getToken();
+    const tokenTime = localStorage.getItem('token_time');
+
+    if (!token || !tokenTime) return false;
+
+    // ⏳ Expira después de 1h
+    const elapsed = Date.now() - parseInt(tokenTime, 10);
+    if (elapsed > 60 * 60 * 1000) {
+      this.logout();
+      return false;
+    }
+    return true;
+  }
+
+  getUserId(): number | null {
+    const id = localStorage.getItem('id');
+    return id ? Number(id) : null;
   }
 }

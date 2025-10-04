@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { AuthService } from './services/auth';
 
 @Component({
@@ -7,9 +7,17 @@ import { AuthService } from './services/auth';
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
-export class App {
+export class App implements OnInit {
   isSidebarOpen = true;
-  protected readonly title = signal('reqcheckone-cl');
+  title = signal('reqcheckone-cl');
 
-  constructor(public authService: AuthService) {}
+  constructor(public authService: AuthService) { }
+
+  ngOnInit() {
+    
+  }
+
+  get isLoggedIn() {
+    return this.authService.isLoggedIn();
+  }
 }

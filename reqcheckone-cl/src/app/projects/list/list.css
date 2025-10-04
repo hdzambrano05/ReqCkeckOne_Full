@@ -1,109 +1,98 @@
 /* Header */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-}
-
 .header h2 {
-    font-size: 1.8rem;
-    color: #4e54c8;
-    font-weight: bold;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1f2937;
+    letter-spacing: 0.5px;
 }
 
-/* Botón Crear */
-.btn-create {
-    padding: 10px 18px;
-    background: linear-gradient(135deg, #28a745, #85e085);
-    color: #fff;
-    border: none;
-    border-radius: 0.5rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.btn-create:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(40, 167, 69, 0.4);
-}
-
-/* Lista de proyectos */
-.projects-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.project-card {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-    padding: 20px;
-    border-radius: 0.8rem;
+/* Inputs */
+.stylish-input {
+    border-radius: 12px;
     border: 1px solid #ddd;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: all 0.2s ease;
+}
+
+.stylish-input:focus-within {
+    border-color: #4e54c8;
+    box-shadow: 0 0 6px rgba(78, 84, 200, 0.4);
+}
+
+/* Toggle Button */
+.toggle-btn {
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.toggle-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: scale(1.08);
+}
+
+/* Tarjetas */
+.project-card {
+    border-radius: 1rem;
+    backdrop-filter: blur(10px);
+    background: #fff;
+    transition: all 0.3s ease;
 }
 
 .project-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
 }
 
-/* Titulos y textos */
-.project-card h3 {
-    margin: 0 0 8px 0;
-    color: #4e54c8;
+/* Títulos */
+.card-title {
+    font-size: 1.25rem;
     font-weight: 600;
-    font-size: 1.3rem;
 }
 
-.project-card .description {
-    color: #555;
-    margin-bottom: 8px;
-}
-
-.project-card .status,
-.project-card .deadline {
-    color: #333;
-    font-size: 0.95rem;
-    margin-bottom: 6px;
-}
-
-/* Botón Ver detalles */
-.btn-details {
-    padding: 8px 14px;
+.text-gradient {
     background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    background-clip: text;
+    /* Propiedad estándar */
+    -webkit-background-clip: text;
+    /* Compatibilidad con WebKit */
+    color: transparent;
+    /* Fallback estándar */
+    -webkit-text-fill-color: transparent;
+    /* Necesario en WebKit */
+}
+
+
+/* Badges */
+.badge-collab {
+    background: linear-gradient(135deg, #f7971e, #ffd200);
     color: #fff;
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+/* Botones */
+.btn-gradient {
+    background: linear-gradient(135deg, #43cea2, #185a9d);
+    color: #fff;
+    font-weight: 600;
     border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    font-weight: 500;
-    transition: transform 0.2s, box-shadow 0.2s;
+    border-radius: 50px;
+    transition: all 0.3s;
 }
 
-.btn-details:hover {
+.btn-gradient:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(78, 84, 200, 0.4);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
 }
 
-/* Mensajes de estado */
-.status-message {
-    text-align: center;
-    margin-top: 25px;
-    font-weight: bold;
-    font-size: 1rem;
+/* Animación loading */
+.spin {
+    animation: spin 1s linear infinite;
 }
 
-.status-message.loading {
-    color: #4e54c8;
-}
-
-.status-message.error {
-    color: #ff4d4f;
-}
-
-.status-message.empty {
-    color: #555;
-    font-style: italic;
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
 }
