@@ -55,30 +55,46 @@
       </div>
 
       <!-- Requisitos -->
+      <!-- Requisitos -->
       <div>
         <h6 class="text-uppercase text-secondary fw-semibold mb-3 d-flex align-items-center gap-1">
           <i class="bi bi-list-check"></i> Requisitos del Proyecto
         </h6>
+
         <ul class="list-group list-group-flush mb-4">
           <li
             *ngFor="let req of requirements"
-            class="list-group-item d-flex flex-column align-items-start"
+            class="list-group-item d-flex justify-content-between align-items-start flex-wrap"
           >
-            <strong class="text-dark d-flex align-items-center gap-1">
-              <i class="bi bi-file-earmark-text"></i> {{ req.title }}
-            </strong>
-            <p class="mb-1 text-muted">{{ req.text }}</p>
-            <small class="text-secondary d-flex align-items-center gap-3">
-              <span
-                ><i class="bi bi-exclamation-triangle-fill text-warning me-1"></i> Prioridad:
-                <span class="fw-semibold">{{ req.priority }}</span></span
-              >
-              <span
-                ><i class="bi bi-pin-angle-fill text-primary me-1"></i> Estado:
-                <span class="fw-semibold">{{ req.status }}</span></span
-              >
-            </small>
+            <div class="flex-grow-1">
+              <strong class="text-dark d-flex align-items-center gap-1">
+                <i class="bi bi-file-earmark-text"></i> {{ req.title }}
+              </strong>
+              <p class="mb-1 text-muted">{{ req.text }}</p>
+              <small class="text-secondary d-flex align-items-center gap-3">
+                <span>
+                  <i class="bi bi-exclamation-triangle-fill text-warning me-1"></i>
+                  Prioridad: <span class="fw-semibold">{{ req.priority }}</span>
+                </span>
+                <span>
+                  <i class="bi bi-pin-angle-fill text-primary me-1"></i>
+                  Estado: <span class="fw-semibold">{{ req.status }}</span>
+                </span>
+              </small>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="d-flex flex-column align-items-end gap-2 mt-2 mt-sm-0">
+              <button class="btn btn-outline-primary btn-sm" (click)="viewRequirement(req.id)">
+                Ver
+              </button>
+
+              <button class="btn btn-outline-danger btn-sm" (click)="deleteRequirement(req.id)">
+                <i class="bi bi-trash"></i> Eliminar
+              </button>
+            </div>
           </li>
+
           <li *ngIf="!requirements.length" class="list-group-item text-muted fst-italic">
             No hay requisitos aún.
           </li>
@@ -89,6 +105,41 @@
       <div class="text-end">
         <button class="btn btn-primary btn-lg shadow-sm" (click)="goToAddRequirement()">
           <i class="bi bi-plus-circle"></i> Agregar requisito
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================= -->
+<!-- 🗑️ Modal de confirmación de eliminación -->
+<!-- ================================================= -->
+<!-- Modal de confirmación -->
+<div
+  class="modal fade"
+  id="confirmDeleteModal"
+  tabindex="-1"
+  aria-labelledby="confirmDeleteModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que deseas eliminar este requisito? Esta acción no se puede deshacer.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          (click)="confirmDelete()"
+          data-bs-dismiss="modal"
+        >
+          Eliminar
         </button>
       </div>
     </div>

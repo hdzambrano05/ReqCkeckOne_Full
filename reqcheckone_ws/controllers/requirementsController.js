@@ -52,11 +52,11 @@ module.exports = {
                     return res.status(404).send({ message: 'Requirement Not Found' });
                 }
 
-                let parsedAnalysis;
+                let parsedAnalysis = null;
                 try {
                     parsedAnalysis = JSON.parse(requirement.analysis);
                 } catch {
-                    parsedAnalysis = requirement.analysis; // por si falla el parseo
+                    parsedAnalysis = requirement.analysis; // Si ya es objeto
                 }
 
                 return res.status(200).send({

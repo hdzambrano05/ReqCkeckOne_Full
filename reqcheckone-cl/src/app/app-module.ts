@@ -19,6 +19,7 @@ import { List } from './projects/list/list';
 import { Create } from './projects/create/create';
 import { Detail } from './projects/detail/detail';
 import { CreateRequirement } from './requirements/create-requirement/create-requirement';
+import { DetailRequirement } from './requirements/detail-requirement/detail-requirement';
 
 
 
@@ -34,6 +35,7 @@ import { CreateRequirement } from './requirements/create-requirement/create-requ
     Detail,
     Create,
     CreateRequirement,
+    DetailRequirement,
     
   ],
   imports: [

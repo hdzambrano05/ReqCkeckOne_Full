@@ -35,6 +35,12 @@ export class RequirementsService {
     return this.http.post<any>(`${this.apiUrl}/analyze`, data, { headers: this.getHeaders() });
   }
 
+  // Eliminar requisito
+  deleteRequirement(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
+  }
+
+
 
 
 }

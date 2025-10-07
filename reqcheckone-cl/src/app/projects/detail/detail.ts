@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectsService, Project } from '../../services/projects';
 import { RequirementsService } from '../../services/requirements';
 
+declare var bootstrap: any; // 👈 importante para usar el modal de Bootstrap
+
 export interface Requirement {
   id: number;
   project_id: number;
@@ -28,6 +30,8 @@ export class Detail implements OnInit {
   requirements: Requirement[] = [];
   loadingProject = true;
   loadingRequirements = true;
+  selectedRequirement: Requirement | null = null; // 👈 requisito a eliminar
+  selectedRequirementId: number | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -76,13 +80,41 @@ export class Detail implements OnInit {
 
   goToAddRequirement() {
     if (!this.project) return;
-    this.router.navigate([
-      `/projects/${this.project.id}/requirements/create`,
-    ]);
+    this.router.navigate([`/projects/${this.project.id}/requirements/create`]);
   }
 
   goBack() {
-    this.router.navigate(['/projects']); // 👈 redirige a la lista de proyectos
+    this.router.navigate(['/projects']);
   }
 
+  viewRequirement(id: number) {
+    if (!this.project) return;
+    this.router.navigate([`/projects/${this.project.id}/requirements/${id}`]);
+  }
+
+  deleteRequirement(id: number) {
+    this.selectedRequirementId = id;
+    const modalElement = document.getElementById('confirmDeleteModal') as any;
+    if (modalElement) {
+      const modal = new (window as any).bootstrap.Modal(modalElement);
+      modal.show();
+    }
+  }
+
+  confirmDelete() {
+    if (!this.selectedRequirementId) return;
+
+    this.requirementsService.deleteRequirement(this.selectedRequirementId).subscribe({
+      next: () => {
+        if (this.project?.id) {
+          this.loadRequirements(this.project.id);
+        }
+        this.selectedRequirementId = null;
+      },
+      error: (err) => {
+        console.error('Error eliminando requisito:', err);
+        alert('No se pudo eliminar el requisito.');
+      },
+    });
+  }
 }

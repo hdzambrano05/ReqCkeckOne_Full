@@ -1,0 +1,96 @@
+/* Contenedor general */
+.requirement-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1rem;
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Botón volver */
+.back-btn {
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    margin-bottom: 1.2rem;
+}
+
+.back-btn:hover {
+    background-color: #0d6efd;
+    color: #fff;
+    transform: translateX(-3px);
+}
+
+/* Tarjetas */
+.card {
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.7s ease-in-out;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.6s ease-in-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(25px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Colores y detalles */
+.description-card {
+    border-left: 5px solid #0d6efd;
+}
+
+.agent-card {
+    border-left: 5px solid #198754;
+}
+
+/* Loading */
+.loading-spinner {
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Textos */
+h2,
+h4,
+h5 {
+    letter-spacing: 0.5px;
+}
+
+/* Sombras suaves */
+.shadow-sm {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Badges */
+.badge {
+    font-size: 0.9rem;
+    border-radius: 8px;
+}
