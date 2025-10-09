@@ -42,6 +42,26 @@ app.use('/tasks', tasksRouter);
 app.use('/users', usersRouter);
 app.use('/user_projects', user_projectsRouter);
 
+app.get('/test-insert-history', async (req, res) => {
+  const { requirement_history_model } = require('./models');
+  try {
+    const record = await requirement_history_model.create({
+      requirement_id: 18,
+      version: 1,
+      text: 'Prueba manual',
+      context: 'test',
+      analysis: { dummy: true },
+      changed_by: 1,
+      updated_at: new Date(),
+    });
+    res.send(record);
+  } catch (e) {
+    console.error('Error al insertar en requirement_history:', e);
+    res.status(500).send(e);
+  }
+});
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

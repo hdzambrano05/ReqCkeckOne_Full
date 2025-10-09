@@ -96,10 +96,10 @@ module.exports = sequelize => {
   const RequirementHistoryModel = sequelize.define("requirement_history_model", attributes, options);
   RequirementHistoryModel.associate = function (models) {
     // Cada versión pertenece a un requisito
-    RequirementHistoryModel.belongsTo(models.requirements_model, { foreignKey: 'requirement_id' });
+    RequirementHistoryModel.belongsTo(models.requirements_model, { foreignKey: 'requirement_id', as: 'requirement' });
 
     // Cada versión tiene un usuario que la cambió
-    RequirementHistoryModel.belongsTo(models.users_model, { foreignKey: 'changed_by' });
+    RequirementHistoryModel.belongsTo(models.users_model, { foreignKey: 'changed_by', as: 'changer' });
   };
 
   return RequirementHistoryModel;

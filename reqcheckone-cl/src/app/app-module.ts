@@ -20,6 +20,8 @@ import { Create } from './projects/create/create';
 import { Detail } from './projects/detail/detail';
 import { CreateRequirement } from './requirements/create-requirement/create-requirement';
 import { DetailRequirement } from './requirements/detail-requirement/detail-requirement';
+import { HistoryRequirements } from './requirements/history-requirements/history-requirements';
+
 
 
 
@@ -36,6 +38,7 @@ import { DetailRequirement } from './requirements/detail-requirement/detail-requ
     Create,
     CreateRequirement,
     DetailRequirement,
+    HistoryRequirements,
     
   ],
   imports: [

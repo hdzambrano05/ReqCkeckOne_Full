@@ -53,8 +53,14 @@
           <p class="text-muted fst-italic">No hay colaboradores asignados.</p>
         </ng-template>
       </div>
+      
+      <!-- Botón agregar requisito (arriba de la lista) -->
+      <div class="text-end mb-3">
+        <button class="btn btn-add btn-lg shadow-sm" (click)="goToAddRequirement()">
+          <i class="bi bi-plus-circle"></i> Agregar requisito
+        </button>
+      </div>
 
-      <!-- Requisitos -->
       <!-- Requisitos -->
       <div>
         <h6 class="text-uppercase text-secondary fw-semibold mb-3 d-flex align-items-center gap-1">
@@ -64,14 +70,14 @@
         <ul class="list-group list-group-flush mb-4">
           <li
             *ngFor="let req of requirements"
-            class="list-group-item d-flex justify-content-between align-items-start flex-wrap"
+            class="list-group-item d-flex justify-content-between align-items-center flex-wrap gap-3"
           >
-            <div class="flex-grow-1">
+            <div class="flex-grow-1 me-3">
               <strong class="text-dark d-flex align-items-center gap-1">
                 <i class="bi bi-file-earmark-text"></i> {{ req.title }}
               </strong>
               <p class="mb-1 text-muted">{{ req.text }}</p>
-              <small class="text-secondary d-flex align-items-center gap-3">
+              <small class="text-secondary d-flex flex-wrap gap-3">
                 <span>
                   <i class="bi bi-exclamation-triangle-fill text-warning me-1"></i>
                   Prioridad: <span class="fw-semibold">{{ req.priority }}</span>
@@ -83,14 +89,24 @@
               </small>
             </div>
 
-            <!-- Botones de acción -->
-            <div class="d-flex flex-column align-items-end gap-2 mt-2 mt-sm-0">
-              <button class="btn btn-outline-primary btn-sm" (click)="viewRequirement(req.id)">
-                Ver
+            <!-- Botones de acción siempre a la derecha -->
+            <div class="d-flex flex-column flex-sm-row gap-2 align-items-sm-end ms-auto">
+              <button
+                class="btn btn-outline-primary btn-sm btn-action"
+                (click)="viewRequirement(req.id)"
+              >
+                <i class="bi bi-eye me-1"></i> Ver
               </button>
 
-              <button class="btn btn-outline-danger btn-sm" (click)="deleteRequirement(req.id)">
-                <i class="bi bi-trash"></i> Eliminar
+              <button class="btn btn-outline-warning btn-sm btn-action">
+                <i class="bi bi-pencil me-1"></i> Editar
+              </button>
+
+              <button
+                class="btn btn-outline-danger btn-sm btn-action"
+                (click)="deleteRequirement(req.id)"
+              >
+                <i class="bi bi-trash me-1"></i> Eliminar
               </button>
             </div>
           </li>
@@ -100,21 +116,11 @@
           </li>
         </ul>
       </div>
-
-      <!-- Botón agregar requisito -->
-      <div class="text-end">
-        <button class="btn btn-primary btn-lg shadow-sm" (click)="goToAddRequirement()">
-          <i class="bi bi-plus-circle"></i> Agregar requisito
-        </button>
-      </div>
     </div>
   </div>
 </div>
 
-<!-- ================================================= -->
-<!-- 🗑️ Modal de confirmación de eliminación -->
-<!-- ================================================= -->
-<!-- Modal de confirmación -->
+<!-- Modal de confirmación de eliminación -->
 <div
   class="modal fade"
   id="confirmDeleteModal"

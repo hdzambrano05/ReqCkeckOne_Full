@@ -1,24 +1,67 @@
-.card {
+/* Estilo base para todos los botones de acción */
+.btn-action,
+.btn-add {
+    font-weight: 600;
+    border-radius: 0.75rem;
+    padding: 0.45rem 0.9rem;
     transition: all 0.3s ease-in-out;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
 }
 
-.card:hover {
+/* Hover general */
+.btn-action:hover,
+.btn-add:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    color: #fff !important;
 }
 
-.badge-collab {
+/* Botón Ver */
+.btn-outline-primary.btn-action:hover {
     background: linear-gradient(135deg, #007bff, #6610f2);
-    color: #fff;
-    font-weight: 500;
-    border-radius: 20px;
+    border-color: #6610f2;
 }
 
-.list-group-item {
+/* Botón Editar */
+.btn-outline-warning.btn-action:hover {
+    background: linear-gradient(135deg, #ffc107, #ff8c00);
+    border-color: #ff8c00;
+}
+
+/* Botón Eliminar */
+.btn-outline-danger.btn-action:hover {
+    background: linear-gradient(135deg, #dc3545, #a71d2a);
+    border-color: #a71d2a;
+}
+
+/* Botón Agregar */
+.btn-add {
+    background: linear-gradient(135deg, #28a745, #20c997);
     border: none;
-    border-bottom: 1px solid #f0f0f0;
+    color: #fff;
 }
 
-.list-group-item:last-child {
-    border-bottom: none;
+.btn-add:hover {
+    background: linear-gradient(135deg, #20c997, #218838);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+/* Iconos con margen */
+.btn-action i,
+.btn-add i {
+    vertical-align: middle;
+}
+
+/* Opcional: añadir sombra suave a hover de tarjetas y listas */
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fa;
 }

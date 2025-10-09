@@ -68,6 +68,7 @@ export class Detail implements OnInit {
           (a, b) =>
             new Date(b.created_at).getTime() -
             new Date(a.created_at).getTime()
+          // 👈 ordenar por fecha de creación
         );
         this.loadingRequirements = false;
       },

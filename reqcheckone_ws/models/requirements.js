@@ -141,7 +141,7 @@ module.exports = sequelize => {
   const RequirementsModel = sequelize.define("requirements_model", attributes, options);
   RequirementsModel.associate = function (models) {
     // Cada requisito pertenece a un proyecto
-    RequirementsModel.belongsTo(models.projects_model, { foreignKey: 'project_id' });
+    RequirementsModel.belongsTo(models.projects_model, { foreignKey: 'project_id', as: 'project' });
 
     // Cada requisito tiene un creador (usuario)
     RequirementsModel.belongsTo(models.users_model, { 

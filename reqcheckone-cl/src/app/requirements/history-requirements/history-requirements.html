@@ -1,0 +1,57 @@
+<div class="history-container">
+  <h2>Historial de Cambios</h2>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading">
+    <div class="spinner-border text-primary me-2" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    Cargando historial...
+  </div>
+
+  <!-- Historial agrupado por proyecto -->
+  <div *ngIf="!loading && groupedHistory.length > 0">
+    <div *ngFor="let project of groupedHistory" class="project-group">
+      <!-- Nombre del proyecto -->
+      <h3>{{ project.projectName }}</h3>
+
+      <!-- Tabla de requisitos -->
+      <div class="table-responsive">
+        <table class="history-table table align-middle">
+          <thead>
+            <tr>
+              <th>Requisito</th>
+              <th>Versión</th>
+              <th>Cambio</th>
+              <th>Modificado por</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of project.requirements"
+              [ngClass]="{
+                'table-danger': item.currentStatus === 'eliminado',
+                'table-primary': item.currentStatus === 'modificado',
+                'table-success': item.currentStatus === 'activo'
+              }"
+            >
+              <td data-label="Requisito">{{ item.requirement?.title || '—' }}</td>
+              <td data-label="Versión">
+                <span class="badge bg-secondary">{{ item.version }}</span>
+              </td>
+              <td data-label="Cambio">{{ item.text }}</td>
+              <td data-label="Modificado por">{{ item.changer?.username || 'Desconocido' }}</td>
+              <td data-label="Fecha">{{ item.updated_at | date : 'short' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sin historial -->
+  <div *ngIf="!loading && groupedHistory.length === 0" class="no-data">
+    <i class="bi bi-info-circle me-2"></i> No hay cambios registrados.
+  </div>
+</div>
