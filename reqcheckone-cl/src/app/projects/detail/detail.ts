@@ -93,6 +93,11 @@ export class Detail implements OnInit {
     this.router.navigate([`/projects/${this.project.id}/requirements/${id}`]);
   }
 
+  editRequirement(id: number) {
+    if (!this.project) return;
+    this.router.navigate([`/projects/${this.project.id}/requirements/${id}/update`]);
+  }
+
   deleteRequirement(id: number) {
     this.selectedRequirementId = id;
     const modalElement = document.getElementById('confirmDeleteModal') as any;

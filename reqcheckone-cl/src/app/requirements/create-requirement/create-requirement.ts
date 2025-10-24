@@ -4,6 +4,8 @@ import { RequirementsService } from '../../services/requirements';
 import { AuthService } from '../../services/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectsService, Project } from '../../services/projects';
+import { AfterViewInit } from '@angular/core';
+import { Tooltip } from 'bootstrap';
 
 interface Attribute {
   name: string;
@@ -57,6 +59,80 @@ export class CreateRequirement implements OnInit {
     { name: 'Conformidad', value: 0 }
   ];
 
+  attributeDescriptions: { [key: string]: string } = {
+    'Validez': `
+    <b>El requisito representa una necesidad real del usuario o sistema.</b><br>
+    <i class="bi bi-check-circle text-success"></i> “El sistema debe registrar ventas con fecha y hora.”<br>
+    <i class="bi bi-x-circle text-danger"></i> “El sistema debe cambiar los colores del fondo.”
+  `,
+
+    'Claridad / No ambigüedad': `
+    <b>El requisito se entiende de una sola forma.</b><br>
+    <i class="bi bi-check-circle text-success"></i> “El sistema debe responder en ≤ 3 segundos con 100 usuarios.”<br>
+    <i class="bi bi-x-circle text-danger"></i> “El sistema debe ser rápido.”
+  `,
+
+    'Completitud': `
+    <b>Incluye entradas, procesos y salidas.</b><br>
+    <i class="bi bi-check-circle text-success"></i> “El sistema generará un reporte mensual en PDF con cliente y monto.”<br>
+    <i class="bi bi-x-circle text-danger"></i> “El sistema generará un reporte.”
+  `,
+
+    'Consistencia': `
+    <b>No contradice otros requisitos.</b><br>
+    <i class="bi bi-check-circle text-success"></i> Req1: “Contraseña mínimo 8 caracteres.” / Req2: “Validar con 8 caracteres.”<br>
+    <i class="bi bi-x-circle text-danger"></i> Req1: “Contraseña mínimo 8.” / Req2: “Contraseña mínimo 10.”
+  `,
+
+    'Viabilidad': `
+    <b>Pueden implementarse con los recursos disponibles.</b><br>
+    <i class="bi bi-check-circle text-success"></i> “El sistema debe soportar 200 usuarios concurrentes.”<br>
+    <i class="bi bi-x-circle text-danger"></i> “El sistema debe responder en 1 ms con 10.000 usuarios.”
+  `,
+
+    'Priorización': `
+    <b>Tiene un nivel de importancia definido.</b><br>
+    <i class="bi bi-check-circle text-success"></i> “Alta prioridad: Cumplimiento normativo.”<br>
+    <i class="bi bi-x-circle text-danger"></i> “El sistema debe integrarse con todas las redes sociales.” (sin prioridad)
+  `,
+
+    'Trazabilidad': `
+    <b>Puede rastrearse desde su origen hasta su prueba.</b><br>
+    <i class="bi bi-check-circle text-success"></i> “REQ-010 → Login → Auth.java → TC-025.”<br>
+    <i class="bi bi-x-circle text-danger"></i> “El sistema debe permitir iniciar sesión.” (sin ID ni rastro)
+  `,
+
+    'Verificabilidad': `
+    <b>Puede comprobarse con pruebas o revisión.</b><br>
+    <i class="bi bi-check-circle text-success"></i> “El sistema debe bloquear cuenta tras 3 intentos fallidos.”<br>
+    <i class="bi bi-x-circle text-danger"></i> “El sistema debe ser confiable.”
+  `,
+
+    'Modificabilidad': `
+    <b>Puede cambiarse sin afectar otros requisitos.</b><br>
+    <i class="bi bi-check-circle text-success"></i> “REQ-045: alerta de inventario bajo.”<br>
+    <i class="bi bi-x-circle text-danger"></i> “El sistema debe alertar inventario y enviar correos y actualizar precios.”
+  `,
+
+    'Necesidad / Relevancia': `
+    <b>Es realmente necesario y justificado.</b><br>
+    <i class="bi bi-check-circle text-success"></i> “El sistema debe cumplir normativa DIAN.”<br>
+    <i class="bi bi-x-circle text-danger"></i> “El sistema debe mostrar animación al abrir.”
+  `,
+
+    'Singularidad / Atomicidad': `
+    <b>Expresa una sola necesidad.</b><br>
+    <i class="bi bi-check-circle text-success"></i> “Registrar usuario.” / “Enviar correo.”<br>
+    <i class="bi bi-x-circle text-danger"></i> “Registrar usuario y enviar correo.”
+  `,
+
+    'Conformidad': `
+    <b>Cumple con normas o plantillas establecidas.</b><br>
+    <i class="bi bi-check-circle text-success"></i> “REQ-123 – Descripción – Prioridad – Fuente.”<br>
+    <i class="bi bi-x-circle text-danger"></i> “El sistema debe calcular impuestos.” (sin estructura)
+  `
+  };
+
   constructor(
     private fb: FormBuilder,
     private requirementsService: RequirementsService,
@@ -93,6 +169,11 @@ export class CreateRequirement implements OnInit {
         });
       }
     });
+  }
+
+  ngAfterViewInit(): void {
+    const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach(el => new Tooltip(el));
   }
 
   // Getters para evitar errores TS

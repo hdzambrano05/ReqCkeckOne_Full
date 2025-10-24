@@ -6,6 +6,7 @@ import { forkJoin } from 'rxjs';
 interface ProjectHistory {
   projectName: string;
   requirements: any[];
+  expanded: boolean;
 }
 
 @Component({
@@ -79,7 +80,13 @@ export class HistoryRequirements {
 
     this.groupedHistory = Object.keys(grouped).map(projectName => ({
       projectName,
-      requirements: grouped[projectName]
+      requirements: grouped[projectName],
+      expanded: false // Flag para colapsar/expandir
     }));
+  }
+
+  // Toggle para expandir/colapsar proyecto
+  toggleProject(project: ProjectHistory): void {
+    project.expanded = !project.expanded;
   }
 }

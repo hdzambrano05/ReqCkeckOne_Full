@@ -1,0 +1,123 @@
+/* MODAL ANIMACIÓN */
+.modal-animated {
+    transform: scale(0.95);
+    opacity: 0;
+    animation: fadeInScale 0.25s forwards;
+}
+
+@keyframes fadeInScale {
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* BACKDROP */
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+}
+
+/* CABECERAS CON GRADIENTE PROFESIONAL */
+.modal-success {
+    background: linear-gradient(90deg, #2e7d32, #1b5e20);
+    /* verde serio */
+    color: #ffffff;
+}
+
+.modal-error {
+    background: linear-gradient(90deg, #c62828, #8e0000);
+    /* rojo intenso */
+    color: #ffffff;
+}
+
+.modal-info {
+    background: linear-gradient(90deg, #1565c0, #0d47a1);
+    /* azul profesional */
+    color: #ffffff;
+}
+
+.modal-loading {
+    background: linear-gradient(90deg, #424242, #1b1b1b);
+    /* gris serio */
+    color: #ffffff;
+}
+
+/* ICONOS DEL HEADER */
+.modal-header i {
+    font-size: 1.5rem;
+}
+
+/* BODY */
+.modal-body p {
+    font-size: 0.95rem;
+    color: #343a40;
+}
+
+/* FOOTER BOTONES */
+.modal-footer .btn {
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+}
+
+.modal-footer .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* ALERTAS */
+.alert-warning {
+    background: linear-gradient(90deg, #fff8e1, #ffecb3);
+    color: #795548;
+    border: none;
+    padding: 1rem 1.25rem;
+}
+
+.alert-warning i {
+    color: #ffb300;
+}
+
+.alert-warning ul li {
+    margin-bottom: 0.3rem;
+    line-height: 1.4;
+}
+
+/* OPCIONES ADICIONALES PARA UN LOOK SERIO */
+.modal-header,
+.modal-body,
+.modal-footer {
+    border-radius: 0.5rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.modal-header h5 {
+    font-weight: 600;
+}
+
+.modal-body {
+    font-size: 0.95rem;
+    color: #212529;
+}
+
+/* OPCIONES DE BOTONES */
+.btn-outline-primary {
+    border-color: #0d6efd;
+    color: #0d6efd;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+/* SPINNER */
+.spinner-border {
+    width: 2rem;
+    height: 2rem;
+    border-width: 0.25rem;
+}
+
+/* OPCIONAL: sombra más elegante para el modal */
+.modal-content {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}

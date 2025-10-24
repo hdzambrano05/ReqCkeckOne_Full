@@ -1,11 +1,12 @@
-<div class="header d-flex justify-content-between align-items-center mb-4">
-  <h2 class="fw-bold text-dark">Mis Proyectos</h2>
-  <div class="d-flex gap-2 align-items-center">
-    <!-- Buscador -->
-    <div class="input-group stylish-input">
-      <span class="input-group-text bg-transparent border-0">
-        <i class="bi bi-search text-secondary"></i>
-      </span>
+<div class="project-header d-flex flex-wrap justify-content-between align-items-center mb-5 gap-3">
+  <!-- Título -->
+  <h2 class="fw-bold text-dark fs-2">Mis Proyectos</h2>
+
+  <!-- Panel de acciones -->
+  <div class="d-flex flex-wrap gap-2 align-items-center">
+    <!-- Buscador moderno -->
+    <div class="search-bar shadow-sm d-flex align-items-center rounded-pill px-3 bg-white">
+      <i class="bi bi-search text-primary me-2 fs-5"></i>
       <input
         type="text"
         class="form-control border-0 shadow-none"
@@ -14,23 +15,43 @@
         (input)="filterProjects()"
       />
     </div>
-    <!-- Filtro por estado -->
-    <select
-      class="form-select stylish-input"
-      [(ngModel)]="statusFilter"
-      (change)="filterProjects()"
+
+    <!-- Filtro estado -->
+    <div class="dropdown">
+      <button
+        class="btn btn-outline-primary dropdown-toggle rounded-pill px-3 py-2"
+        type="button"
+        id="statusDropdown"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        {{ statusFilter || 'Filtrar por estado' }}
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="statusDropdown">
+        <li><a class="dropdown-item" (click)="statusFilter = ''; filterProjects()">Todos</a></li>
+        <li>
+          <a class="dropdown-item" (click)="statusFilter = 'activo'; filterProjects()">Activos</a>
+        </li>
+        <li>
+          <a class="dropdown-item" (click)="statusFilter = 'finalizado'; filterProjects()"
+            >Finalizados</a
+          >
+        </li>
+      </ul>
+    </div>
+
+    <!-- Toggle vista -->
+    <button
+      class="btn btn-outline-secondary rounded-circle p-2 shadow-sm"
+      (click)="toggleView()"
+      [title]="viewMode === 'cards' ? 'Ver lista' : 'Ver tarjetas'"
     >
-      <option value="">Todos</option>
-      <option value="activo">Activos</option>
-      <option value="finalizado">Finalizados</option>
-    </select>
-    <!-- Botón toggle vista -->
-    <button class="btn btn-outline-dark toggle-btn" (click)="toggleView()">
       <i class="bi" [ngClass]="viewMode === 'cards' ? 'bi-list-ul' : 'bi-grid-3x3-gap'"></i>
     </button>
-    <!-- Crear -->
-    <button class="btn btn-gradient" (click)="createProject()">
-      <i class="bi bi-plus-lg me-1"></i> Crear
+
+    <!-- Crear proyecto -->
+    <button class="btn btn-gradient shadow-sm rounded-pill px-4 py-2" (click)="createProject()">
+      <i class="bi bi-plus-lg me-2"></i> Crear Proyecto
     </button>
   </div>
 </div>
@@ -46,52 +67,49 @@
 <!-- VISTA TARJETAS -->
 <div class="row g-3" *ngIf="!loading && !error && viewMode === 'cards'">
   <div class="col-md-4" *ngFor="let project of filteredProjects">
-    <div class="card project-card h-100 shadow-sm border-0">
-      <div class="card-body d-flex flex-column">
-        <h5 class="card-title text-gradient">{{ project.name }}</h5>
-        <p class="card-text text-secondary flex-grow-1">{{ project.description }}</p>
-        <!-- Colaboradores -->
-        <div *ngIf="project.collaborators?.length" class="mb-3">
-          <h5><i class="bi bi-people-fill"></i> Colaboradores</h5>
-          <div class="d-flex flex-wrap gap-2 mt-2">
-            <span *ngFor="let c of project.collaborators" class="badge badge-collab">
-              <i class="bi bi-person"></i> {{ c.username }}
-              <small class="ms-1 text-light">({{ c.role }})</small>
+    <div class="project-card shadow-sm" (click)="viewProject(project.id)">
+      <h5 class="card-title text-gradient">{{ project.name }}</h5>
+      <p class="card-text">{{ project.description }}</p>
 
-              <!-- Marca si es el usuario actual -->
-              <span *ngIf="c.id === getLoggedUserId()" class="ms-1 badge bg-success">
-                <i class="bi bi-person-check"></i> Tú
-              </span>
+      <!-- Colaboradores -->
+      <div *ngIf="project.collaborators?.length" class="mb-3">
+        <h6 class="text-muted"><i class="bi bi-people-fill me-1"></i> Colaboradores</h6>
+        <div class="d-flex flex-wrap gap-2 mt-2">
+          <span
+            *ngFor="let c of project.collaborators"
+            class="badge-collab"
+            (click)="$event.stopPropagation()"
+          >
+            <i class="bi bi-person me-1"></i>{{ c.username }}
+            <small>({{ c.role }})</small>
+            <span *ngIf="c.id === getLoggedUserId()" class="badge bg-success ms-1">
+              <i class="bi bi-person-check"></i> Tú
             </span>
-          </div>
-        </div>
-        <div *ngIf="!project.collaborators?.length" class="text-muted mb-3">
-          No hay colaboradores asignados.
-        </div>
-        <!-- Meta -->
-        <div class="project-meta small text-muted mt-2">
-          <span *ngIf="project.status">
-            <i class="bi bi-flag-fill me-1"></i>{{ project.status }} </span
-          ><br />
-          <span *ngIf="project.deadline">
-            <i class="bi bi-calendar-event me-1"></i>{{ project.deadline }}
           </span>
         </div>
-        <!-- Acciones -->
-        <div class="actions mt-3 d-flex gap-2">
-          <button
-            class="btn btn-primary btn-sm rounded-pill px-3"
-            (click)="viewProject(project.id)"
-          >
-            <i class="bi bi-eye me-1"></i> Ver
-          </button>
-          <button
-            class="btn btn-danger btn-sm rounded-pill px-3"
-            (click)="openDeleteModal(project)"
-          >
-            <i class="bi bi-trash me-1"></i> Eliminar
-          </button>
-        </div>
+      </div>
+      <div *ngIf="!project.collaborators?.length" class="text-muted mb-3">
+        No hay colaboradores asignados.
+      </div>
+
+      <!-- Meta -->
+      <div class="project-meta small text-muted mt-2">
+        <span *ngIf="project.status">
+          <i class="bi bi-flag-fill me-1"></i>{{ project.status }} </span
+        ><br />
+        <span *ngIf="project.deadline">
+          <i class="bi bi-calendar-event me-1"></i>{{ project.deadline }}
+        </span>
+      </div>
+
+      <!-- Acciones -->
+      <div class="actions mt-3 d-flex gap-2">
+        <button
+          class="btn btn-sm rounded-pill btn-danger"
+          (click)="openDeleteModal(project); $event.stopPropagation()"
+        >
+          <i class="bi bi-trash me-1"></i> Eliminar
+        </button>
       </div>
     </div>
   </div>
@@ -117,7 +135,7 @@
       <td class="fw-semibold text-gradient">{{ project.name }}</td>
       <td>{{ project.description }}</td>
       <td>
-        <span *ngFor="let c of project.collaborators" class="badge badge-collab me-1">{{
+        <span *ngFor="let c of project.collaborators" class="badge-collab me-1">{{
           c.username
         }}</span>
         <span *ngIf="!project.collaborators?.length" class="text-muted small">—</span>
@@ -125,10 +143,10 @@
       <td>{{ project.status || '—' }}</td>
       <td>{{ project.deadline || '—' }}</td>
       <td class="text-center">
-        <button class="btn btn-sm btn-primary me-1 rounded-pill" (click)="viewProject(project.id)">
+        <button class="btn btn-sm rounded-pill btn-primary me-1" (click)="viewProject(project.id)">
           <i class="bi bi-eye"></i>
         </button>
-        <button class="btn btn-sm btn-danger rounded-pill" (click)="openDeleteModal(project)">
+        <button class="btn btn-sm rounded-pill btn-danger" (click)="openDeleteModal(project)">
           <i class="bi bi-trash"></i>
         </button>
       </td>
@@ -145,24 +163,17 @@
   aria-hidden="true"
 >
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow-lg rounded-3">
+    <div class="modal-content">
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title" id="deleteModalLabel">
           <i class="bi bi-trash me-2"></i> Confirmar eliminación
         </h5>
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
         <p>
-          ¿Seguro que deseas eliminar el proyecto
-          <strong>{{ projectToDelete?.name }}</strong
-          >?
-          <br />
+          ¿Seguro que deseas eliminar el proyecto <strong>{{ projectToDelete?.name }}</strong
+          >?<br />
           Esta acción no se puede deshacer.
         </p>
       </div>
@@ -192,17 +203,12 @@
   aria-hidden="true"
 >
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow-lg rounded-3">
+    <div class="modal-content">
       <div class="modal-header bg-warning text-dark">
         <h5 class="modal-title" id="notOwnerModalLabel">
           <i class="bi bi-exclamation-triangle-fill me-2"></i> Acción no permitida
         </h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Cerrar"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">Solo el dueño del proyecto puede eliminarlo.</div>
       <div class="modal-footer">

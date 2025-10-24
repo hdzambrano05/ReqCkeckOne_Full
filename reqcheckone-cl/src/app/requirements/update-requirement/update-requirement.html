@@ -1,0 +1,199 @@
+<div class="container py-4">
+  <!-- Botón Regresar -->
+  <button
+    class="btn btn-outline-secondary btn-sm mb-3 d-flex align-items-center gap-1"
+    (click)="goBack()"
+  >
+    <i class="bi bi-arrow-left"></i> Regresar
+  </button>
+
+  <div class="row g-4">
+    <!-- FORMULARIO -->
+    <div class="col-lg-6">
+      <form [formGroup]="form" class="card p-4 shadow-sm rounded-4">
+        <h3 class="mb-4 text-primary">Editar Requisito Funcional</h3>
+
+        <!-- Proyecto -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Proyecto:</label>
+          <input class="form-control" [value]="projectName" readonly />
+        </div>
+
+        <!-- Título -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Título:</label>
+          <input class="form-control" formControlName="title" />
+        </div>
+
+        <!-- Descripción -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Descripción:</label>
+          <textarea
+            class="form-control"
+            formControlName="text"
+            rows="3"
+            (click)="enableAnalyze()"
+          ></textarea>
+        </div>
+
+        <!-- Contexto -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Contexto:</label>
+          <textarea class="form-control" formControlName="context" rows="2"></textarea>
+        </div>
+
+        <!-- Estado -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Estado:</label>
+          <select class="form-select" formControlName="status">
+            <option value="draft">Borrador</option>
+            <option value="reviewed">Revisado</option>
+            <option value="accepted">Aceptado</option>
+            <option value="rejected">Rechazado</option>
+          </select>
+        </div>
+
+        <!-- Prioridad solo lectura -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Prioridad (PO):</label>
+          <input class="form-control fw-bold" formControlName="priority" readonly />
+        </div>
+
+        <!-- Fecha límite -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Fecha límite:</label>
+          <input class="form-control" type="date" formControlName="due_date" />
+        </div>
+
+        <!-- Versión -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Versión:</label>
+          <input class="form-control" type="number" formControlName="version" />
+        </div>
+
+        <!-- Botones -->
+        <div class="d-grid gap-2">
+          <button
+            type="button"
+            class="btn btn-warning"
+            [disabled]="!canAnalyze || loadingAnalysis"
+            (click)="analyzeRequirement()"
+          >
+            <span *ngIf="!loadingAnalysis">Analizar Requisito</span>
+            <span *ngIf="loadingAnalysis" class="spinner-border spinner-border-sm"></span>
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="!canSave"
+            (click)="updateRequirement()"
+          >
+            Actualizar
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- BARRAS DE ATRIBUTOS -->
+    <div class="col-lg-6" *ngIf="analysis">
+      <div class="card p-4 shadow-sm rounded-4">
+        <h3 class="text-success mb-3">Atributos del Requisito</h3>
+
+        <div *ngFor="let attr of attributes" class="mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span class="fw-semibold" [title]="attr.description" style="cursor: help">{{
+              attr.name
+            }}</span>
+            <span>{{ attr.value }}%</span>
+          </div>
+          <div class="progress rounded-pill" style="height: 20px">
+            <div
+              class="progress-bar progress-bar-striped progress-bar-animated"
+              [style.width.%]="attr.value"
+              [ngClass]="{
+                'bg-success': attr.value >= 80,
+                'bg-warning': attr.value >= 50 && attr.value < 80,
+                'bg-danger': attr.value < 50
+              }"
+            ></div>
+          </div>
+          <small class="text-muted d-block mt-1" style="font-size: 0.85rem">{{
+            attr.description
+          }}</small>
+        </div>
+
+        <!-- Sugerencias de mejora -->
+        <div
+          *ngIf="analysis?.refined_requirement?.sugerencias?.length"
+          class="alert alert-warning d-flex flex-column gap-2 mt-3 rounded-4 shadow-sm"
+        >
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-lightbulb-fill fs-4"></i>
+            <strong>Sugerencias de mejora:</strong>
+          </div>
+          <ul class="mb-0 mt-2 ps-4">
+            <li *ngFor="let s of analysis.refined_requirement.sugerencias">{{ s }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL CENTRALIZADO -->
+  <div *ngIf="modalState.show" class="modal-backdrop fade show"></div>
+  <div *ngIf="modalState.show" class="modal d-block" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content shadow-lg rounded-4 modal-animated">
+        <div
+          class="modal-header d-flex align-items-center gap-2 justify-content-center"
+          [ngClass]="{
+            'modal-success': modalState.type === 'success',
+            'modal-error': modalState.type === 'error',
+            'modal-info': modalState.type === 'info',
+            'modal-loading': modalState.type === 'loading'
+          }"
+        >
+          <i
+            [ngClass]="{
+              'bi bi-hourglass-split': modalState.type === 'loading',
+              'bi bi-check-circle': modalState.type === 'success',
+              'bi bi-x-circle': modalState.type === 'error',
+              'bi bi-info-circle': modalState.type === 'info'
+            }"
+          ></i>
+          <h5 class="modal-title mb-0">
+            {{
+              modalState.type === 'loading'
+                ? 'Procesando...'
+                : modalState.type === 'success'
+                ? 'Éxito'
+                : modalState.type === 'error'
+                ? 'Error'
+                : 'Información'
+            }}
+          </h5>
+        </div>
+
+        <div class="modal-body text-center py-4">
+          <ng-container *ngIf="modalState.type === 'loading'">
+            <div class="spinner-border text-white mb-3" role="status"></div>
+            <p class="mb-0 fw-semibold text-white">{{ modalState.message }}</p>
+          </ng-container>
+          <ng-container *ngIf="modalState.type !== 'loading'">
+            <p class="mb-0 fw-semibold">{{ modalState.message }}</p>
+          </ng-container>
+        </div>
+
+        <div class="modal-footer justify-content-center" *ngIf="modalState.type !== 'loading'">
+          <button
+            type="button"
+            class="btn btn-outline-primary px-4 fw-semibold"
+            (click)="closeModal()"
+          >
+            <i class="bi bi-x-lg me-1"></i> Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

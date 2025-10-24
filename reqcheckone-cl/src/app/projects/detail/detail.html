@@ -53,7 +53,7 @@
           <p class="text-muted fst-italic">No hay colaboradores asignados.</p>
         </ng-template>
       </div>
-      
+
       <!-- Botón agregar requisito (arriba de la lista) -->
       <div class="text-end mb-3">
         <button class="btn btn-add btn-lg shadow-sm" (click)="goToAddRequirement()">
@@ -98,10 +98,13 @@
                 <i class="bi bi-eye me-1"></i> Ver
               </button>
 
-              <button class="btn btn-outline-warning btn-sm btn-action">
+              <button
+                class="btn btn-outline-warning btn-sm btn-action"
+                (click)="editRequirement(req.id)"
+              >
                 <i class="bi bi-pencil me-1"></i> Editar
               </button>
-
+              
               <button
                 class="btn btn-outline-danger btn-sm btn-action"
                 (click)="deleteRequirement(req.id)"

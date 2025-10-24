@@ -9,6 +9,7 @@ import { Detail } from './projects/detail/detail';
 import { CreateRequirement } from './requirements/create-requirement/create-requirement';
 import { DetailRequirement } from './requirements/detail-requirement/detail-requirement';
 import { HistoryRequirements } from './requirements/history-requirements/history-requirements';
+import { UpdateRequirement } from './requirements/update-requirement/update-requirement';
 import { AuthGuard } from './core/auth-guard';
 
 const routes: Routes = [
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'projects/:id', component: Detail, canActivate: [AuthGuard] },
   { path: 'projects/:id/requirements/create', component: CreateRequirement, canActivate: [AuthGuard] },
   { path: 'projects/:projectId/requirements/:id', component: DetailRequirement, canActivate: [AuthGuard] },
+  { path: 'projects/:projectId/requirements/:id/update', component: UpdateRequirement, canActivate: [AuthGuard] },
   { path: 'requirements/history', component: HistoryRequirements, canActivate: [AuthGuard] },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '**', redirectTo: 'login' }

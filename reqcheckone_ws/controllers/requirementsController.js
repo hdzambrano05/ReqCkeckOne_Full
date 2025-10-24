@@ -134,21 +134,21 @@ module.exports = {
             const requirement = await requirements.findByPk(req.params.id);
 
             if (!requirement) {
-                return res.status(404).send({ message: 'Requirement Not Found' });
+                return res.status(404).send({ message: "Requirement Not Found" });
             }
 
-            // Guardar versión anterior en el historial
+            // 🧩 Guardar la versión anterior en historial
             await requirement_history.create({
                 requirement_id: requirement.id,
                 version: requirement.version,
                 text: requirement.text,
                 context: requirement.context,
                 analysis: requirement.analysis,
-                changed_by: req.body.changed_by || null, // viene del frontend (usuario logueado)
+                changed_by: req.body.changed_by || null,
             });
 
-            // Actualizar el requisito
-            await requirement.update({
+            // 💾 Actualizar directamente con los datos nuevos
+            const updated = await requirement.update({
                 project_id: req.body.project_id || requirement.project_id,
                 title: req.body.title || requirement.title,
                 text: req.body.text || requirement.text,
@@ -156,57 +156,62 @@ module.exports = {
                 status: req.body.status || requirement.status,
                 priority: req.body.priority || requirement.priority,
                 due_date: req.body.due_date || requirement.due_date,
-                version: (requirement.version || 1) + 1, // incrementamos versión
-                analysis: req.body.analysis || requirement.analysis,
+                version: (requirement.version || 1) + 1,
+                analysis: req.body.analysis ? JSON.stringify(req.body.analysis) : requirement.analysis,
                 created_by: req.body.created_by || requirement.created_by,
-            });
-
-            return res.status(200).send(requirement);
-
-        } catch (error) {
-            console.error("Error updating requirement:", error);
-            return res.status(400).send(error);
-        }
-    },
-
-    async delete(req, res) {
-        try {
-            const id = req.params.id;
-            const userId = req.user?.id || null;
-
-            const requirement = await requirements.findByPk(id);
-            if (!requirement) {
-                return res.status(404).send({ message: 'Requirement not found' });
-            }
-
-            console.log('🧠 Eliminado por usuario:', req.user);
-
-            // ✅ Marcar como eliminado (sin borrar de la BD)
-            requirement.status = 'eliminado';
-            await requirement.save();
-
-            // ✅ Guardar el cambio en el historial
-            await requirement_history.create({
-                requirement_id: requirement.id,
-                version: requirement.version,
-                text: requirement.text,
-                context: requirement.context,
-                analysis: requirement.analysis,
-                changed_by: userId,
                 updated_at: new Date(),
             });
 
-            console.log('✅ Historial guardado correctamente');
-            return res.status(200).send({ message: 'Requisito marcado como eliminado' });
+            console.log("✅ Requisito actualizado correctamente (sin reanalizar).");
+            return res.status(200).send(updated);
 
         } catch (error) {
-            console.error('❌ Error al eliminar requisito:', error);
-            return res.status(500).send({
-                message: 'Error al eliminar el requisito',
+            console.error("❌ Error actualizando requisito:", error.message);
+            return res.status(400).send({
+                message: "Error actualizando el requisito",
                 error: error.message,
             });
         }
+    },
+
+    async delete (req, res) {
+    try {
+        const id = req.params.id;
+        const userId = req.user?.id || null;
+
+        const requirement = await requirements.findByPk(id);
+        if (!requirement) {
+            return res.status(404).send({ message: 'Requirement not found' });
+        }
+
+        console.log('🧠 Eliminado por usuario:', req.user);
+
+        // ✅ Marcar como eliminado (sin borrar de la BD)
+        requirement.status = 'eliminado';
+        await requirement.save();
+
+        // ✅ Guardar el cambio en el historial
+        await requirement_history.create({
+            requirement_id: requirement.id,
+            version: requirement.version,
+            text: requirement.text,
+            context: requirement.context,
+            analysis: requirement.analysis,
+            changed_by: userId,
+            updated_at: new Date(),
+        });
+
+        console.log('✅ Historial guardado correctamente');
+        return res.status(200).send({ message: 'Requisito marcado como eliminado' });
+
+    } catch (error) {
+        console.error('❌ Error al eliminar requisito:', error);
+        return res.status(500).send({
+            message: 'Error al eliminar el requisito',
+            error: error.message,
+        });
     }
+}
 
 
 };

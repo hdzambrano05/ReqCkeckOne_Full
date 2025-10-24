@@ -40,6 +40,10 @@ export class RequirementsService {
     return this.http.delete<any>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 
+  updateRequirement(id: number, data: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, data, { headers: this.getHeaders() });
+  }
+
 
 
 
