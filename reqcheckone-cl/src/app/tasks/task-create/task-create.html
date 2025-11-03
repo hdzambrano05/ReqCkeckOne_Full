@@ -1,0 +1,73 @@
+<div class="task-create-container p-4 shadow rounded-4" *ngIf="isOwner; else noAccess">
+  <h2 class="text-center mb-4 fw-bold text-dark">📝 Crear Nueva Tarea</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <!-- Título -->
+    <div class="form-floating mb-3">
+      <input
+        type="text"
+        class="form-control input-light"
+        id="taskTitle"
+        placeholder="Título de la tarea"
+        formControlName="title"
+      />
+      <label for="taskTitle"><i class="bi bi-card-text me-1"></i> Título</label>
+    </div>
+
+    <!-- Descripción -->
+    <div class="form-floating mb-3">
+      <textarea
+        class="form-control input-light"
+        placeholder="Descripción de la tarea"
+        id="taskDescription"
+        style="height: 100px;"
+        formControlName="description"
+      ></textarea>
+      <label for="taskDescription"><i class="bi bi-journal-text me-1"></i> Descripción</label>
+    </div>
+
+    <!-- Asignar a -->
+    <div class="form-floating mb-3">
+      <select class="form-select input-light" id="taskAssignee" formControlName="assignee_id">
+        <option value="">Selecciona un colaborador</option>
+        <option *ngFor="let col of collaborators" [value]="col.id">{{ col.username }}</option>
+      </select>
+      <label for="taskAssignee"><i class="bi bi-person-fill me-1"></i> Asignar a</label>
+    </div>
+
+    <!-- Requisito relacionado -->
+    <div class="form-floating mb-3">
+      <select class="form-select input-light" id="taskRequirement" formControlName="requirement_id">
+        <option value="">Ninguno</option>
+        <option *ngFor="let req of requirements" [value]="req.id">
+          {{ req.title || 'Requisito #' + req.id }}
+        </option>
+      </select>
+      <label for="taskRequirement"><i class="bi bi-clipboard-check me-1"></i> Requisito relacionado</label>
+    </div>
+
+    <!-- Fecha límite -->
+    <div class="form-floating mb-4">
+      <input
+        type="date"
+        class="form-control input-light"
+        id="taskDueDate"
+        placeholder="Fecha límite"
+        formControlName="due_date"
+      />
+      <label for="taskDueDate"><i class="bi bi-calendar-event me-1"></i> Fecha límite</label>
+    </div>
+
+    <!-- Botón Crear -->
+    <button type="submit" class="btn btn-primary w-100 py-2" [disabled]="loading || form.invalid">
+      {{ loading ? 'Creando...' : 'Crear tarea' }}
+    </button>
+  </form>
+</div>
+
+<ng-template #noAccess>
+  <div class="alert alert-warning m-3 text-center">
+    ⚠️ No tienes permisos para asignar tareas en este proyecto.
+  </div>
+</ng-template>

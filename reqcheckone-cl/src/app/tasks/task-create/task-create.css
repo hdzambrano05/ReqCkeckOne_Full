@@ -1,0 +1,55 @@
+.task-create-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: #ffffff;
+  color: #212529;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.task-create-container:hover {
+  transform: translateY(-2px);
+}
+
+h2 {
+  color: #212529;
+  font-size: 1.8rem;
+}
+
+.input-light {
+  background: #f8f9fa;
+  color: #212529;
+  border: 1px solid #ced4da;
+  border-radius: 12px;
+  padding-left: 1rem;
+}
+
+.input-light:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 8px rgba(13, 110, 253, 0.25);
+}
+
+.btn-primary {
+  background: #0d6efd;
+  border: none;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: #0b5ed7;
+  transform: translateY(-2px);
+}
+
+.form-floating > label i {
+  color: #0d6efd;
+}
+
+.alert-warning {
+  background: #fff3cd;
+  color: #856404;
+  font-weight: 600;
+}

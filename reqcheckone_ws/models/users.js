@@ -90,7 +90,7 @@ module.exports = sequelize => {
     });
 
     // Un usuario puede ser asignado a muchas tareas
-    UsersModel.hasMany(models.tasks_model, { foreignKey: 'assignee_id' });
+    UsersModel.hasMany(models.tasks_model, { foreignKey: 'assignee_id', as: 'assignedTasks' });
 
     // Un usuario puede escribir muchos comentarios
     UsersModel.hasMany(models.comments_model, { foreignKey: 'user_id' });

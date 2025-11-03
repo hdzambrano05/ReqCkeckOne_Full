@@ -22,6 +22,7 @@ import { CreateRequirement } from './requirements/create-requirement/create-requ
 import { DetailRequirement } from './requirements/detail-requirement/detail-requirement';
 import { HistoryRequirements } from './requirements/history-requirements/history-requirements';
 import {UpdateRequirement} from './requirements/update-requirement/update-requirement';
+import { TaskCreate } from './tasks/task-create/task-create';
 
 
 
@@ -40,7 +41,8 @@ import {UpdateRequirement} from './requirements/update-requirement/update-requir
     CreateRequirement,
     DetailRequirement,
     HistoryRequirements,
-    UpdateRequirement
+    UpdateRequirement,
+    TaskCreate
     
   ],
   imports: [

@@ -1,11 +1,49 @@
 <div class="container mt-4" *ngIf="project">
   <!-- Flecha para regresar -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+  <!-- Botón regresar a la izquierda -->
   <button
-    class="btn btn-outline-secondary btn-sm mb-3 d-flex align-items-center gap-1"
+    class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1"
     (click)="goBack()"
   >
     <i class="bi bi-arrow-left"></i> Regresar
   </button>
+
+  <!-- Botón de notificaciones a la derecha -->
+  <button
+    type="button"
+    class="btn btn-outline-dark position-relative p-2"
+    (click)="openTasksModal()"
+    title="Ver tareas asignadas"
+    style="
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    "
+  >
+    <i class="bi bi-bell-fill fs-5"></i>
+
+    <!-- Badge elegante -->
+    <span
+      *ngIf="unreadTasks > 0"
+      class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger"
+      style="
+        width: 16px;
+        height: 16px;
+        font-size: 0.65rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s;
+      "
+    >
+      {{ unreadTasks }}
+    </span>
+  </button>
+</div>
 
   <!-- Tarjeta principal -->
   <div class="card shadow-lg border-0 rounded-3">
@@ -104,7 +142,7 @@
               >
                 <i class="bi bi-pencil me-1"></i> Editar
               </button>
-              
+
               <button
                 class="btn btn-outline-danger btn-sm btn-action"
                 (click)="deleteRequirement(req.id)"
@@ -118,6 +156,141 @@
             No hay requisitos aún.
           </li>
         </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 🧾 Modal de Tareas -->
+<div
+  class="modal fade"
+  id="tasksModal"
+  tabindex="-1"
+  aria-labelledby="tasksModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-content bg-white text-dark shadow-lg rounded-4 border-0">
+      <div class="modal-header bg-primary text-white rounded-top-4">
+        <h5 class="modal-title fw-bold d-flex align-items-center gap-2" id="tasksModalLabel">
+          <i class="bi bi-check2-square"></i> Tareas del Proyecto
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Loader -->
+        <div *ngIf="loadingTasks" class="text-center my-4">
+          <div class="spinner-border text-primary"></div>
+        </div>
+
+        <!-- Sin tareas -->
+        <div *ngIf="!loadingTasks && tasks.length === 0" class="text-center text-muted py-4">
+          <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+          No hay tareas asignadas.
+        </div>
+
+        <!-- Lista de tareas -->
+        <ul *ngIf="tasks.length > 0" class="list-group list-group-flush">
+          <li
+            *ngFor="let task of tasks"
+            class="list-group-item bg-light border-0 shadow-sm mb-2 rounded-3"
+          >
+            <div class="d-flex justify-content-between align-items-start flex-column flex-md-row">
+              <div class="flex-grow-1">
+                <h6 class="fw-bold mb-1 text-primary d-flex align-items-center gap-2">
+                  <i class="bi bi-clipboard-check"></i> {{ task.title }}
+                  <span *ngIf="!task.read_by_user" class="badge bg-success ms-2">Nuevo</span>
+                </h6>
+                <p class="mb-1 text-secondary">{{ task.description }}</p>
+                <small class="text-muted d-block">
+                  <i class="bi bi-person-circle"></i>
+                  Asignado a:
+                  <span class="fw-semibold text-dark">
+                    {{ task.assignedUser?.username || 'Sin asignar' }}
+                  </span>
+                </small>
+                <small class="text-muted d-block">
+                  <i class="bi bi-calendar-event"></i>
+                  Fecha límite:
+                  <span class="fw-semibold">{{ task.due_date | date : 'mediumDate' }}</span>
+                </small>
+                <small class="text-muted d-block mt-1">
+                  <i class="bi bi-info-circle"></i>
+                  Estado: <span class="fw-semibold text-primary">{{ task.status }}</span>
+                </small>
+              </div>
+
+              <!-- Botones Aceptar / Rechazar para colaborador -->
+              <div class="mt-2 mt-md-0 ms-md-3 d-flex gap-2 flex-wrap">
+                <button
+                  *ngIf="task.assignee_id === userId && task.status === 'pending'"
+                  class="btn btn-success btn-sm"
+                  (click)="respondTask(task.id, true)"
+                >
+                  <i class="bi bi-check-lg me-1"></i> Aceptar
+                </button>
+                <button
+                  *ngIf="task.assignee_id === userId && task.status === 'pending'"
+                  class="btn btn-danger btn-sm"
+                  (click)="respondTask(task.id, false)"
+                >
+                  <i class="bi bi-x-lg me-1"></i> Rechazar
+                </button>
+                <span
+                  *ngIf="task.status !== 'pending'"
+                  class="badge bg-secondary align-self-center"
+                >
+                  {{ task.status | titlecase }}
+                </span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="modal-footer bg-light border-0">
+        <!-- Botón de crear tarea solo para creador -->
+        <button
+          *ngIf="project?.owner_id === userId"
+          class="btn btn-primary rounded-pill px-4"
+          data-bs-toggle="modal"
+          data-bs-target="#createTaskModal"
+        >
+          <i class="bi bi-plus-circle"></i> Nueva Tarea
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 📋 Modal para Crear Tarea -->
+<div
+  class="modal fade"
+  id="createTaskModal"
+  tabindex="-1"
+  aria-labelledby="createTaskModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content bg-white text-dark shadow-lg rounded-4 border-0">
+      <div class="modal-header bg-primary text-white rounded-top-4">
+        <h5 class="modal-title fw-bold d-flex align-items-center gap-2" id="createTaskModalLabel">
+          <i class="bi bi-plus-circle"></i> Crear Tarea
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <app-task-create
+          *ngIf="project?.id"
+          [projectId]="project!.id"
+          (taskCreated)="loadTasks(project!.id, true)"
+        ></app-task-create>
       </div>
     </div>
   </div>
