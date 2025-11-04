@@ -1,47 +1,66 @@
 <div class="container mt-4" *ngIf="project">
   <!-- Flecha para regresar -->
   <div class="d-flex justify-content-between align-items-center mb-3">
-  <!-- Botón regresar a la izquierda -->
-  <button
-    class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1"
-    (click)="goBack()"
-  >
-    <i class="bi bi-arrow-left"></i> Regresar
-  </button>
+    <button
+      class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1"
+      (click)="goBack()"
+    >
+      <i class="bi bi-arrow-left"></i> Regresar
+    </button>
 
-  <!-- Botón de notificaciones a la derecha -->
-  <button
-    type="button"
-    class="btn btn-outline-dark position-relative p-2"
-    (click)="openTasksModal()"
-    title="Ver tareas asignadas"
-    style="
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    "
-  >
-    <i class="bi bi-bell-fill fs-5"></i>
-
-    <!-- Badge elegante -->
-    <span
-      *ngIf="unreadTasks > 0"
-      class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger"
+    <!-- Botón de notificaciones -->
+    <button
+      type="button"
+      class="btn btn-outline-dark position-relative p-2"
+      (click)="openTasksModal()"
+      title="Ver tareas asignadas"
       style="
-        width: 16px;
-        height: 16px;
-        font-size: 0.65rem;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: transform 0.3s;
       "
     >
-      {{ unreadTasks }}
-    </span>
+      <i class="bi bi-bell-fill fs-5"></i>
+      <span
+        *ngIf="unreadTasks > 0"
+        class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger"
+        style="
+          width: 16px;
+          height: 16px;
+          font-size: 0.65rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: transform 0.3s;
+        "
+      >
+        {{ unreadTasks }}
+      </span>
+    </button>
+  </div>
+
+<!-- Botón Generar PDF profesional compacto -->
+<div class="d-flex justify-content-end mb-3">
+  <button
+    #pdfBtn
+    class="btn btn-success d-flex align-items-center gap-2"
+    style="
+      padding: 0.45rem 0.9rem;
+      font-size: 0.95rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
+    "
+    (click)="generatePDF()"
+    (mouseover)="pdfBtn.style.transform='scale(1.05)'"
+    (mouseout)="pdfBtn.style.transform='scale(1)'"
+    title="Generar PDF del proyecto"
+  >
+    <i class="bi bi-file-earmark-pdf fs-5"></i>
+    <span>Generar PDF</span>
   </button>
 </div>
 
@@ -92,7 +111,7 @@
         </ng-template>
       </div>
 
-      <!-- Botón agregar requisito (arriba de la lista) -->
+      <!-- Botón agregar requisito -->
       <div class="text-end mb-3">
         <button class="btn btn-add btn-lg shadow-sm" (click)="goToAddRequirement()">
           <i class="bi bi-plus-circle"></i> Agregar requisito
@@ -104,7 +123,6 @@
         <h6 class="text-uppercase text-secondary fw-semibold mb-3 d-flex align-items-center gap-1">
           <i class="bi bi-list-check"></i> Requisitos del Proyecto
         </h6>
-
         <ul class="list-group list-group-flush mb-4">
           <li
             *ngFor="let req of requirements"
@@ -126,8 +144,6 @@
                 </span>
               </small>
             </div>
-
-            <!-- Botones de acción siempre a la derecha -->
             <div class="d-flex flex-column flex-sm-row gap-2 align-items-sm-end ms-auto">
               <button
                 class="btn btn-outline-primary btn-sm btn-action"
@@ -135,14 +151,12 @@
               >
                 <i class="bi bi-eye me-1"></i> Ver
               </button>
-
               <button
                 class="btn btn-outline-warning btn-sm btn-action"
                 (click)="editRequirement(req.id)"
               >
                 <i class="bi bi-pencil me-1"></i> Editar
               </button>
-
               <button
                 class="btn btn-outline-danger btn-sm btn-action"
                 (click)="deleteRequirement(req.id)"
@@ -151,7 +165,6 @@
               </button>
             </div>
           </li>
-
           <li *ngIf="!requirements.length" class="list-group-item text-muted fst-italic">
             No hay requisitos aún.
           </li>
@@ -160,6 +173,7 @@
     </div>
   </div>
 </div>
+
 <!-- 🧾 Modal de Tareas -->
 <div
   class="modal fade"

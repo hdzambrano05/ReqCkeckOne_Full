@@ -62,4 +62,9 @@ export class AuthService {
     const id = localStorage.getItem('id');
     return id ? Number(id) : null;
   }
+
+  getUserById(id: number): Observable<{ id: number; username: string; email?: string; name?: string }> {
+  return this.http.get<{ id: number; username: string; email?: string; name?: string }>(`${this.base}/users/${id}`);
+}
+
 }
