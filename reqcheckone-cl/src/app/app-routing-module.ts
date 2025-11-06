@@ -11,8 +11,10 @@ import { DetailRequirement } from './requirements/detail-requirement/detail-requ
 import { HistoryRequirements } from './requirements/history-requirements/history-requirements';
 import { UpdateRequirement } from './requirements/update-requirement/update-requirement';
 import { AuthGuard } from './core/auth-guard';
+import { LandingComponent } from './components/landing/landing.component';
 
 const routes: Routes = [
+  { path: 'landing', component: LandingComponent },
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'home', component: Home, canActivate: [AuthGuard] },
@@ -23,12 +25,17 @@ const routes: Routes = [
   { path: 'projects/:projectId/requirements/:id', component: DetailRequirement, canActivate: [AuthGuard] },
   { path: 'projects/:projectId/requirements/:id/update', component: UpdateRequirement, canActivate: [AuthGuard] },
   { path: 'requirements/history', component: HistoryRequirements, canActivate: [AuthGuard] },
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: '**', redirectTo: 'login' }
+  { path: '', redirectTo: 'landing', pathMatch: 'full' },
+  { path: '**', redirectTo: 'landing' },
+  { path: '', component: LandingComponent }, // ← Página principal
+  { path: '**', redirectTo: '' } // ← Redirección si la ruta no existe
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
+
+
 export class AppRoutingModule { }
+

@@ -1,19 +1,17 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './app-routing-module';
-import { App } from './app';
+import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+
+import { AppRoutingModule } from './app-routing-module';
+import { App } from './app';
 
 /* Components */
 import { Login } from './auth/login/login';
 import { Register } from './auth/register/register';
 import { Home } from './dashboard/home/home';
-
-/* Core */
-import { AuthInterceptor } from './core/auth-interceptor';
-import { AuthGuard } from './core/auth-guard';
 import { Sidebar } from './shared/sidebar/sidebar';
 import { List } from './projects/list/list';
 import { Create } from './projects/create/create';
@@ -21,38 +19,44 @@ import { Detail } from './projects/detail/detail';
 import { CreateRequirement } from './requirements/create-requirement/create-requirement';
 import { DetailRequirement } from './requirements/detail-requirement/detail-requirement';
 import { HistoryRequirements } from './requirements/history-requirements/history-requirements';
-import {UpdateRequirement} from './requirements/update-requirement/update-requirement';
+import { UpdateRequirement } from './requirements/update-requirement/update-requirement';
 import { TaskCreate } from './tasks/task-create/task-create';
 
+/* Core */
+import { AuthInterceptor } from './core/auth-interceptor';
+import { AuthGuard } from './core/auth-guard';
 
-
+/* Standalone Components */
+import { LandingComponent } from './components/landing/landing.component'; // ✅ standalone
 
 @NgModule({
   declarations: [
     App,
     Login,
     Register,
-    List,
     Home,
     Sidebar,
+    List,
     Create,
     Detail,
-    Create,
     CreateRequirement,
     DetailRequirement,
     HistoryRequirements,
     UpdateRequirement,
     TaskCreate
-    
+    // ❌ NO declarar LandingComponent aquí
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
+    CommonModule,
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    AppRoutingModule,
+    LandingComponent // ✅ Standalone components van en imports
   ],
+  exports: [Sidebar],
   providers: [
     AuthGuard,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

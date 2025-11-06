@@ -1,11 +1,11 @@
 <div class="layout">
-  <!-- Sidebar solo si hay sesión -->
+
   <app-sidebar
     *ngIf="isLoggedIn"
     [(isSidebarOpen)]="isSidebarOpen"
   ></app-sidebar>
 
-  <!-- Contenido -->
+
   <main
     class="content"
     [class.collapsed]="isLoggedIn && !isSidebarOpen"
