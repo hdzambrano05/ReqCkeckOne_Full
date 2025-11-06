@@ -1,355 +1,297 @@
-@import url('https://fonts.googleapis.com/css2?family=Momo+Trust+Display&display=swap');
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* ---------------------------------------------------- */
+/* Variables de Color (Elegancia y Tecnología) */
+/* ---------------------------------------------------- */
+:root {
+  --color-primary: #1E3A8A;   /* Azul Oscuro Principal (Elegante) */
+  --color-accent: #3B82F6;    /* Azul Vibrante (Acento de IA) */
+  --color-secondary: #6B7280; /* Gris Frío (Texto y Bordes) */
+  --color-background-light: #F9FAFB; /* Fondo Claro */
+  --color-white: #ffffff;
 }
 
-html,
-body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  font-family: Arial, sans-serif;
+/* ---------------------------------------------------- */
+/* Globales, Tipografía y Botones */
+/* ---------------------------------------------------- */
+:host {
+  display: block;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente moderna */
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  color: var(--color-primary);
+  background-color: var(--color-background-light);
 }
 
-
-/* Contenedor principal */
-.main-title {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center; /* Centra horizontalmente */
-  align-items: center; /* Centra verticalmente */
-  background-color: rgb(255, 202, 43,0.2)
-}
-
-
-
-/* Hijos */
-.title,
-.image {
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 20px;
-}
-
-.title {
-  flex: 0 1 40%;
-  max-width: 600px;
-  height: 55%;
-  margin-right: 6vw;
-}
-
-.image {
-  flex: 0 1 40%;
-  max-width: 800px;
-  height: 70%;
-  margin-left: 5vw;
-}
-
-/* Bordes personalizados */
-.title,
-.image {
-  border: 3px solid black;
-  border-radius: 15px;
-}
-
-
-/* Contenido interno */
-.title-content,
-.image-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.title-content h1 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-}
-
-.title-content p {
-  font-size: 1rem;
-  max-width: 90%;
-}
-
-/* Responsive tablet */
-@media (max-width: 768px) {
-  .main-title {
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .title,
-  .image {
-    width: 80%;
-    height: auto;
-  }
-
-  .title-content h1,
-  .image-content h1 {
-    font-size: 1.6rem;
-  }
-
-  .title-content p {
-    font-size: 0.95rem;
-  }
-}
-
-/* Responsive móvil */
-@media (max-width: 480px) {
-
-  .title,
-  .image {
-    width: 90%;
-    padding: 15px;
-  }
-
-  .title-content h1,
-  .image-content h1 {
-    font-size: 1.3rem;
-  }
-
-  .title-content p {
-    font-size: 0.9rem;
-  }
-}
-
-/*----------------------------------*/
-
-.text {
-  width: 35vw;
-  height: 45vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border: 2px solid #db5534;
-  border-radius: 10px;
-  box-sizing: border-box;
-  gap: 2rem;
-}
-
-/* Elementos internos */
-.text h2 {
-  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  font-weight: 600;
-  font-size: 3.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.text p {
-  font-family: monospace;
-  font-size: 1.5rem;
-  max-width: 90%;
-}
-
-.name {
-  font-family: 'Momo Trust Display', sans-serif;
-  color: yellow;
-  -webkit-text-stroke: 5px #ff0000;
-}
-
-.slogan0 {
-  font-family: 'Montserrat', bold;
-  font-size: 3rem;
-  color: #ffff;
-}
-.slogan {
-  font-family: 'Montserrat', bold;
-  font-size: 3rem;
-  color: yellow;
-  color: #3498db;
-}
-
-.text button {
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
+/* Estilos de botones primarios */
+.btn-primary-action, .btn-get-started {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  padding: 12px 30px;
   border: none;
-  border-radius: 5px;
-  background-color: #3498db;
-  color: white;
+  border-radius: 8px; /* Bordes más modernos */
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-weight: 600; /* Semibold */
+  font-size: 1.05em;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); /* Sombra elegante */
+  margin-right: 15px;
 }
 
-.text button:hover {
-  background-color: #2980b9;
+.btn-primary-action:hover, .btn-get-started:hover {
+  background-color: #2563EB; /* Un poco más oscuro */
+  transform: translateY(-2px);
+}
+.btn-primary-action:active, .btn-get-started:active {
+  transform: scale(0.98);
 }
 
-/* Tablet */
-@media (max-width: 768px) {
-  .text {
-    width: 80vw;
-    height: auto;
-    padding: 1.5rem;
-  }
-
-  .text h2 {
-    font-size: 1.6rem;
-  }
-
-  .text p {
-    font-size: 0.95rem;
-  }
-
-  .text button {
-    font-size: 0.95rem;
-    padding: 0.5rem 1rem;
-  }
+/* Estilos de botones secundarios (para 'More Info' / 'Consultoría') */
+.btn-secondary-action {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-accent);
+  padding: 12px 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.05em;
+  transition: all 0.3s ease;
 }
 
-/* Móvil */
-@media (max-width: 480px) {
-  .text {
-    width: 90vw;
-    padding: 1rem;
-  }
-
-  .text h2 {
-    font-size: 1.3rem;
-  }
-
-  .text p {
-    font-size: 0.9rem;
-  }
-
-  .text button {
-    font-size: 0.9rem;
-    padding: 0.4rem 0.8rem;
-  }
+.btn-secondary-action:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: var(--color-accent);
 }
 
-/*-----------------------------------------*/
+/* ---------------------------------------------------- */
+/* Barra de Navegación (Navbar) */
+/* ---------------------------------------------------- */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 80px;
+  background-color: var(--color-background-light);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  position: sticky; /* Sticky para que se quede arriba */
+  top: 0;
+  z-index: 20; /* Alto z-index */
+}
 
 .logo {
-  width: 30vw;
-  height: 30vh;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-box {
+  width: 25px;
+  height: 25px;
+  background-color: var(--color-accent);
+  border-radius: 5px;
+}
+
+.logo-text {
+  font-weight: 700; /* Bold */
+  font-size: 1.3em;
+  color: var(--color-primary);
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--color-secondary);
+  margin-left: 30px;
+  font-size: 1em;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--color-accent);
+}
+
+/* ---------------------------------------------------- */
+/* Sección Principal (Hero) */
+/* ---------------------------------------------------- */
+.hero-section {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding-bottom: 0; /* Ajustamos el padding para el diseño curvo */
+}
+
+/* Fondo de Partículas */
+.particles-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.1; /* Sutil */
+  z-index: 1;
+  /* Nota: El color de fondo del componente de partículas está definido en tu .ts como #0d47a1. */
+}
+
+/* Contenido Principal */
+.hero-content {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 40px 80px;
+}
+
+.text-content {
+  max-width: 50%;
+}
+
+.elegant-h1 {
+  font-size: 3.8em;
+  margin-bottom: 20px;
+  font-weight: 900;
+  line-height: 1.2;
+  color: var(--color-primary);
+}
+
+.elegant-h1 ** {
+  color: var(--color-accent);
+}
+
+.subtitle {
+  font-size: 1.2em;
+  margin-bottom: 40px;
+  line-height: 1.6;
+  color: var(--color-secondary);
+}
+
+.illustration-area {
+  max-width: 45%;
+  min-height: 450px;
+  position: relative;
+  display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px solid #3498db;
-  font-size: 1.3rem;
-  padding: 2rem;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  text-align: center;
-  box-sizing: border-box;
-  gap: 1rem;
-}
-
-/*---------------------*/
-
-/* Contenedor principal */
-.main-product {
-  width: 100vw;
-  height: 82vh;
-  margin-top: 30px;
-  display: flex;
-  justify-content: center;
-  /* Centra horizontalmente */
-  align-items: center;
-  /* Centra verticalmente */
-  /* Espacio entre los hijos */
-  aspect-ratio: 1/1;
-  /* Espacio entre los divs */
-  gap: 20px;
-  box-sizing: border-box;
-  background: linear-gradient(135deg, #3498db, #9b59b6);
-  flex-wrap: wrap;
-  /* Permite que se acomoden en varias líneas si no caben */
-
-}
-
-/* Estilos base para los hijos */
-.product1,
-.product2,
-.product3 {
-  width: 28vw;
-  height: 50vh;
-  background-color: #3498db;
-  border: 2px solid #333;
-  border-radius: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: 1.2rem;
-  text-align: center;
-}
-
-.main-product h1 {
-  font-size: 50px;
-  width: 80%;
-  text-align: center;
-  color: white;
-}
-
-.main-product p {
-  font-size: 20px;
-  width: 80%;
-  text-align: center;
-  color: white;
-}
-
-/* Responsive para tablets */
-@media (max-width: 768px) {
-  .main-product {
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-  }
-
-  .product1,
-  .product2,
-  .product3 {
-    width: 45%;
-    height: 130px;
-    font-size: 1rem;
-  }
-}
-
-/* Responsive para móviles */
-@media (max-width: 480px) {
-  .main-product {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-  }
-
-  .product1,
-  .product2,
-  .product3 {
-    width: 90%;
-    height: 120px;
-    font-size: 0.95rem;
-  }
-}
-
-/*-----------------------------------------------------*/
-
-.main-services {
-  width: 100vw;
-  height: 70vh;
-  margin-top: 50px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #e67e22, #d35400);
-  color: white;
-  font-size: 2rem;
-  text-align: center;
   padding: 20px;
-  box-sizing: border-box;
-  gap: 20px;
+}
+
+.illustration-placeholder {
+    /* Simulación simple y profesional de la ilustración */
+    background-color: var(--color-white);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    padding: 50px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.icon-ai, .icon-data {
+    font-size: 3em;
+    display: block;
+    margin-bottom: 10px;
+}
+.icon-ai { color: var(--color-accent); }
+.icon-data { color: var(--color-primary); }
+
+.caption {
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+/* Curva de Fondo (Recreación elegante del diseño) */
+.hero-section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60%; /* La curva comienza más arriba */
+  background: var(--color-background-light); /* Color de la parte inferior */
+
+  /* Forma curva usando clip-path para un look moderno */
+  clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 100%);
+  z-index: 0;
+}
+/* Agregamos una capa de color sólido o degradado para la parte superior azul */
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Degradado sutil de azul */
+    background: linear-gradient(145deg, var(--color-primary) 0%, #2a52be 100%); 
+    
+    /* El mismo clip-path, pero inverso para que se vea solo en la parte de arriba */
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 40%);
+    z-index: 0;
+    opacity: 0.9;
+}
+
+/* El contenido (texto e imagen) debe estar sobre las capas de fondo */
+.hero-content {
+    z-index: 10;
+}
+
+
+/* ---------------------------------------------------- */
+/* Secciones de Contenido (Para pruebas de scroll) */
+/* ---------------------------------------------------- */
+.content-section {
+  padding: 100px 80px;
+  min-height: 50vh;
+  position: relative;
+  z-index: 10; /* Asegura que no se meta debajo del hero */
+  background-color: var(--color-background-light);
+}
+
+.dark-section {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.section-title {
+    font-size: 2.5em;
+    font-weight: 800;
+    margin-bottom: 20px;
+    text-align: center;
+    color: inherit; /* Hereda el color del contenedor (blanco en dark-section) */
+}
+
+
+/* ---------------------------------------------------- */
+/* Media Queries (Responsive) */
+/* ---------------------------------------------------- */
+@media (max-width: 1024px) {
+  .navbar { padding: 15px 40px; }
+  .elegant-h1 { font-size: 3em; }
+  .hero-content {
+    flex-direction: column;
+    padding: 60px 40px;
+    text-align: center;
+  }
+  .text-content, .illustration-area {
+    max-width: 100%;
+  }
+  .text-content {
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar { flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .nav-links { order: 2; flex-basis: 100%; text-align: center; margin-top: 10px; }
+  .btn-get-started { order: 3; }
+  .logo { order: 1; }
+  .elegant-h1 { font-size: 2.2em; }
+  .subtitle { font-size: 1em; }
+  .btn-primary-action, .btn-secondary-action {
+    padding: 10px 20px;
+    font-size: 1em;
+    margin-bottom: 10px;
+  }
 }
