@@ -1,26 +1,26 @@
 {
   "development": {
     "username": "postgres",
-    "password": "1004191801",
+    "password": "1004232350",
     "database": "ReqCheckOne",
     "host": "localhost",
     "dialect": "postgres",
-    "port": "5433"
+    "port": "5432"
   },
   "test": {
     "username": "postgres ",
-    "password": "1004191801",
+    "password": "1004232350",
     "database": "ReqCheckOne",
     "host": "localhost",
     "dialect": "postgres",
-    "port": "5433"
+    "port": "5432"
   },
   "production": {
     "username": "postgres ",
-    "password": "1004191801",
+    "password": "1004232350",
     "database": "ReqCheckOne",
     "host": "localhost",
     "dialect": "postgres",
-    "port": "5433"
+    "port": "5432"
   }
 }
