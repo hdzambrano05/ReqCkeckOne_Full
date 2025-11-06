@@ -1,516 +1,663 @@
 /* ==============================
-   Paleta y fuentes modernas
+    1. Importar Fuente y Iconos Bootstrap
 ============================== */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css');
 
-:root {
-  --color-primary: #1E1B4B;
-  --color-accent: #6366F1;
-  --color-accent-light: #818CF8;
-  --color-accent-dark: #4F46E5;
-  --color-secondary: #64748B;
-  --color-bg: #F1F5F9;
-  --color-white: #ffffff;
-  --color-text-dark: #1E293B;
-  --font-main: 'Inter', 'Segoe UI', Tahoma, sans-serif;
-}
+---
 
 /* ==============================
-   Global
+    2. Paleta de Colores Moderna y Degradados (ESQUEMA ULTRA OSCURO)
 ============================== */
+:root {
+  /* Colores principales - Refinados para un look moderno */
+  --color-blue: #007bff;
+  /* Azul primario (Bootstrap) */
+  --color-green: #28a745;
+  /* Verde (Bootstrap) */
+  --color-yellow: #ffc107;
+  /* Amarillo (Bootstrap) */
+
+  /* Colores de soporte: Fondos más oscuros (cercanos al negro) */
+  --color-dark-shade: #121212;
+  /* NEGRO PROFUNDO para fondo principal y footer */
+  --color-light-shade: #1e1e1e;
+  /* GRIS MUY OSCURO para tarjetas y fondos secundarios (contraste) */
+  --color-white: #ffffff;
+  /* Blanco puro para texto principal y tarjetas de precio */
+  --color-text-muted: #9e9e9e;
+  /* Gris medio para texto secundario sobre fondos oscuros */
+  --color-text-dark-on-light: #121212;
+  /* Usado para texto fuerte en tarjetas claras */
+
+  /* Degradados para usar en texto, botones, bordes, etc. (SIN CAMBIOS) */
+  --gradient-primary: linear-gradient(90deg, #007bff, #0056b3);
+  --gradient-secondary: linear-gradient(90deg, #28a745, #1e7e34);
+  --gradient-accent: linear-gradient(90deg, #ffc107, #e0a800);
+
+  /* Fuentes y Variables de Bootstrap (SIN CAMBIOS) */
+  --font-main: 'Poppins', sans-serif;
+  --bs-primary: var(--color-blue);
+  --bs-success: var(--color-green);
+  --bs-warning: var(--color-yellow);
+  --bs-font-sans-serif: var(--font-main);
+  --bs-body-font-family: var(--bs-font-sans-serif);
+}
+
+---
+
+/* ==============================
+    3. Estilos Globales y Full-width (ULTRA OSCURO)
+============================== */
+body {
+  font-family: var(--font-main);
+  /* Fondo principal NEGRO PROFUNDO */
+  background-color: var(--color-dark-shade);
+  color: var(--color-white);
+  /* Texto principal blanco */
+  overflow-x: hidden;
+  padding-top: 76px;
+}
+
+/* Eliminar el padding del host para ocupar todo el ancho */
 :host {
   display: block;
-  font-family: var(--font-main);
-  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
-  color: var(--color-primary);
-  overflow-x: hidden;
-  min-height: 100vh;
-  padding: 40px;
-}
-
-/* ==============================
-   Animaciones
-============================== */
-@keyframes fadeIn {
-  from { 
-    opacity: 0; 
-    transform: translateY(30px); 
-  }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
-  }
-}
-
-@keyframes slideInLeft {
-  from { 
-    opacity: 0; 
-    transform: translateX(-50px); 
-  }
-  to { 
-    opacity: 1; 
-    transform: translateX(0); 
-  }
-}
-
-@keyframes slideInRight {
-  from { 
-    opacity: 0; 
-    transform: translateX(50px); 
-  }
-  to { 
-    opacity: 1; 
-    transform: translateX(0); 
-  }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-15px); }
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.8; }
-}
-
-.fade-in {
-  animation: fadeIn 1s ease-out;
-}
-
-.slide-in-left {
-  animation: slideInLeft 0.8s ease-out;
-}
-
-.slide-in-right {
-  animation: slideInRight 0.8s ease-out;
-}
-
-/* ==============================
-   Contenedor principal con bordes redondeados
-============================== */
-.main-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  background: var(--color-white);
-  border-radius: 24px;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
-}
-
-/* ==============================
-   Navbar
-============================== */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 25px 60px;
-  background: var(--color-white);
-  position: relative;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.logo:hover {
-  transform: scale(1.05);
-}
-
-.logo-img {
-  width: 40px;
-  height: 40px;
-  background: var(--color-accent);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-}
-
-.logo-text {
-  font-weight: 800;
-  font-size: 1.5em;
-  color: var(--color-text-dark);
-  letter-spacing: -0.5px;
-}
-
-.nav-links {
-  display: flex;
-  gap: 40px;
-  align-items: center;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: var(--color-text-dark);
-  font-weight: 600;
-  font-size: 1em;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--color-accent);
-  transition: width 0.3s ease;
-}
-
-.nav-links a:hover {
-  color: var(--color-accent);
-}
-
-.nav-links a:hover::after {
   width: 100%;
-}
-
-.btn-get-started {
-  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
-  color: var(--color-white);
-  border: none;
-  padding: 14px 32px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 1em;
-  cursor: pointer;
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.btn-get-started:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
-}
-
-.btn-get-started:active {
-  transform: translateY(-1px);
-}
-
-/* ==============================
-   Hero section con ondas
-============================== */
-.hero-section {
-  position: relative;
-  min-height: 600px;
-  display: flex;
-  align-items: center;
-  background: linear-gradient(180deg, #F8FAFC 0%, #E0E7FF 100%);
-  overflow: hidden;
-}
-
-/* Ondas decorativas */
-.hero-section::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 300px;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%236366F1" fill-opacity="0.15" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,138.7C960,139,1056,117,1152,101.3C1248,85,1344,75,1392,69.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
-  background-size: cover;
-  opacity: 0.6;
-}
-
-.hero-section::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 60%;
-  height: 400px;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
-  border-radius: 50% 0 0 0;
-}
-
-.particles-bg {
-  position: absolute;
-  inset: 0;
-  opacity: 0.1;
-}
-
-.hero-content {
-  z-index: 5;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 80px 60px;
-  width: 100%;
-  gap: 60px;
-}
-
-.text-content {
-  max-width: 45%;
-  animation: slideInLeft 0.8s ease-out;
-}
-
-.elegant-h1 {
-  font-size: 3.5em;
-  font-weight: 900;
-  line-height: 1.15;
-  letter-spacing: -1.5px;
-  margin-bottom: 25px;
-  color: var(--color-primary);
-  text-transform: uppercase;
-}
-
-.elegant-h1 span {
-  display: block;
-  color: var(--color-primary);
-}
-
-.subtitle {
-  font-size: 1.1em;
-  line-height: 1.7;
-  margin: 25px 0 40px;
-  color: var(--color-secondary);
-  font-weight: 400;
-  max-width: 90%;
-}
-
-.btn-group {
-  display: flex;
-  gap: 20px;
-  margin-top: 40px;
-}
-
-/* Botones */
-.btn-primary-action {
-  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
-  color: var(--color-white);
-  border: none;
-  padding: 16px 40px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 1.05em;
-  cursor: pointer;
-  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.btn-primary-action:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 35px rgba(99, 102, 241, 0.4);
-}
-
-.btn-primary-action:active {
-  transform: translateY(-1px);
-}
-
-.btn-secondary-action {
-  background: transparent;
-  border: 2px solid var(--color-accent);
-  color: var(--color-accent);
-  padding: 16px 40px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 1.05em;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-secondary-action:hover {
-  background: var(--color-accent);
-  color: var(--color-white);
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
-}
-
-.illustration-area {
-  max-width: 50%;
-  text-align: center;
-  animation: slideInRight 0.8s ease-out;
-  position: relative;
-  z-index: 10;
-}
-
-.illustration-img {
-  width: 100%;
-  max-width: 600px;
-  height: auto;
-  animation: float 4s ease-in-out infinite;
-  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.1));
-}
-
-/* ==============================
-   Secciones de contenido
-============================== */
-.content-section {
-  padding: 100px 60px;
-  text-align: center;
-  position: relative;
-}
-
-.section-title {
-  font-size: 2.8em;
-  font-weight: 900;
-  margin-bottom: 25px;
-  letter-spacing: -1px;
-  color: var(--color-primary);
-}
-
-.section-description {
-  font-size: 1.15em;
-  line-height: 1.8;
-  max-width: 800px;
-  margin: 0 auto;
-  color: var(--color-secondary);
-  font-weight: 400;
-}
-
-.light-section {
-  background: var(--color-white);
-}
-
-.dark-section {
-  background: linear-gradient(135deg, var(--color-primary) 0%, #312E81 100%);
-  color: var(--color-white);
-}
-
-.dark-section .section-title {
-  color: var(--color-white);
-}
-
-.dark-section .section-description {
-  color: rgba(255, 255, 255, 0.85);
-}
-
-/* ==============================
-   Footer
-============================== */
-.footer {
-  text-align: center;
-  padding: 40px;
-  background: var(--color-white);
-  color: var(--color-secondary);
-  font-size: 0.95em;
-  border-top: 1px solid #E2E8F0;
-}
-
-.footer p {
-  font-weight: 500;
+  padding: 0;
   margin: 0;
 }
 
+/* Contenedor centralizado para el contenido dentro de las secciones */
+.content-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.max-w-700 {
+  max-width: 700px;
+}
+
+---
 /* ==============================
-   Responsive
+    4. Clases de Utilidad y Colores Personalizados
 ============================== */
-@media (max-width: 1200px) {
-  .hero-content {
-    padding: 60px 40px;
-    gap: 40px;
+
+/* Texto con degradado (CON background-clip estándar) */
+.text-gradient-primary {
+  background: var(--gradient-primary);
+  /* Propiedad estándar para mayor compatibilidad */
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-secondary {
+  background: var(--gradient-secondary);
+  /* Propiedad estándar para mayor compatibilidad */
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-accent {
+  background: var(--gradient-accent);
+  /* Propiedad estándar para mayor compatibilidad */
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Botones con degradado (SIN CAMBIOS) */
+.btn-gradient-primary {
+  background: var(--gradient-primary);
+  border: none;
+  color: var(--color-white);
+  transition: all 0.3s ease;
+}
+
+.btn-gradient-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+}
+
+.btn-gradient-secondary {
+  background: var(--gradient-secondary);
+  border: none;
+  color: var(--color-white);
+  transition: all 0.3s ease;
+}
+
+.btn-gradient-secondary:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+}
+
+.btn-gradient-accent {
+  background: var(--gradient-accent);
+  border: none;
+  color: var(--color-dark-shade);
+  transition: all 0.3s ease;
+}
+
+.btn-gradient-accent:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(255, 193, 7, 0.4);
+}
+
+/* Botones outline con color primario (SIN CAMBIOS) */
+.btn-outline-primary-custom {
+  border: 2px solid var(--color-blue);
+  color: var(--color-blue);
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-primary-custom:hover {
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+}
+
+/* Sombras y fondos (AJUSTADOS PARA MÁS NEGRO) */
+.shadow-sm-custom {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+}
+
+.shadow-lg-custom {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7) !important;
+}
+
+.bg-light-custom {
+  background-color: var(--color-light-shade) !important;
+  /* Ahora es gris muy oscuro (tarjetas) */
+}
+
+.bg-dark-custom {
+  background-color: var(--color-dark-shade) !important;
+  /* Ahora es negro profundo (principal) */
+}
+
+/* Clases de texto adaptadas al fondo oscuro (SIN CAMBIOS) */
+.text-dark-custom {
+  color: var(--color-white) !important;
+  /* Texto fuerte será blanco */
+}
+
+.text-muted-custom {
+  color: var(--color-text-muted) !important;
+  /* Texto secundario será gris claro/medio */
+}
+
+/* Añadimos una clase para textos oscuros sobre fondo claro (para pricing) */
+.text-dark-on-light {
+  color: var(--color-text-dark-on-light) !important;
+}
+
+---
+
+/* ==============================
+    5. Navbar (AJUSTADO A NEGRO PROFUNDO)
+============================== */
+.navbar {
+  backdrop-filter: blur(10px);
+  /* Aumentamos el blur */
+  /* Fondo transparente sobre el NEGRO PROFUNDO */
+  background-color: rgba(18, 18, 18, 0.9) !important;
+  z-index: 1030;
+  /* Borde más sutil aún */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.navbar-brand .bi {
+  color: var(--color-blue);
+}
+
+.nav-link-custom {
+  color: var(--color-white);
+  /* En lugar de dark-shade, ahora es white */
+  font-weight: 500;
+  position: relative;
+  transition: all 0.3s ease;
+  padding: 8px 0;
+}
+
+.nav-link-custom::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: var(--gradient-primary);
+  transition: width 0.3s ease;
+}
+
+.nav-link-custom:hover {
+  color: var(--color-blue);
+}
+
+.nav-link-custom:hover::after {
+  width: 100%;
+}
+
+---
+
+/* ==============================
+    6. Hero Section (ULTRA OSCURO)
+============================== */
+.hero-section {
+  padding-top: 100px;
+  padding-bottom: 200px;
+  background-color: var(--color-dark-shade);
+  /* Fondo negro profundo */
+  position: relative;
+  color: var(--color-white);
+}
+
+.hero-h1 {
+  font-size: 3.8rem;
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+}
+
+.hero-subtitle {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Imagen de ilustración flotante (SIN CAMBIOS) */
+.illustration-img {
+  animation: float 4s ease-in-out infinite;
+  /* Sombra más oscura para contraste */
+  filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.45));
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
   }
 
-  .elegant-h1 {
-    font-size: 3em;
+  50% {
+    transform: translateY(-18px);
   }
 }
 
-@media (max-width: 1024px) {
-  :host {
-    padding: 20px;
+/* Ola inferior con degradado y z-index bajo (AJUSTADO) */
+.hero-wave-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  /* Degradado hacia el fondo secundario GRIS MUY OSCURO */
+  background: linear-gradient(to top, var(--color-light-shade) 0%, rgba(0, 123, 255, 0.05) 100%);
+  clip-path: ellipse(150% 70% at 50% 100%);
+  z-index: 1;
+  opacity: 0.9;
+}
+
+/* Degradado de overlay en el hero para profundidad (AJUSTADO OPACIDAD) */
+.hero-overlay-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top right, rgba(0, 123, 255, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at bottom left, rgba(40, 167, 69, 0.03) 0%, transparent 40%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+---
+
+/* ==============================
+    7. Secciones de Contenido (ULTRA OSCURO)
+============================== */
+.py-6 {
+  padding-top: 6rem !important;
+  padding-bottom: 6rem !important;
+}
+
+.mb-6 {
+  margin-bottom: 6rem !important;
+}
+
+
+/* Solución - Feature Cards (AJUSTADO) */
+.feature-card {
+  /* Fondo de la tarjeta en GRIS MUY OSCURO */
+  background-color: var(--color-light-shade);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: var(--color-white);
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6) !important;
+}
+
+.feature-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+}
+
+/* Fondos de iconos ajustados a la nueva paleta (SIN CAMBIOS) */
+.feature-icon.bg-primary-light {
+  background-color: rgba(0, 123, 255, 0.2);
+}
+
+.feature-icon.bg-success-light {
+  background-color: rgba(40, 167, 69, 0.2);
+}
+
+.feature-icon.bg-warning-light {
+  background-color: rgba(255, 193, 7, 0.2);
+}
+
+
+/* Análisis - Step Cards (AJUSTADO) */
+.step-card {
+  /* Fondo ligeramente azul sobre GRIS MUY OSCURO */
+  background-color: rgba(0, 123, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-white);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.step-card:hover {
+  background-color: rgba(0, 123, 255, 0.15);
+}
+
+.step-icon {
+  font-size: 4rem;
+  line-height: 1;
+}
+
+/* Precios - Pricing Cards (MÁXIMO CONTRASTE CON BLANCO) */
+.card-pricing {
+  /* Fondo de tarjeta blanco: El ÚNICO que usa blanco puro para contraste */
+  background-color: var(--color-white);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  /* El texto vuelve a ser negro */
+  color: var(--color-text-dark-on-light);
+}
+
+.card-pricing.bg-white-hover-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2) !important;
+}
+
+.card-pricing.popular-card {
+  border: 3px solid transparent;
+  background-image: linear-gradient(var(--color-white), var(--color-white)), var(--gradient-secondary);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(40, 167, 69, 0.5) !important;
+}
+
+.card-pricing.popular-card:hover {
+  transform: translateY(-15px);
+  box-shadow: 0 25px 50px rgba(40, 167, 69, 0.6) !important;
+}
+
+.card-pricing .badge {
+  background: var(--gradient-secondary) !important;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.pricing-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+  /* Texto oscuro en la tarjeta blanca */
+  color: var(--color-text-dark-on-light);
+}
+
+.pricing-list li .bi-check-circle-fill {
+  color: var(--color-green);
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.pricing-list li .bi-x-circle-fill {
+  /* X marks usan el Gris Muted (oscuro en este contexto) */
+  color: var(--color-text-muted);
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+/* Formas de fondo abstractas para modernidad (SIN CAMBIOS) */
+.bg-shape-1,
+.bg-shape-2,
+.bg-shape-3,
+.bg-shape-4 {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Colores de las formas ajustados a la nueva paleta */
+.bg-shape-1 {
+  background-color: var(--color-blue);
+  width: 300px;
+  height: 300px;
+  top: -50px;
+  left: -100px;
+}
+
+.bg-shape-2 {
+  background-color: var(--color-green);
+  width: 400px;
+  height: 400px;
+  bottom: -150px;
+  right: -150px;
+}
+
+.bg-shape-3 {
+  background-color: var(--color-yellow);
+  width: 350px;
+  height: 350px;
+  top: -100px;
+  right: -100px;
+}
+
+.bg-shape-4 {
+  background-color: var(--color-blue);
+  width: 250px;
+  height: 250px;
+  bottom: -50px;
+  left: -50px;
+}
+
+---
+
+/* ==============================
+    8. Footer (ULTRA OSCURO)
+============================== */
+.footer {
+  background-color: var(--color-dark-shade) !important;
+  /* Fondo negro profundo */
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+
+/* ==============================
+    9. Animaciones Modernas (SIN CAMBIOS)
+============================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
 
-  .navbar {
-    padding: 20px 40px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
   }
 
-  .hero-content {
-    flex-direction: column;
-    text-align: center;
-    padding: 60px 40px;
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-right {
+  animation: fadeInRight 1s ease-out forwards;
+  opacity: 0;
+}
+
+/* Retrasos para animaciones en secuencia */
+.delay-1 {
+  animation-delay: 0.2s;
+}
+
+.delay-2 {
+  animation-delay: 0.4s;
+}
+
+.delay-3 {
+  animation-delay: 0.6s;
+}
+
+
+/* ==============================
+    10. Responsive (SIN CAMBIOS)
+============================== */
+@media (max-width: 991.98px) {
+  .hero-h1 {
+    font-size: 2.8rem;
+    letter-spacing: -1px;
   }
 
-  .text-content, 
-  .illustration-area {
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .hero-section {
+    padding-bottom: 150px;
+    padding-top: 80px;
+    height: auto;
+  }
+
+  .hero-wave-bottom {
+    height: 120px;
+  }
+
+  .content-container {
+    padding: 0 25px;
+  }
+
+  .max-w-700 {
     max-width: 100%;
   }
+}
 
-  .elegant-h1 {
-    font-size: 2.5em;
+@media (max-width: 767.98px) {
+  .navbar-brand .fs-4 {
+    font-size: 1.5rem !important;
   }
 
-  .btn-group {
-    justify-content: center;
+  .navbar-brand .bi {
+    font-size: 1.8rem !important;
   }
 
-  .content-section {
-    padding: 80px 40px;
+  .hero-h1 {
+    font-size: 2.2rem;
+    letter-spacing: -0.8px;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .illustration-area {
+    margin-top: 3rem;
+  }
+
+  .py-6 {
+    padding-top: 4rem !important;
+    padding-bottom: 4rem !important;
+  }
+
+  .mb-6 {
+    margin-bottom: 4rem !important;
+  }
+
+  .feature-icon {
+    font-size: 2rem;
+    width: 60px;
+    height: 60px;
+  }
+
+  .step-icon {
+    font-size: 3rem;
+  }
+
+  .display-5 {
+    font-size: 2.5rem;
   }
 }
 
-@media (max-width: 768px) {
-  :host {
-    padding: 10px;
+/* Animaciones deshabilitadas en "prefers-reduced-motion" */
+@media (prefers-reduced-motion) {
+
+  .animate-fade-in-up,
+  .animate-fade-in-right,
+  .illustration-img,
+  .feature-card,
+  .step-card,
+  .card-pricing {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 
-  .navbar {
-    padding: 15px 20px;
-    flex-direction: column;
-    gap: 20px;
+  .feature-card:hover,
+  .step-card:hover,
+  .card-pricing:hover {
+    transform: none !important;
+    box-shadow: none !important;
   }
 
-  .nav-links {
-    flex-direction: column;
-    gap: 15px;
-    width: 100%;
-  }
-
-  .nav-links a {
-    padding: 10px;
-  }
-
-  .hero-content {
-    padding: 40px 20px;
-  }
-
-  .elegant-h1 {
-    font-size: 2em;
-  }
-
-  .subtitle {
-    font-size: 1em;
-  }
-
-  .btn-group {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .btn-primary-action,
-  .btn-secondary-action {
-    width: 100%;
-    padding: 14px 30px;
-  }
-
-  .content-section {
-    padding: 60px 20px;
-  }
-
-  .section-title {
-    font-size: 2em;
-  }
-
-  .section-description {
-    font-size: 1em;
-  }
-}
-
-@media (max-width: 480px) {
-  .elegant-h1 {
-    font-size: 1.7em;
-  }
-
-  .section-title {
-    font-size: 1.7em;
+  .card-pricing.popular-card {
+    transform: none !important;
+    box-shadow: none !important;
   }
 }
