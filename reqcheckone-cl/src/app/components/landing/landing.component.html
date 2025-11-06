@@ -1,8 +1,9 @@
-<header class="navbar">
+<header class="navbar glass-nav">
   <div class="logo">
-    <div class="logo-box"></div>
+    <img src="assets/images/logo.png" alt="ReqCheckOne Logo" class="logo-img" />
     <span class="logo-text">ReqCheckOne</span>
   </div>
+
   <nav class="nav-links">
     <a href="#inicio" (click)="scrollToSection('inicio')">Inicio</a>
     <a href="#solucion" (click)="scrollToSection('solucion')">Solución IA</a>
@@ -10,41 +11,48 @@
     <a href="#precios" (click)="scrollToSection('precios')">Precios</a>
     <a href="#contacto" (click)="scrollToSection('contacto')">Contacto</a>
   </nav>
+
   <button class="btn-get-started">Comenzar Ahora</button>
 </header>
 
 <main class="hero-section" id="inicio">
   <ngx-particles [id]="id" [options]="particlesOptions" class="particles-bg"></ngx-particles>
 
-  <div class="hero-content">
+  <div class="hero-content fade-in">
     <div class="text-content">
-      <h1 class="elegant-h1">
-        ReqCheckOne: <br>
-        **Calidad de Requisitos** impulsada por **IA Generativa**
-      </h1>
+      <h1 class="elegant-h1">Precisión y <span>Inteligencia</span> en cada requisito.</h1>
       <p class="subtitle">
-        El gestor de proyectos de próxima generación que utiliza **Agentes Inteligentes** para validar, optimizar y asegurar la **coherencia** de tus requisitos funcionales.
+        Potencia la calidad de tus proyectos con <strong>IA Generativa</strong> que analiza, evalúa
+        y perfecciona tus requisitos funcionales.
       </p>
-      <button class="btn-primary-action">Ver Demo Interactiva</button>
-      <button class="btn-secondary-action">Solicitar Consultoría</button>
-    </div>
-    
-    <div class="illustration-area">
-      <div class="illustration-placeholder">
-        <span class="icon-ai">🤖</span>
-        <span class="icon-data">📊</span>
-        <p class="caption">Análisis Inteligente de Requisitos</p>
+      <div class="btn-group">
+        <button class="btn-primary-action">Ver Demo</button>
+        <button class="btn-secondary-action">Solicitar Consultoría</button>
       </div>
+    </div>
+
+    <div class="illustration-area">
+      <img src="assets/images/ai-dashboard.png" alt="Ilustración IA" class="illustration-img" />
     </div>
   </div>
 </main>
 
-<section id="solucion" class="content-section">
-  <h2 class="section-title">Solución IA</h2>
-  <p>Detalles sobre cómo los agentes inteligentes revisan tus documentos.</p>
+<section id="solucion" class="content-section light-section fade-in">
+  <h2 class="section-title">Solución impulsada por IA</h2>
+  <p class="section-description">
+    Nuestros agentes inteligentes revisan tus documentos, detectan inconsistencias y te ofrecen
+    sugerencias precisas para mejorar la calidad y coherencia de los requisitos.
+  </p>
 </section>
 
-<section id="analisis" class="content-section dark-section">
+<section id="analisis" class="content-section dark-section fade-in">
   <h2 class="section-title">Análisis de Requisitos</h2>
-  <p>Demuestra las métricas de calidad que proporciona la herramienta.</p>
+  <p class="section-description">
+    Visualiza métricas detalladas de calidad, detecta ambigüedades y obtén una puntuación objetiva
+    de tus especificaciones.
+  </p>
 </section>
+
+<footer class="footer">
+  <p>© 2025 ReqCheckOne. Innovación en Ingeniería de Requisitos.</p>
+</footer>
