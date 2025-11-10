@@ -5,6 +5,7 @@
 >
   <i class="bi bi-arrow-left"></i> Regresar
 </button>
+
 <div class="create-requirement container py-4">
   <div class="row g-4">
     <!-- Formulario -->
@@ -81,11 +82,12 @@
       </form>
     </div>
 
-    <!-- Atributos del análisis -->
+    <!-- Panel de atributos -->
     <div class="col-lg-6">
       <div class="card p-4 shadow-sm rounded-4">
         <h3 class="mb-4 text-success">Atributos del requisito</h3>
 
+        <!-- Barras -->
         <div *ngFor="let attr of attributes" class="mb-3">
           <div class="d-flex justify-content-between align-items-center mb-1">
             <span
@@ -93,7 +95,6 @@
               style="cursor: help"
               data-bs-toggle="tooltip"
               data-bs-placement="top"
-              data-bs-html="true"
               [attr.title]="attributeDescriptions[attr.name]"
             >
               {{ attr.name }}
@@ -101,9 +102,10 @@
             </span>
             <span>{{ attr.value }}%</span>
           </div>
-          <div class="progress rounded-pill" style="height: 20px">
+          <div class="progress rounded-pill" style="height: 18px">
             <div
               class="progress-bar progress-bar-striped progress-bar-animated"
+              role="progressbar"
               [style.width.%]="attr.value"
               [ngClass]="{
                 'bg-success': attr.value >= 80,
@@ -112,50 +114,57 @@
               }"
             ></div>
           </div>
+
+          <!-- sugerencias -->
+          <div *ngIf="attributeSuggestions[attr.name]?.length && attr.value <= 60" class="mt-2">
+            <small class="text-warning fw-semibold">Sugerencias:</small>
+            <ul class="mb-0" style="font-size: 0.9em">
+              <li *ngFor="let s of attributeSuggestions[attr.name]" class="text-muted">{{ s }}</li>
+            </ul>
+          </div>
         </div>
 
         <h5 class="mt-4">
-          Progreso total:
-          <span class="text-primary">{{ analysis?.promedio_cumplimiento ?? 0 }}%</span>
+          Porcentaje de calidad del requisto (0% - 100%):
+          <span class="text-primary">{{ getTotalProgress() }}%</span>
         </h5>
 
+        <!-- === Sección dinámica según resultado === -->
         <ng-container *ngIf="analysis?.refined_requirement as rr">
-          <div class="mt-3" *ngIf="rr.estado?.toLowerCase() === 'sugerencias'">
-            <h6>Sugerencias de mejora:</h6>
-            <ul class="list-group list-group-flush">
-              <li *ngFor="let s of rr.sugerencias || []" class="list-group-item">{{ s }}</li>
-            </ul>
-          </div>
-
-          <div class="mt-3" *ngIf="rr.estado?.toLowerCase() === 'refinado_obligatorio'">
-            <h6>Requisito refinado:</h6>
-            <pre class="p-3 bg-light rounded">{{ rr.requisito_refinado_final || '' }}</pre>
-          </div>
-
-          <div
-            class="mt-3"
-            *ngIf="
-              ['aceptado', 'opcional'].includes(rr.estado?.toLowerCase() || '') &&
-              (analysis?.promedio_cumplimiento ?? 0) >= 60
-            "
-          >
-            <p class="text-success">El requisito puede ser guardado.</p>
-            <button class="btn btn-success w-100" (click)="saveRequirement()" [disabled]="!canSave">
-              Guardar Requisito
+          <!-- Caso < 30% -->
+          <div *ngIf="getTotalProgress() < 30" class="mt-4 alert alert-danger rounded-3">
+            <h6>Requisito refinado sugerido:</h6>
+            <pre class="bg-light p-3 rounded">{{ rr.requisito_refinado_final || 'No disponible' }}</pre>
+            <button class="btn btn-outline-primary w-100 mt-2" (click)="copyRefinedToText()">
+              <i class="bi bi-clipboard"></i> Copiar al campo de texto
             </button>
           </div>
 
-          <div class="mt-3" *ngIf="(analysis?.promedio_cumplimiento ?? 0) < 60">
-            <p class="text-danger">
-              El requisito no cumple con el porcentaje mínimo para ser guardado.
+          <!-- Caso 30 - 59 -->
+          <div *ngIf="getTotalProgress() >= 30 && getTotalProgress() < 60" class="mt-4 alert alert-warning rounded-3">
+            <h6>Debe mejorar el requisito:</h6>
+            <p class="mb-2">
+              Siga las sugerencias mostradas para obtener un requisito de mejor calidad.
             </p>
+          </div>
+
+          <!-- Caso >= 60 -->
+          <div *ngIf="getTotalProgress() >= 60" class="mt-4 alert alert-success rounded-3">
+            <p class="mb-2">El requisito cumple con los estándares mínimos de calidad.</p>
+            <button
+              class="btn btn-success w-100"
+              (click)="saveRequirement()"
+              [disabled]="!canSave"
+            >
+              <i class="bi bi-save"></i> Guardar Requisito
+            </button>
           </div>
         </ng-container>
       </div>
     </div>
   </div>
 
-  <!-- Modal de notificación moderno -->
+  <!-- Modal notificación -->
   <div *ngIf="showModal" class="modal-backdrop">
     <div
       class="modal-content"
@@ -165,14 +174,12 @@
         'modal-info': modalType === 'info'
       }"
     >
-      <p>
-        {{ modalMessage }}
-      </p>
+      <p>{{ modalMessage }}</p>
       <button (click)="closeModal()">Cerrar</button>
     </div>
   </div>
 
-  <!-- Modal de espera moderno -->
+  <!-- Modal de carga -->
   <div *ngIf="loadingAnalysis" class="modal-backdrop modal-loading">
     <div class="modal-content">
       <div class="spinner-border text-primary" role="status"></div>
