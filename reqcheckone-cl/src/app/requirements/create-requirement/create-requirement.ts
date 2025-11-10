@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { RequirementsService } from '../../services/requirements';
 import { AuthService } from '../../services/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectsService, Project } from '../../services/projects';
-import { AfterViewInit } from '@angular/core';
 import { Tooltip } from 'bootstrap';
 
 interface Attribute {
@@ -20,7 +19,7 @@ interface RefinedRequirement {
 
 interface RequirementAnalysis {
   promedio_cumplimiento?: number;
-  agents: { [agent: string]: { analysis: any } };
+  agents: { [agent: string]: { analysis: any; porcentaje?: number } };
   refined_requirement?: RefinedRequirement;
 }
 
@@ -30,7 +29,7 @@ interface RequirementAnalysis {
   styleUrls: ['./create-requirement.css'],
   standalone: false
 })
-export class CreateRequirement implements OnInit {
+export class CreateRequirement implements OnInit, AfterViewInit {
   form: FormGroup;
   analysis: RequirementAnalysis | null = null;
   loadingAnalysis = false;
@@ -44,6 +43,7 @@ export class CreateRequirement implements OnInit {
   showModal = false;
   modalType: 'success' | 'error' | 'info' = 'info';
 
+  // Lista de atributos visibles en UI
   attributes: Attribute[] = [
     { name: 'Validez', value: 0 },
     { name: 'Claridad / No ambigüedad', value: 0 },
@@ -59,78 +59,38 @@ export class CreateRequirement implements OnInit {
     { name: 'Conformidad', value: 0 }
   ];
 
+  // Mapa backendKey -> UI name
+  private attrMap: Record<string, string> = {
+    validez: 'Validez',
+    claridad: 'Claridad / No ambigüedad',
+    completitud: 'Completitud',
+    consistencia: 'Consistencia',
+    viabilidad: 'Viabilidad',
+    priorizacion: 'Priorización',
+    trazabilidad: 'Trazabilidad',
+    verificabilidad: 'Verificabilidad',
+    modificabilidad: 'Modificabilidad',
+    necesidad: 'Necesidad / Relevancia',
+    atomicidad: 'Singularidad / Atomicidad',
+    conformidad: 'Conformidad'
+  };
+
+  // Sugerencias por atributo (UI name -> array de sugerencias)
+  attributeSuggestions: { [uiName: string]: string[] } = {};
+
   attributeDescriptions: { [key: string]: string } = {
-    'Validez': `
-    <b>El requisito representa una necesidad real del usuario o sistema.</b><br>
-    <i class="bi bi-check-circle text-success"></i> “El sistema debe registrar ventas con fecha y hora.”<br>
-    <i class="bi bi-x-circle text-danger"></i> “El sistema debe cambiar los colores del fondo.”
-  `,
-
-    'Claridad / No ambigüedad': `
-    <b>El requisito se entiende de una sola forma.</b><br>
-    <i class="bi bi-check-circle text-success"></i> “El sistema debe responder en ≤ 3 segundos con 100 usuarios.”<br>
-    <i class="bi bi-x-circle text-danger"></i> “El sistema debe ser rápido.”
-  `,
-
-    'Completitud': `
-    <b>Incluye entradas, procesos y salidas.</b><br>
-    <i class="bi bi-check-circle text-success"></i> “El sistema generará un reporte mensual en PDF con cliente y monto.”<br>
-    <i class="bi bi-x-circle text-danger"></i> “El sistema generará un reporte.”
-  `,
-
-    'Consistencia': `
-    <b>No contradice otros requisitos.</b><br>
-    <i class="bi bi-check-circle text-success"></i> Req1: “Contraseña mínimo 8 caracteres.” / Req2: “Validar con 8 caracteres.”<br>
-    <i class="bi bi-x-circle text-danger"></i> Req1: “Contraseña mínimo 8.” / Req2: “Contraseña mínimo 10.”
-  `,
-
-    'Viabilidad': `
-    <b>Pueden implementarse con los recursos disponibles.</b><br>
-    <i class="bi bi-check-circle text-success"></i> “El sistema debe soportar 200 usuarios concurrentes.”<br>
-    <i class="bi bi-x-circle text-danger"></i> “El sistema debe responder en 1 ms con 10.000 usuarios.”
-  `,
-
-    'Priorización': `
-    <b>Tiene un nivel de importancia definido.</b><br>
-    <i class="bi bi-check-circle text-success"></i> “Alta prioridad: Cumplimiento normativo.”<br>
-    <i class="bi bi-x-circle text-danger"></i> “El sistema debe integrarse con todas las redes sociales.” (sin prioridad)
-  `,
-
-    'Trazabilidad': `
-    <b>Puede rastrearse desde su origen hasta su prueba.</b><br>
-    <i class="bi bi-check-circle text-success"></i> “REQ-010 → Login → Auth.java → TC-025.”<br>
-    <i class="bi bi-x-circle text-danger"></i> “El sistema debe permitir iniciar sesión.” (sin ID ni rastro)
-  `,
-
-    'Verificabilidad': `
-    <b>Puede comprobarse con pruebas o revisión.</b><br>
-    <i class="bi bi-check-circle text-success"></i> “El sistema debe bloquear cuenta tras 3 intentos fallidos.”<br>
-    <i class="bi bi-x-circle text-danger"></i> “El sistema debe ser confiable.”
-  `,
-
-    'Modificabilidad': `
-    <b>Puede cambiarse sin afectar otros requisitos.</b><br>
-    <i class="bi bi-check-circle text-success"></i> “REQ-045: alerta de inventario bajo.”<br>
-    <i class="bi bi-x-circle text-danger"></i> “El sistema debe alertar inventario y enviar correos y actualizar precios.”
-  `,
-
-    'Necesidad / Relevancia': `
-    <b>Es realmente necesario y justificado.</b><br>
-    <i class="bi bi-check-circle text-success"></i> “El sistema debe cumplir normativa DIAN.”<br>
-    <i class="bi bi-x-circle text-danger"></i> “El sistema debe mostrar animación al abrir.”
-  `,
-
-    'Singularidad / Atomicidad': `
-    <b>Expresa una sola necesidad.</b><br>
-    <i class="bi bi-check-circle text-success"></i> “Registrar usuario.” / “Enviar correo.”<br>
-    <i class="bi bi-x-circle text-danger"></i> “Registrar usuario y enviar correo.”
-  `,
-
-    'Conformidad': `
-    <b>Cumple con normas o plantillas establecidas.</b><br>
-    <i class="bi bi-check-circle text-success"></i> “REQ-123 – Descripción – Prioridad – Fuente.”<br>
-    <i class="bi bi-x-circle text-danger"></i> “El sistema debe calcular impuestos.” (sin estructura)
-  `
+    'Validez': 'El requisito representa una necesidad real del usuario o sistema.',
+    'Claridad / No ambigüedad': 'El requisito se entiende de una sola forma.',
+    'Completitud': 'Incluye entradas, procesos y salidas.',
+    'Consistencia': 'No contradice otros requisitos.',
+    'Viabilidad': 'Puede implementarse con los recursos disponibles.',
+    'Priorización': 'Tiene un nivel de importancia definido.',
+    'Trazabilidad': 'Puede rastrearse desde su origen hasta su prueba.',
+    'Verificabilidad': 'Puede comprobarse con pruebas o revisión.',
+    'Modificabilidad': 'Puede cambiarse sin afectar otros requisitos.',
+    'Necesidad / Relevancia': 'Es realmente necesario y justificado.',
+    'Singularidad / Atomicidad': 'Expresa una sola necesidad.',
+    'Conformidad': 'Cumple con normas o plantillas establecidas.'
   };
 
   constructor(
@@ -139,7 +99,8 @@ export class CreateRequirement implements OnInit {
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
-    private projectsService: ProjectsService
+    private projectsService: ProjectsService,
+    private cd: ChangeDetectorRef
   ) {
     this.username = localStorage.getItem('username') || '';
 
@@ -164,7 +125,7 @@ export class CreateRequirement implements OnInit {
         this.form.get('project_id')?.setValue(this.projectId);
 
         this.projectsService.getProjectById(this.projectId).subscribe({
-          next: (project: Project) => this.projectName = project.name,
+          next: (project: Project) => (this.projectName = project.name),
           error: err => console.error('Error cargando proyecto:', err)
         });
       }
@@ -207,21 +168,65 @@ export class CreateRequirement implements OnInit {
     this.loadingAnalysis = true;
     this.analysis = null;
     this.canSave = false;
+    this.attributeSuggestions = {}; // limpiar sugerencias previas
 
     const payload = { id: 'REQ-TEMP', text, context };
 
     this.requirementsService.analyzeRequirement(payload).subscribe({
-      next: res => {
-        this.analysis = res.data;
-        this.updateAttributes();
+      next: (res) => {
+        const data = res.data;
+        console.log('Respuesta backend (raw):', data);
 
-        // Actualiza la prioridad según Product Owner
-        const poAnalysis = this.analysis?.agents?.['Product Owner']?.analysis;
-        const prioridad = poAnalysis?.priorizacion || 'medium';
+        // Construir estructura de analysis compatible con el componente
+        this.analysis = {
+          promedio_cumplimiento: data.promedio_cumplimiento,
+          agents: {},
+          refined_requirement: {
+            estado: 'sugerencias',
+            sugerencias: data.sugerencias_combinadas || [],
+            requisito_refinado_final: data.requisito_refinado_final || ''
+          }
+        };
+
+        // Transformar analisis_detallado -> agents
+        if (data.analisis_detallado) {
+          for (const [agentName, agentData] of Object.entries<any>(data.analisis_detallado)) {
+            const atributos = (agentData as any).atributos || {};
+            const analysisPlain: Record<string, any> = {};
+            // Extraer sugerencias por atributo para mostrarlas luego
+            for (const [backendKey, detalle] of Object.entries<any>(atributos)) {
+              // detalle puede ser { valor: ..., sugerencia: ... } u otras formas
+              analysisPlain[backendKey] = detalle?.valor !== undefined ? detalle.valor : detalle;
+              // recolectar sugerencia textual si existe
+              if (detalle?.sugerencia) {
+                const uiName = this.attrMap[backendKey] ?? backendKey;
+                if (!this.attributeSuggestions[uiName]) this.attributeSuggestions[uiName] = [];
+                this.attributeSuggestions[uiName].push(`${agentName}: ${detalle.sugerencia}`);
+              }
+            }
+
+            this.analysis.agents[agentName] = {
+              analysis: analysisPlain,
+              porcentaje: (agentData as any).porcentaje
+            };
+          }
+        }
+
+        // Actualizar atributos y UI
+        this.updateAttributes();
+        this.cd.detectChanges(); // asegurar render
+
+        // Prioridad según Product Owner (si existe)
+        const poAnalysis = this.analysis.agents?.['Product Owner']?.analysis;
+        const prioridad = poAnalysis?.priorizacion === 'alta'
+          ? 'high'
+          : poAnalysis?.priorizacion === 'media'
+            ? 'medium'
+            : 'low';
         this.priorityControl.setValue(prioridad);
 
-        // Determina si se puede guardar según promedio
-        const promedio = this.analysis?.promedio_cumplimiento ?? 0;
+        // Control de guardado por promedio
+        const promedio = this.analysis.promedio_cumplimiento ?? 0;
         this.canSave = promedio >= 60;
 
         if (promedio < 30) {
@@ -231,7 +236,7 @@ export class CreateRequirement implements OnInit {
 
         this.loadingAnalysis = false;
       },
-      error: err => {
+      error: (err) => {
         console.error('Error analizando requisito:', err);
         this.loadingAnalysis = false;
         this.openModal('Error analizando requisito. Revisa la consola.', 'error');
@@ -244,99 +249,62 @@ export class CreateRequirement implements OnInit {
     if (!this.analysis?.agents) return;
     const agents = this.analysis.agents;
 
+    // reiniciar valores y sugerencias si fuera necesario
+    this.attributes.forEach(a => a.value = 0);
+
     this.attributes.forEach(attr => {
       let total = 0;
       let count = 0;
 
-      Object.values(agents).forEach(agent => {
+      // encontrar la clave backend que corresponde al nombre UI
+      const backendKey = Object.keys(this.attrMap).find(k => this.attrMap[k] === attr.name);
+      if (!backendKey) {
+        attr.value = 0;
+        return;
+      }
+
+      Object.values(agents).forEach((agent: any) => {
         const analysis = agent?.analysis;
         if (!analysis) return;
 
-        switch (attr.name) {
-          case 'Validez':
-            if ('validez' in analysis) {
-              total += analysis.validez ? (analysis.porcentaje ?? 100) : 0;
-              count++;
-            }
+        const valor = analysis[backendKey];
+        if (valor === undefined || valor === null) return;
+
+        let porcentaje = 0;
+        switch (typeof valor) {
+          case 'boolean':
+            porcentaje = valor ? 100 : 0;
             break;
-          case 'Claridad / No ambigüedad':
-            if ('claridad' in analysis) {
-              total += analysis.porcentaje ?? (analysis.claridad === 'claro' ? 100 : 0);
-              count++;
-            }
+          case 'number':
+            porcentaje = Math.max(0, Math.min(100, valor)); // si backend ya devuelve número
             break;
-          case 'Completitud':
-            if ('completitud' in analysis) {
-              total += analysis.porcentaje ?? (analysis.completitud === 'completo' ? 100 : 0);
-              count++;
-            }
+          case 'string':
+            // Normalizar valores textuales a porcentajes
+            const v = valor.toLowerCase();
+            if (v === 'alta' || v === 'correcta' || v === 'completo' || v === 'claro' || v === 'atómico' || v === 'atomico') porcentaje = 100;
+            else if (v === 'media' || v === 'parcial' || v === 'media') porcentaje = 60;
+            else if (v === 'baja' || v === 'ambigua' || v === 'ambiguous') porcentaje = 30;
+            else porcentaje = 0;
             break;
-          case 'Consistencia':
-            if ('consistencia' in analysis) {
-              total += analysis.porcentaje ?? (analysis.consistencia === 'consistente' ? 100 : 0);
-              count++;
-            }
-            break;
-          case 'Viabilidad':
-            if ('viabilidad' in analysis) {
-              total += analysis.porcentaje ?? 100;
-              count++;
-            }
-            break;
-          case 'Priorización':
-            if ('priorizacion' in analysis) {
-              total += analysis.porcentaje ?? (analysis.priorizacion === 'alta' ? 100 : analysis.priorizacion === 'media' ? 60 : 30);
-              count++;
-            }
-            break;
-          case 'Trazabilidad':
-            if ('trazabilidad' in analysis) {
-              total += analysis.porcentaje ?? (analysis.trazabilidad === 'trazable' ? 100 : 0);
-              count++;
-            }
-            break;
-          case 'Verificabilidad':
-            if ('verificabilidad' in analysis) {
-              total += analysis.porcentaje ?? (analysis.verificabilidad ? 100 : 0);
-              count++;
-            }
-            break;
-          case 'Modificabilidad':
-            if ('modificabilidad' in analysis) {
-              total += analysis.porcentaje ?? (analysis.modificabilidad === 'alta' ? 100 : analysis.modificabilidad === 'media' ? 60 : 30);
-              count++;
-            }
-            break;
-          case 'Necesidad / Relevancia':
-            if ('necesidad' in analysis) {
-              total += analysis.porcentaje ?? (analysis.necesidad ? 100 : 0);
-              count++;
-            }
-            break;
-          case 'Singularidad / Atomicidad':
-            if ('atomicidad' in analysis) {
-              total += analysis.porcentaje ?? (analysis.atomicidad === 'atómico' ? 100 : 0);
-              count++;
-            }
-            break;
-          case 'Conformidad':
-            if ('conformidad' in analysis) {
-              total += analysis.porcentaje ?? (analysis.conformidad === 'conforme' ? 100 : 0);
-              count++;
-            }
-            break;
+          default:
+            porcentaje = 0;
         }
+
+        total += porcentaje;
+        count++;
       });
 
       attr.value = count ? Math.round(total / count) : 0;
     });
+
+    console.log('Atributos calculados:', this.attributes);
   }
 
   // ------------------- GUARDAR REQUISITO -------------------
   saveRequirement(): void {
     if (!this.analysis) return;
 
-    const userId = localStorage.getItem('id'); // o tu método real
+    const userId = localStorage.getItem('id');
     if (!userId) {
       this.openModal('No se pudo identificar al usuario. Inicia sesión nuevamente.', 'error');
       return;
@@ -367,9 +335,8 @@ export class CreateRequirement implements OnInit {
     };
 
     this.requirementsService.addRequirement(payload).subscribe({
-      next: res => {
+      next: () => {
         this.openModal('Requisito guardado exitosamente', 'success');
-
         this.form.reset({
           project_id: this.projectId,
           priority: 'medium',
@@ -380,10 +347,11 @@ export class CreateRequirement implements OnInit {
         this.analysis = null;
         this.canSave = false;
         this.attributes.forEach(a => (a.value = 0));
+        this.attributeSuggestions = {};
       },
       error: err => {
         console.error('Error guardando requisito:', err);
-        this.openModal('Ocurrió un error al guardar el requisito. Revisa la consola.', 'error');
+        this.openModal('Ocurrió un error al guardar el requisito.', 'error');
       }
     });
   }
@@ -396,5 +364,15 @@ export class CreateRequirement implements OnInit {
     this.router.navigate(['/projects', this.projectId]);
   }
 
+  // Copiar requisito refinado al campo de texto
+  copyRefinedToText(): void {
+    const refined = this.analysis?.refined_requirement?.requisito_refinado_final;
+    if (refined) {
+      this.form.patchValue({ text: refined });
+      this.openModal('El requisito refinado ha sido copiado al campo de descripción.', 'info');
+    } else {
+      this.openModal('No hay requisito refinado disponible.', 'error');
+    }
+  }
 
 }
