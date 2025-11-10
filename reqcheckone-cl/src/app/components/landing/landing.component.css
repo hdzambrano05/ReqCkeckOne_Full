@@ -1,663 +1,314 @@
 /* ==============================
-    1. Importar Fuente y Iconos Bootstrap
+   🌟 ReqCheckOne – Versión Clara y Elegante
+   Paleta: Azul Rey, Verde Claro, Amarillo
 ============================== */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css');
 
----
-
-/* ==============================
-    2. Paleta de Colores Moderna y Degradados (ESQUEMA ULTRA OSCURO)
-============================== */
 :root {
-  /* Colores principales - Refinados para un look moderno */
-  --color-blue: #007bff;
-  /* Azul primario (Bootstrap) */
-  --color-green: #28a745;
-  /* Verde (Bootstrap) */
-  --color-yellow: #ffc107;
-  /* Amarillo (Bootstrap) */
-
-  /* Colores de soporte: Fondos más oscuros (cercanos al negro) */
-  --color-dark-shade: #121212;
-  /* NEGRO PROFUNDO para fondo principal y footer */
-  --color-light-shade: #1e1e1e;
-  /* GRIS MUY OSCURO para tarjetas y fondos secundarios (contraste) */
-  --color-white: #ffffff;
-  /* Blanco puro para texto principal y tarjetas de precio */
-  --color-text-muted: #9e9e9e;
-  /* Gris medio para texto secundario sobre fondos oscuros */
-  --color-text-dark-on-light: #121212;
-  /* Usado para texto fuerte en tarjetas claras */
-
-  /* Degradados para usar en texto, botones, bordes, etc. (SIN CAMBIOS) */
-  --gradient-primary: linear-gradient(90deg, #007bff, #0056b3);
-  --gradient-secondary: linear-gradient(90deg, #28a745, #1e7e34);
-  --gradient-accent: linear-gradient(90deg, #ffc107, #e0a800);
-
-  /* Fuentes y Variables de Bootstrap (SIN CAMBIOS) */
-  --font-main: 'Poppins', sans-serif;
-  --bs-primary: var(--color-blue);
-  --bs-success: var(--color-green);
-  --bs-warning: var(--color-yellow);
-  --bs-font-sans-serif: var(--font-main);
-  --bs-body-font-family: var(--bs-font-sans-serif);
+  --blue: #0057d9;
+  --light-blue: #eaf4ff;
+  --green: #5ef38c;
+  --yellow: #ffd23f;
+  --white: #ffffff;
+  --gray: #f7f9fb;
+  --text-dark: #000000;
+  --text-medium: #2c2c2c;
+  --gradient-primary: linear-gradient(135deg, #5ef38c, #0057d9);
+  --gradient-accent: linear-gradient(135deg, #ffd23f, #5ef38c);
 }
-
----
 
 /* ==============================
-    3. Estilos Globales y Full-width (ULTRA OSCURO)
+   ⚙️ Base
 ============================== */
-body {
-  font-family: var(--font-main);
-  /* Fondo principal NEGRO PROFUNDO */
-  background-color: var(--color-dark-shade);
-  color: var(--color-white);
-  /* Texto principal blanco */
-  overflow-x: hidden;
-  padding-top: 76px;
-}
-
-/* Eliminar el padding del host para ocupar todo el ancho */
 :host {
   display: block;
   width: 100%;
-  padding: 0;
-  margin: 0;
 }
 
-/* Contenedor centralizado para el contenido dentro de las secciones */
-.content-container {
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 0 15px;
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--gray);
+  color: var(--text-dark);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
-
-.max-w-700 {
-  max-width: 700px;
-}
-
----
-/* ==============================
-    4. Clases de Utilidad y Colores Personalizados
-============================== */
-
-/* Texto con degradado (CON background-clip estándar) */
-.text-gradient-primary {
-  background: var(--gradient-primary);
-  /* Propiedad estándar para mayor compatibilidad */
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.text-gradient-secondary {
-  background: var(--gradient-secondary);
-  /* Propiedad estándar para mayor compatibilidad */
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.text-gradient-accent {
-  background: var(--gradient-accent);
-  /* Propiedad estándar para mayor compatibilidad */
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Botones con degradado (SIN CAMBIOS) */
-.btn-gradient-primary {
-  background: var(--gradient-primary);
-  border: none;
-  color: var(--color-white);
-  transition: all 0.3s ease;
-}
-
-.btn-gradient-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
-}
-
-.btn-gradient-secondary {
-  background: var(--gradient-secondary);
-  border: none;
-  color: var(--color-white);
-  transition: all 0.3s ease;
-}
-
-.btn-gradient-secondary:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
-}
-
-.btn-gradient-accent {
-  background: var(--gradient-accent);
-  border: none;
-  color: var(--color-dark-shade);
-  transition: all 0.3s ease;
-}
-
-.btn-gradient-accent:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(255, 193, 7, 0.4);
-}
-
-/* Botones outline con color primario (SIN CAMBIOS) */
-.btn-outline-primary-custom {
-  border: 2px solid var(--color-blue);
-  color: var(--color-blue);
-  background-color: transparent;
-  transition: all 0.3s ease;
-}
-
-.btn-outline-primary-custom:hover {
-  background-color: var(--color-blue);
-  color: var(--color-white);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
-}
-
-/* Sombras y fondos (AJUSTADOS PARA MÁS NEGRO) */
-.shadow-sm-custom {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
-}
-
-.shadow-lg-custom {
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7) !important;
-}
-
-.bg-light-custom {
-  background-color: var(--color-light-shade) !important;
-  /* Ahora es gris muy oscuro (tarjetas) */
-}
-
-.bg-dark-custom {
-  background-color: var(--color-dark-shade) !important;
-  /* Ahora es negro profundo (principal) */
-}
-
-/* Clases de texto adaptadas al fondo oscuro (SIN CAMBIOS) */
-.text-dark-custom {
-  color: var(--color-white) !important;
-  /* Texto fuerte será blanco */
-}
-
-.text-muted-custom {
-  color: var(--color-text-muted) !important;
-  /* Texto secundario será gris claro/medio */
-}
-
-/* Añadimos una clase para textos oscuros sobre fondo claro (para pricing) */
-.text-dark-on-light {
-  color: var(--color-text-dark-on-light) !important;
-}
-
----
 
 /* ==============================
-    5. Navbar (AJUSTADO A NEGRO PROFUNDO)
+   🧭 Navbar
 ============================== */
 .navbar {
-  backdrop-filter: blur(10px);
-  /* Aumentamos el blur */
-  /* Fondo transparente sobre el NEGRO PROFUNDO */
-  background-color: rgba(18, 18, 18, 0.9) !important;
-  z-index: 1030;
-  /* Borde más sutil aún */
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background-color: var(--white);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 1rem 2rem;
+  transition: all 0.3s ease;
 }
 
-.navbar-brand .bi {
-  color: var(--color-blue);
+.navbar-brand {
+  font-weight: 800;
+  color: var(--blue);
+  letter-spacing: 0.5px;
 }
 
 .nav-link-custom {
-  color: var(--color-white);
-  /* En lugar de dark-shade, ahora es white */
-  font-weight: 500;
+  color: var(--text-medium);
+  font-weight: 600;
+  margin: 0 0.6rem;
   position: relative;
-  transition: all 0.3s ease;
-  padding: 8px 0;
-}
-
-.nav-link-custom::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 2px;
-  background: var(--gradient-primary);
-  transition: width 0.3s ease;
+  transition: color 0.3s ease;
 }
 
 .nav-link-custom:hover {
-  color: var(--color-blue);
+  color: var(--blue);
 }
 
-.nav-link-custom:hover::after {
-  width: 100%;
+.btn.btn-gradient-secondary {
+  background: var(--gradient-primary);
+  border: none;
+  color: var(--white);
+  transition: all 0.3s ease;
 }
 
----
+.btn.btn-gradient-secondary:hover {
+  opacity: 0.9;
+  transform: scale(1.03);
+}
 
 /* ==============================
-    6. Hero Section (ULTRA OSCURO)
+   🌅 Hero Section
 ============================== */
 .hero-section {
-  padding-top: 100px;
-  padding-bottom: 200px;
-  background-color: var(--color-dark-shade);
-  /* Fondo negro profundo */
+  background: linear-gradient(135deg,  #eaf8ff 40%, #fefbe8 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 4rem 0;
   position: relative;
-  color: var(--color-white);
+  color: var(--text-dark);
 }
+
 
 .hero-h1 {
-  font-size: 3.8rem;
-  line-height: 1.1;
-  letter-spacing: -1.5px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 3.2rem;
+  color: var(--blue);
+  line-height: 1.2;
+  text-shadow: 2px 2px 20px rgb(56, 142, 255);
 }
 
-.hero-subtitle {
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+.hero-h1 span {
+  color:#000000;
+  opacity: 0.8;
 }
 
-/* Imagen de ilustración flotante (SIN CAMBIOS) */
+.hero-subtitle p {
+  color:rgb(255, 0, 0);
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.hero-subtitle strong {
+    text-shadow: 6px 4px 10px rgba(66, 66, 66, 0.5);
+}
+
+
+.btn-outline-primary-custom {
+  border: 2px solid #0057d9;
+  color: var(--blue);
+  font-weight: 600;
+  padding: 0.9rem 2.4rem;
+  border-radius: 50px;
+  transition: 0.3s;
+  background-color: var(--white);
+}
+
+.btn-outline-primary-custom:hover {
+  background: var(--gradient-primary);
+  color: var(--white);
+  box-shadow: 0 0 20px rgba(217, 195, 0, 0.25);
+}
+
 .illustration-img {
   animation: float 4s ease-in-out infinite;
-  /* Sombra más oscura para contraste */
-  filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.45));
+  max-width: 90%;
 }
 
 @keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0px);
+  0%, 100% {
+    transform: translateY(0);
   }
-
   50% {
-    transform: translateY(-18px);
+    transform: translateY(-12px);
   }
 }
-
-/* Ola inferior con degradado y z-index bajo (AJUSTADO) */
-.hero-wave-bottom {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 200px;
-  /* Degradado hacia el fondo secundario GRIS MUY OSCURO */
-  background: linear-gradient(to top, var(--color-light-shade) 0%, rgba(0, 123, 255, 0.05) 100%);
-  clip-path: ellipse(150% 70% at 50% 100%);
-  z-index: 1;
-  opacity: 0.9;
-}
-
-/* Degradado de overlay en el hero para profundidad (AJUSTADO OPACIDAD) */
-.hero-overlay-gradient {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at top right, rgba(0, 123, 255, 0.05) 0%, transparent 40%),
-    radial-gradient(circle at bottom left, rgba(40, 167, 69, 0.03) 0%, transparent 40%);
-  z-index: 0;
-  pointer-events: none;
-}
-
----
 
 /* ==============================
-    7. Secciones de Contenido (ULTRA OSCURO)
+   💡 Sección Solución
 ============================== */
-.py-6 {
-  padding-top: 6rem !important;
-  padding-bottom: 6rem !important;
+#solucion {
+  background: var(--black);
+  padding: 100px 0;
+  text-align: center;
 }
 
-.mb-6 {
-  margin-bottom: 6rem !important;
+#solucion h2 {
+  color: var(--text-dark);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 6px 4px 10px rgba(66, 66, 66, 0.5);
 }
 
+#solucion h3 {
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 6px 4px 10px rgba(66, 66, 66, 0.5);
+}
 
-/* Solución - Feature Cards (AJUSTADO) */
+#solucion p {
+  color: var(--text-dark);
+  max-width: 700px;
+  margin: 0 auto 2rem;
+  line-height: 1.7;
+  font-weight: 500;
+}
+
 .feature-card {
-  /* Fondo de la tarjeta en GRIS MUY OSCURO */
-  background-color: var(--color-light-shade);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  color: var(--color-white);
+  background: linear-gradient(0deg,  #f0f9ff 40%, #ffffff 100%);
+  border-radius: 200px;
+  border: 2px solid rgba(70, 97, 122, 0.3);
+  padding: 2rem;
+  transition: all 0.3s ease;
 }
 
 .feature-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6) !important;
+  transform: translateY(-20px);
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.15);
 }
 
 .feature-icon {
-  width: 70px;
-  height: 70px;
+  font-size: 2.8rem;
+  background: var(--gradient-accent);
+  color: var(--white);
+  width: 80px;
+  height: 80px;
+  line-height: 80px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.2rem;
+  margin-bottom: 1rem;
 }
 
-/* Fondos de iconos ajustados a la nueva paleta (SIN CAMBIOS) */
-.feature-icon.bg-primary-light {
-  background-color: rgba(0, 123, 255, 0.2);
+/* ==============================
+   ⚙️ Sección Análisis
+============================== */
+#analisis {
+  background: linear-gradient(0deg, #aed4ee, #ffffff);
+  padding: 100px 0;
 }
 
-.feature-icon.bg-success-light {
-  background-color: rgba(40, 167, 69, 0.2);
+#analisis h2 {
+  color: var(--green);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 6px 4px 10px rgba(66, 66, 66, 0.5);
 }
 
-.feature-icon.bg-warning-light {
-  background-color: rgba(255, 193, 7, 0.2);
+#analisis p {
+  color: var(--text-medium);
+  max-width: 700px;
+  margin: 0 auto 3rem;
+  line-height: 1.7;
+  font-weight: 500;
 }
 
-
-/* Análisis - Step Cards (AJUSTADO) */
 .step-card {
-  /* Fondo ligeramente azul sobre GRIS MUY OSCURO */
-  background-color: rgba(0, 123, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--color-white);
-  transition: transform 0.3s ease, background-color 0.3s ease;
+  background: var(--white);
+  border: 2px solid rgba(94, 109, 243, 0.3);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  color: var(--text-dark);
 }
 
 .step-card:hover {
-  background-color: rgba(0, 123, 255, 0.15);
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(2, 45, 161, 0.3);
 }
 
 .step-icon {
-  font-size: 4rem;
-  line-height: 1;
-}
-
-/* Precios - Pricing Cards (MÁXIMO CONTRASTE CON BLANCO) */
-.card-pricing {
-  /* Fondo de tarjeta blanco: El ÚNICO que usa blanco puro para contraste */
-  background-color: var(--color-white);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  /* El texto vuelve a ser negro */
-  color: var(--color-text-dark-on-light);
-}
-
-.card-pricing.bg-white-hover-lift:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2) !important;
-}
-
-.card-pricing.popular-card {
-  border: 3px solid transparent;
-  background-image: linear-gradient(var(--color-white), var(--color-white)), var(--gradient-secondary);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
-  transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(40, 167, 69, 0.5) !important;
-}
-
-.card-pricing.popular-card:hover {
-  transform: translateY(-15px);
-  box-shadow: 0 25px 50px rgba(40, 167, 69, 0.6) !important;
-}
-
-.card-pricing .badge {
-  background: var(--gradient-secondary) !important;
-  padding: 0.5rem 1.2rem;
-  font-size: 0.85rem;
-  letter-spacing: 0.5px;
-}
-
-.pricing-list li {
-  display: flex;
-  align-items: center;
+  font-size: 2.5rem;
+  color: var(--blue);
   margin-bottom: 1rem;
-  font-size: 1.05rem;
-  /* Texto oscuro en la tarjeta blanca */
-  color: var(--color-text-dark-on-light);
 }
-
-.pricing-list li .bi-check-circle-fill {
-  color: var(--color-green);
-  font-size: 1.3rem;
-  flex-shrink: 0;
-}
-
-.pricing-list li .bi-x-circle-fill {
-  /* X marks usan el Gris Muted (oscuro en este contexto) */
-  color: var(--color-text-muted);
-  font-size: 1.3rem;
-  flex-shrink: 0;
-}
-
-/* Formas de fondo abstractas para modernidad (SIN CAMBIOS) */
-.bg-shape-1,
-.bg-shape-2,
-.bg-shape-3,
-.bg-shape-4 {
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0.08;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Colores de las formas ajustados a la nueva paleta */
-.bg-shape-1 {
-  background-color: var(--color-blue);
-  width: 300px;
-  height: 300px;
-  top: -50px;
-  left: -100px;
-}
-
-.bg-shape-2 {
-  background-color: var(--color-green);
-  width: 400px;
-  height: 400px;
-  bottom: -150px;
-  right: -150px;
-}
-
-.bg-shape-3 {
-  background-color: var(--color-yellow);
-  width: 350px;
-  height: 350px;
-  top: -100px;
-  right: -100px;
-}
-
-.bg-shape-4 {
-  background-color: var(--color-blue);
-  width: 250px;
-  height: 250px;
-  bottom: -50px;
-  left: -50px;
-}
-
----
 
 /* ==============================
-    8. Footer (ULTRA OSCURO)
+   ⚫ Footer
 ============================== */
 .footer {
-  background-color: var(--color-dark-shade) !important;
-  /* Fondo negro profundo */
-  color: rgba(255, 255, 255, 0.7) !important;
+  background-color: #aed4ee;
+  border-top: 3px solid var(--blue);
+  padding: 60px 0;
+  text-align: center;
 }
 
+.footer p {
+  color: var(--text-medium);
+  font-weight: 500;
+}
+
+.footer strong {
+  color: var(--blue);
+}
 
 /* ==============================
-    9. Animaciones Modernas (SIN CAMBIOS)
+   ✨ Animaciones
 ============================== */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
+.animate-fade-in-up {
+  opacity: 0;
+  transform: translateY(25px);
+  animation: fadeInUp 0.8s ease forwards;
+}
 
+@keyframes fadeInUp {
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-@keyframes fadeInRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
+.animate-fade-in-right {
+  opacity: 0;
+  transform: translateX(25px);
+  animation: fadeInRight 0.8s ease forwards;
+}
 
+@keyframes fadeInRight {
   to {
     opacity: 1;
     transform: translateX(0);
   }
 }
 
-.animate-fade-in-up {
-  animation: fadeInUp 1s ease-out forwards;
-  opacity: 0;
-}
-
-.animate-fade-in-right {
-  animation: fadeInRight 1s ease-out forwards;
-  opacity: 0;
-}
-
-/* Retrasos para animaciones en secuencia */
-.delay-1 {
-  animation-delay: 0.2s;
-}
-
-.delay-2 {
-  animation-delay: 0.4s;
-}
-
-.delay-3 {
-  animation-delay: 0.6s;
-}
-
-
 /* ==============================
-    10. Responsive (SIN CAMBIOS)
+   📱 Responsividad
 ============================== */
-@media (max-width: 991.98px) {
-  .hero-h1 {
-    font-size: 2.8rem;
-    letter-spacing: -1px;
-  }
-
-  .hero-subtitle {
-    font-size: 1.1rem;
-  }
-
+@media (max-width: 991px) {
   .hero-section {
-    padding-bottom: 150px;
-    padding-top: 80px;
-    height: auto;
-  }
-
-  .hero-wave-bottom {
-    height: 120px;
-  }
-
-  .content-container {
-    padding: 0 25px;
-  }
-
-  .max-w-700 {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 767.98px) {
-  .navbar-brand .fs-4 {
-    font-size: 1.5rem !important;
-  }
-
-  .navbar-brand .bi {
-    font-size: 1.8rem !important;
+    text-align: center;
+    flex-direction: column;
   }
 
   .hero-h1 {
-    font-size: 2.2rem;
-    letter-spacing: -0.8px;
+    font-size: 2.4rem;
   }
 
-  .hero-subtitle {
-    font-size: 1rem;
-  }
-
-  .illustration-area {
-    margin-top: 3rem;
-  }
-
-  .py-6 {
-    padding-top: 4rem !important;
-    padding-bottom: 4rem !important;
-  }
-
-  .mb-6 {
-    margin-bottom: 4rem !important;
-  }
-
-  .feature-icon {
-    font-size: 2rem;
-    width: 60px;
-    height: 60px;
-  }
-
-  .step-icon {
-    font-size: 3rem;
-  }
-
-  .display-5 {
-    font-size: 2.5rem;
-  }
-}
-
-/* Animaciones deshabilitadas en "prefers-reduced-motion" */
-@media (prefers-reduced-motion) {
-
-  .animate-fade-in-up,
-  .animate-fade-in-right,
-  .illustration-img,
   .feature-card,
-  .step-card,
-  .card-pricing {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
-  .feature-card:hover,
-  .step-card:hover,
-  .card-pricing:hover {
-    transform: none !important;
-    box-shadow: none !important;
-  }
-
-  .card-pricing.popular-card {
-    transform: none !important;
-    box-shadow: none !important;
+  .step-card {
+    margin-bottom: 2rem;
   }
 }
