@@ -41,9 +41,10 @@
           <label class="form-label">Contexto:</label>
           <textarea
             class="form-control"
-            formControlName="context"
-            rows="2"
-            placeholder="Opcional"
+            name="descripcion_proyecto"
+            [(ngModel)]="description"
+            readonly
+            formControlName="descripcion_proyecto"
           ></textarea>
         </div>
 
@@ -130,32 +131,36 @@
         </h5>
 
         <!-- === Sección dinámica según resultado === -->
-        <ng-container *ngIf="analysis?.refined_requirement as rr">
+        <ng-container *ngIf="analysis?.opciones_requisito as rr">
           <!-- Caso < 30% -->
           <div *ngIf="getTotalProgress() < 30" class="mt-4 alert alert-danger rounded-3">
             <h6>Requisito refinado sugerido:</h6>
-            <pre class="bg-light p-3 rounded">{{ rr.requisito_refinado_final || 'No disponible' }}</pre>
+            <pre class="bg-light p-3 rounded">{{ rr.requisito_refinado || 'No disponible' }}</pre>
             <button class="btn btn-outline-primary w-100 mt-2" (click)="copyRefinedToText()">
               <i class="bi bi-clipboard"></i> Copiar al campo de texto
             </button>
           </div>
 
           <!-- Caso 30 - 59 -->
-          <div *ngIf="getTotalProgress() >= 30 && getTotalProgress() < 60" class="mt-4 alert alert-warning rounded-3">
+          <div
+            *ngIf="getTotalProgress() >= 30 && getTotalProgress() < 60"
+            class="mt-4 alert alert-warning rounded-3"
+          >
             <h6>Debe mejorar el requisito:</h6>
             <p class="mb-2">
               Siga las sugerencias mostradas para obtener un requisito de mejor calidad.
             </p>
+            <h6>Requisito refinado sugerido:</h6>
+            <pre class="bg-light p-3 rounded">{{ rr.requisito_refinado || 'No disponible' }}</pre>
+            <button class="btn btn-outline-primary w-100 mt-2" (click)="copyRefinedToText()">
+              <i class="bi bi-clipboard"></i> Copiar al campo de texto
+            </button>
           </div>
 
           <!-- Caso >= 60 -->
           <div *ngIf="getTotalProgress() >= 60" class="mt-4 alert alert-success rounded-3">
             <p class="mb-2">El requisito cumple con los estándares mínimos de calidad.</p>
-            <button
-              class="btn btn-success w-100"
-              (click)="saveRequirement()"
-              [disabled]="!canSave"
-            >
+            <button class="btn btn-success w-100" (click)="saveRequirement()" [disabled]="!canSave">
               <i class="bi bi-save"></i> Guardar Requisito
             </button>
           </div>

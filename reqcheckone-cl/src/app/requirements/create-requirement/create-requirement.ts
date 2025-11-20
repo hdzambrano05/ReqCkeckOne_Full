@@ -14,13 +14,13 @@ interface Attribute {
 interface RefinedRequirement {
   estado?: 'aceptado' | 'opcional' | 'rechazado' | 'sugerencias' | 'refinado_obligatorio';
   sugerencias?: string[];
-  requisito_refinado_final?: string;
+  requisito_refinado?: string;
 }
 
 interface RequirementAnalysis {
   promedio_cumplimiento?: number;
   agents: { [agent: string]: { analysis: any; porcentaje?: number } };
-  refined_requirement?: RefinedRequirement;
+  opciones_requisito?: RefinedRequirement;
 }
 
 @Component({
@@ -37,13 +37,12 @@ export class CreateRequirement implements OnInit, AfterViewInit {
   username = '';
   projectId!: number;
   projectName = '';
+  description = '';
 
-  // Modal
   modalMessage = '';
   showModal = false;
   modalType: 'success' | 'error' | 'info' = 'info';
 
-  // Lista de atributos visibles en UI
   attributes: Attribute[] = [
     { name: 'Validez', value: 0 },
     { name: 'Claridad / No ambigüedad', value: 0 },
@@ -59,7 +58,6 @@ export class CreateRequirement implements OnInit, AfterViewInit {
     { name: 'Conformidad', value: 0 }
   ];
 
-  // Mapa backendKey -> UI name
   private attrMap: Record<string, string> = {
     validez: 'Validez',
     claridad: 'Claridad / No ambigüedad',
@@ -75,7 +73,6 @@ export class CreateRequirement implements OnInit, AfterViewInit {
     conformidad: 'Conformidad'
   };
 
-  // Sugerencias por atributo (UI name -> array de sugerencias)
   attributeSuggestions: { [uiName: string]: string[] } = {};
 
   attributeDescriptions: { [key: string]: string } = {
@@ -108,7 +105,7 @@ export class CreateRequirement implements OnInit, AfterViewInit {
       project_id: [''],
       title: ['', Validators.required],
       text: ['', Validators.required],
-      context: [''],
+      descripcion_proyecto: [''],
       status: ['draft'],
       priority: [{ value: 'medium', disabled: true }],
       due_date: [''],
@@ -125,7 +122,7 @@ export class CreateRequirement implements OnInit, AfterViewInit {
         this.form.get('project_id')?.setValue(this.projectId);
 
         this.projectsService.getProjectById(this.projectId).subscribe({
-          next: (project: Project) => (this.projectName = project.name),
+          next: (project: Project) => (this.projectName = project.name, this.description = project.description),
           error: err => console.error('Error cargando proyecto:', err)
         });
       }
@@ -137,7 +134,6 @@ export class CreateRequirement implements OnInit, AfterViewInit {
     tooltipTriggerList.forEach(el => new Tooltip(el));
   }
 
-  // Getters para evitar errores TS
   get priorityControl(): FormControl {
     return this.form.get('priority') as FormControl;
   }
@@ -146,7 +142,6 @@ export class CreateRequirement implements OnInit, AfterViewInit {
     return this.form.get('created_by') as FormControl;
   }
 
-  // ------------------- MODAL -------------------
   openModal(message: string, type: 'success' | 'error' | 'info' = 'info') {
     this.modalMessage = message;
     this.modalType = type;
@@ -158,53 +153,51 @@ export class CreateRequirement implements OnInit, AfterViewInit {
     this.modalMessage = '';
   }
 
-  // ------------------- ANALIZAR REQUISITO -------------------
   analyzeRequirement(): void {
     const text = this.form.value.text;
-    const context = this.form.value.context;
+    const descripcion_proyecto = this.form.value.descripcion_proyecto;
 
     if (!text) return;
 
     this.loadingAnalysis = true;
     this.analysis = null;
     this.canSave = false;
-    this.attributeSuggestions = {}; // limpiar sugerencias previas
+    this.attributeSuggestions = {};
 
-    const payload = { id: 'REQ-TEMP', text, context };
+    const payload = { id: 'REQ-TEMP', text, descripcion_proyecto };
 
     this.requirementsService.analyzeRequirement(payload).subscribe({
       next: (res) => {
         const data = res.data;
         console.log('Respuesta backend (raw):', data);
 
-        // Construir estructura de analysis compatible con el componente
+        // Construir estructura de analysis
         this.analysis = {
           promedio_cumplimiento: data.promedio_cumplimiento,
           agents: {},
-          refined_requirement: {
-            estado: 'sugerencias',
-            sugerencias: data.sugerencias_combinadas || [],
-            requisito_refinado_final: data.requisito_refinado_final || ''
+          opciones_requisito: {
+            requisito_refinado: data.opciones_requisito?.requisito_refinado || ''
           }
         };
 
-        // Transformar analisis_detallado -> agents
+        // Procesar sugerencias
+        if (data.sugerencias_combinadas) {
+          this.updateAttributesFromSuggestions(data.sugerencias_combinadas);
+        }
+
+        // Procesar analisis_detallado
         if (data.analisis_detallado) {
           for (const [agentName, agentData] of Object.entries<any>(data.analisis_detallado)) {
             const atributos = (agentData as any).atributos || {};
             const analysisPlain: Record<string, any> = {};
-            // Extraer sugerencias por atributo para mostrarlas luego
             for (const [backendKey, detalle] of Object.entries<any>(atributos)) {
-              // detalle puede ser { valor: ..., sugerencia: ... } u otras formas
               analysisPlain[backendKey] = detalle?.valor !== undefined ? detalle.valor : detalle;
-              // recolectar sugerencia textual si existe
               if (detalle?.sugerencia) {
                 const uiName = this.attrMap[backendKey] ?? backendKey;
                 if (!this.attributeSuggestions[uiName]) this.attributeSuggestions[uiName] = [];
                 this.attributeSuggestions[uiName].push(`${agentName}: ${detalle.sugerencia}`);
               }
             }
-
             this.analysis.agents[agentName] = {
               analysis: analysisPlain,
               porcentaje: (agentData as any).porcentaje
@@ -212,11 +205,9 @@ export class CreateRequirement implements OnInit, AfterViewInit {
           }
         }
 
-        // Actualizar atributos y UI
-        this.updateAttributes();
-        this.cd.detectChanges(); // asegurar render
+        this.cd.detectChanges();
 
-        // Prioridad según Product Owner (si existe)
+        // Prioridad según Product Owner
         const poAnalysis = this.analysis.agents?.['Product Owner']?.analysis;
         const prioridad = poAnalysis?.priorizacion === 'alta'
           ? 'high'
@@ -225,7 +216,7 @@ export class CreateRequirement implements OnInit, AfterViewInit {
             : 'low';
         this.priorityControl.setValue(prioridad);
 
-        // Control de guardado por promedio
+        // Control de guardado
         const promedio = this.analysis.promedio_cumplimiento ?? 0;
         this.canSave = promedio >= 60;
 
@@ -244,63 +235,34 @@ export class CreateRequirement implements OnInit, AfterViewInit {
     });
   }
 
-  // ------------------- ACTUALIZAR ATRIBUTOS -------------------
-  private updateAttributes(): void {
-    if (!this.analysis?.agents) return;
-    const agents = this.analysis.agents;
-
-    // reiniciar valores y sugerencias si fuera necesario
+  private updateAttributesFromSuggestions(suggestions: string[]) {
     this.attributes.forEach(a => a.value = 0);
+    this.attributeSuggestions = {};
 
-    this.attributes.forEach(attr => {
-      let total = 0;
-      let count = 0;
+    const tempSuggestions: { [uiName: string]: Set<string> } = {};
 
-      // encontrar la clave backend que corresponde al nombre UI
-      const backendKey = Object.keys(this.attrMap).find(k => this.attrMap[k] === attr.name);
-      if (!backendKey) {
-        attr.value = 0;
-        return;
+    suggestions.forEach(s => {
+      // Regex para extraer: agente, clave backend, porcentaje y texto
+      const match = s.match(/- \((.+) - (\w+) - ([0-9.]+)%\): Sugerencia: (.+)/);
+      if (match) {
+        const backendKey = match[2].toLowerCase();
+        const porcentaje = parseFloat(match[3]);
+
+        const uiName = this.attrMap[backendKey];
+        if (!uiName) return;
+
+        // Actualizar valor máximo del atributo
+        const attr = this.attributes.find(a => a.name === uiName);
+        if (attr) attr.value = Math.max(attr.value, porcentaje);
+
+        // Inicializar Set temporal si no existe
+        if (!tempSuggestions[uiName]) tempSuggestions[uiName] = new Set();
+
       }
-
-      Object.values(agents).forEach((agent: any) => {
-        const analysis = agent?.analysis;
-        if (!analysis) return;
-
-        const valor = analysis[backendKey];
-        if (valor === undefined || valor === null) return;
-
-        let porcentaje = 0;
-        switch (typeof valor) {
-          case 'boolean':
-            porcentaje = valor ? 100 : 0;
-            break;
-          case 'number':
-            porcentaje = Math.max(0, Math.min(100, valor)); // si backend ya devuelve número
-            break;
-          case 'string':
-            // Normalizar valores textuales a porcentajes
-            const v = valor.toLowerCase();
-            if (v === 'alta' || v === 'correcta' || v === 'completo' || v === 'claro' || v === 'atómico' || v === 'atomico') porcentaje = 100;
-            else if (v === 'media' || v === 'parcial' || v === 'media') porcentaje = 60;
-            else if (v === 'baja' || v === 'ambigua' || v === 'ambiguous') porcentaje = 30;
-            else porcentaje = 0;
-            break;
-          default:
-            porcentaje = 0;
-        }
-
-        total += porcentaje;
-        count++;
-      });
-
-      attr.value = count ? Math.round(total / count) : 0;
     });
-
-    console.log('Atributos calculados:', this.attributes);
   }
 
-  // ------------------- GUARDAR REQUISITO -------------------
+
   saveRequirement(): void {
     if (!this.analysis) return;
 
@@ -321,7 +283,7 @@ export class CreateRequirement implements OnInit, AfterViewInit {
       project_id: this.projectId,
       title: raw.title,
       text: raw.text,
-      context: raw.context || null,
+      descripcion_proyecto: raw.descripcion_proyecto || null,
       status: raw.status,
       priority: this.priorityControl.value || 'medium',
       due_date: raw.due_date || null,
@@ -329,7 +291,7 @@ export class CreateRequirement implements OnInit, AfterViewInit {
       created_by: +userId,
       analysis: {
         promedio_cumplimiento: this.analysis?.promedio_cumplimiento ?? 0,
-        refined_requirement: this.analysis?.refined_requirement ?? null,
+        opciones_requisito: this.analysis?.opciones_requisito ?? null,
         agents: this.analysis?.agents ?? {}
       }
     };
@@ -357,16 +319,18 @@ export class CreateRequirement implements OnInit, AfterViewInit {
   }
 
   getTotalProgress(): number {
-    return Math.round(this.analysis?.promedio_cumplimiento ?? 0);
+    if (!this.attributes.length) return 0;
+    // Promedio exacto basado en atributos visibles
+    const total = this.attributes.reduce((sum, a) => sum + a.value, 0);
+    return Math.round(total / this.attributes.length);
   }
 
   goBack() {
     this.router.navigate(['/projects', this.projectId]);
   }
 
-  // Copiar requisito refinado al campo de texto
   copyRefinedToText(): void {
-    const refined = this.analysis?.refined_requirement?.requisito_refinado_final;
+    const refined = this.analysis?.opciones_requisito?.requisito_refinado;
     if (refined) {
       this.form.patchValue({ text: refined });
       this.openModal('El requisito refinado ha sido copiado al campo de descripción.', 'info');
@@ -374,5 +338,4 @@ export class CreateRequirement implements OnInit, AfterViewInit {
       this.openModal('No hay requisito refinado disponible.', 'error');
     }
   }
-
 }

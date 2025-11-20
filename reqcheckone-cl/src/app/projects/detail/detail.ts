@@ -255,210 +255,192 @@ export class Detail implements OnInit {
       },
     });
   }
-
+  
   generatePDF() {
-  if (!this.project) return;
+    if (!this.project) return;
 
-  const doc = new jsPDF('p', 'mm', 'a4');
-  const margin = 15;
-  let yPos = margin;
-  const pageHeight = 297;
-  const pageWidth = 210;
+    const doc = new jsPDF('p', 'mm', 'a4');
+    const margin = 15;
+    let yPos = margin;
+    const pageHeight = 297;
+    const pageWidth = 210;
 
-  const colors = {
-    title: [30, 30, 30] as [number, number, number],
-    subtitle: [80, 80, 80] as [number, number, number],
-    text: [50, 50, 50] as [number, number, number],
-    agent: [54, 162, 235] as [number, number, number],
-    percentBar: [54, 162, 235] as [number, number, number],
-    separator: [200, 200, 200] as [number, number, number],
-    headerBg: [230, 240, 250] as [number, number, number],
-  };
+    const colors = {
+      title: [30, 30, 30] as [number, number, number],
+      subtitle: [80, 80, 80] as [number, number, number],
+      text: [50, 50, 50] as [number, number, number],
+      agent: [54, 162, 235] as [number, number, number],
+      percentBar: [54, 162, 235] as [number, number, number],
+      separator: [200, 200, 200] as [number, number, number],
+      headerBg: [230, 240, 250] as [number, number, number],
+    };
 
-  const lineHeight = 6;
-  const smallLineHeight = 5;
+    const lineHeight = 6;
+    const smallLineHeight = 5;
 
-  // --------------------
-  // Encabezado
-  // --------------------
-  doc.setFillColor(...colors.headerBg);
-  doc.rect(0, 0, pageWidth, 28, 'F');
+    const checkPageBreak = (extraHeight: number) => {
+      if (yPos + extraHeight > pageHeight - margin) {
+        doc.addPage();
+        yPos = margin;
+      }
+    };
 
-  doc.setFontSize(24);
-  doc.setTextColor(...colors.title);
-  doc.setFont('helvetica', 'bold');
-  doc.text(`Proyecto: ${this.project.name}`, margin, yPos + 7);
+    // -------------------- Header --------------------
+    doc.setFillColor(...colors.headerBg);
+    doc.rect(0, 0, pageWidth, 28, 'F');
 
-  yPos += 14;
-  doc.setFontSize(12);
-  doc.setTextColor(...colors.subtitle);
-  doc.setFont('helvetica', 'normal');
-  const projectDesc = this.project.description || 'No hay descripción';
-  doc.text(`Descripción: ${projectDesc}`, margin, yPos);
-  yPos += 6;
-
-  doc.text(`Creador: ${this.project.owner?.username || 'No disponible'}`, margin, yPos);
-  yPos += 5;
-  const collaborators = this.project.collaborators?.map(c => `${c.username} (${c.role || 'Sin rol'})`).join(', ') || 'Sin colaboradores';
-  doc.text(`Colaboradores: ${collaborators}`, margin, yPos);
-  yPos += 10;
-
-  doc.setFontSize(18);
-  doc.setTextColor(...colors.title);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Requisitos', margin, yPos);
-  yPos += 8;
-
-  // --------------------
-  // Función para agregar requisito
-  // --------------------
-  const addRequirementToPDF = async (req: Requirement, index: number) => {
-    doc.setDrawColor(...colors.separator);
-    doc.setLineWidth(0.5);
-    doc.line(margin, yPos, pageWidth - margin, yPos);
-    yPos += 5;
-
-    // Título
-    doc.setFontSize(14);
+    doc.setFontSize(24);
     doc.setTextColor(...colors.title);
     doc.setFont('helvetica', 'bold');
-    doc.text(`${index + 1}. ${req.title}`, margin, yPos);
-    yPos += 7;
+    doc.text(`Proyecto: ${this.project.name}`, margin, yPos + 7);
 
-    // Descripción
-    doc.setFontSize(11);
-    doc.setTextColor(...colors.text);
-    doc.setFont('helvetica', 'normal');
-    const splitText = doc.splitTextToSize(`Descripción: ${req.text}`, pageWidth - 2 * margin);
-    doc.text(splitText, margin, yPos);
-    yPos += splitText.length * lineHeight;
-
-    // Estado y prioridad
-    doc.setFontSize(10);
-    doc.setTextColor(100, 100, 100);
-    doc.text(`Estado: ${req.status} | Prioridad: ${req.priority}`, margin, yPos);
-    yPos += 6;
-
-    // Parsear análisis
-    let analysisObj: any = {};
-    try {
-      if (req.analysis) {
-        analysisObj = typeof req.analysis === 'string' ? JSON.parse(req.analysis) : req.analysis;
-      }
-    } catch { analysisObj = {}; }
-
-    // Porcentaje total
-    const totalPercent = analysisObj["promedio_cumplimiento"] ?? 0;
-
-    // --------------------
-    // Título de la barra de porcentaje
-    // --------------------
-    doc.setFontSize(10);
+    yPos += 14;
+    doc.setFontSize(12);
     doc.setTextColor(...colors.subtitle);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Porcentaje de calidad del requisito funcional', margin, yPos);
-    yPos += 4;
-
-    const totalBarWidth = 160;
-    const barHeight = 8;
-    doc.setFillColor(220, 220, 220);
-    doc.rect(margin, yPos, totalBarWidth, barHeight, 'F');
-    doc.setFillColor(...colors.percentBar);
-    doc.rect(margin, yPos, (totalPercent / 100) * totalBarWidth, barHeight, 'F');
-    doc.setFontSize(10);
-    doc.setTextColor(255, 255, 255);
-    doc.setFont('helvetica', 'bold');
-    doc.text(`${totalPercent}%`, margin + totalBarWidth / 2 - 8, yPos + 6);
     doc.setFont('helvetica', 'normal');
-    yPos += barHeight + 6;
+    const projectDesc = this.project.description || 'No hay descripción';
+    let splitDesc = doc.splitTextToSize(`Descripción: ${projectDesc}`, pageWidth - 2 * margin);
+    checkPageBreak(splitDesc.length * lineHeight);
+    doc.text(splitDesc, margin, yPos);
+    yPos += splitDesc.length * lineHeight;
 
-    // --------------------
-    // Análisis por agente
-    // --------------------
-    const agents = analysisObj['agents'];
-    if (agents && Object.keys(agents).length > 0) {
-      for (const [agentName, agentRawData] of Object.entries(agents)) {
-        const agentData = agentRawData as { analysis?: Record<string, any>; porcentaje?: number };
-        const analysis = agentData.analysis ?? {};
-        const agentPercent = agentData.porcentaje ?? 0;
+    doc.text(`Creador: ${this.project.owner?.username || 'No disponible'}`, margin, yPos);
+    yPos += 5;
+    const collaborators = this.project.collaborators?.map(c => `${c.username} (${c.role || 'Sin rol'})`).join(', ') || 'Sin colaboradores';
+    doc.text(`Colaboradores: ${collaborators}`, margin, yPos);
+    yPos += 10;
 
-        doc.setFontSize(12);
-        doc.setTextColor(...colors.agent);
-        doc.setFont('helvetica', 'bold');
-        doc.text(agentName, margin + 5, yPos);
-        yPos += 5;
+    doc.setFontSize(18);
+    doc.setTextColor(...colors.title);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Requisitos', margin, yPos);
+    yPos += 8;
 
-        if (Object.keys(analysis).length > 0) {
-          doc.setFontSize(9);
-          doc.setTextColor(...colors.text);
-          doc.setFont('helvetica', 'normal');
+    // -------------------- Add Requirements --------------------
+    const addRequirementToPDF = async (req: Requirement, index: number) => {
+      checkPageBreak(20); // salto de página seguro antes de cada requisito
+      doc.setDrawColor(...colors.separator);
+      doc.setLineWidth(0.5);
+      doc.line(margin, yPos, pageWidth - margin, yPos);
+      yPos += 5;
 
-          for (const [key, value] of Object.entries(analysis)) {
-            if (key === 'casos_prueba' && Array.isArray(value)) {
-              doc.text(`${key}:`, margin + 10, yPos);
-              yPos += 4;
-              value.forEach((test: string, i: number) => {
-                const lines = doc.splitTextToSize(`${i + 1}. ${test}`, pageWidth - 2 * margin - 15);
-                doc.text(lines, margin + 15, yPos);
-                yPos += lines.length * smallLineHeight;
-              });
-            } else if (Array.isArray(value)) {
-              const line = `${key}: ${value.join(', ')}`;
-              const lines = doc.splitTextToSize(line, pageWidth - 2 * margin - 10);
-              doc.text(lines, margin + 10, yPos);
-              yPos += lines.length * smallLineHeight;
-            } else {
-              const line = `${key}: ${value}`;
-              const lines = doc.splitTextToSize(line, pageWidth - 2 * margin - 10);
+      // Título
+      checkPageBreak(10);
+      doc.setFontSize(14);
+      doc.setTextColor(...colors.title);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`${index + 1}. ${req.title}`, margin, yPos);
+      yPos += 7;
+
+      // Descripción
+      doc.setFontSize(11);
+      doc.setTextColor(...colors.text);
+      doc.setFont('helvetica', 'normal');
+      const splitText = doc.splitTextToSize(`Descripción: ${req.text}`, pageWidth - 2 * margin);
+      checkPageBreak(splitText.length * lineHeight);
+      doc.text(splitText, margin, yPos);
+      yPos += splitText.length * lineHeight;
+
+      // Estado y prioridad
+      checkPageBreak(6);
+      doc.setFontSize(10);
+      doc.setTextColor(100, 100, 100);
+      doc.text(`Estado: ${req.status} | Prioridad: ${req.priority}`, margin, yPos);
+      yPos += 6;
+
+      // Análisis
+      let analysisObj: any = {};
+      try {
+        if (req.analysis) {
+          analysisObj = typeof req.analysis === 'string' ? JSON.parse(req.analysis) : req.analysis;
+        }
+      } catch { analysisObj = {}; }
+
+      const totalPercent = analysisObj["promedio_cumplimiento"] ?? 0;
+
+      // Barra de porcentaje total
+      checkPageBreak(14);
+      doc.setFontSize(10);
+      doc.setTextColor(...colors.subtitle);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Porcentaje de calidad del requisito funcional', margin, yPos);
+      yPos += 4;
+
+      const totalBarWidth = 160;
+      const barHeight = 8;
+      doc.setFillColor(220, 220, 220);
+      doc.rect(margin, yPos, totalBarWidth, barHeight, 'F');
+      doc.setFillColor(...colors.percentBar);
+      doc.rect(margin, yPos, (totalPercent / 100) * totalBarWidth, barHeight, 'F');
+      doc.setFontSize(10);
+      doc.setTextColor(255, 255, 255);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`${totalPercent}%`, margin + totalBarWidth / 2 - 8, yPos + 6);
+      doc.setFont('helvetica', 'normal');
+      yPos += barHeight + 6;
+
+      // Análisis por agente
+      const agents = analysisObj['agents'];
+      if (agents && Object.keys(agents).length > 0) {
+        for (const [agentName, agentRawData] of Object.entries(agents)) {
+          checkPageBreak(10);
+          const agentData = agentRawData as { analysis?: Record<string, any>; porcentaje?: number };
+          const analysis = agentData.analysis ?? {};
+          const agentPercent = agentData.porcentaje ?? 0;
+
+          doc.setFontSize(12);
+          doc.setTextColor(...colors.agent);
+          doc.setFont('helvetica', 'bold');
+          doc.text(agentName, margin + 5, yPos);
+          yPos += 5;
+
+          if (Object.keys(analysis).length > 0) {
+            for (const [key, value] of Object.entries(analysis)) {
+              let lines: string[];
+              if (Array.isArray(value)) {
+                lines = doc.splitTextToSize(`${key}: ${value.join(', ')}`, pageWidth - 2 * margin - 10);
+              } else {
+                lines = doc.splitTextToSize(`${key}: ${value}`, pageWidth - 2 * margin - 10);
+              }
+              checkPageBreak(lines.length * smallLineHeight);
+              doc.setFontSize(9);
+              doc.setTextColor(...colors.text);
+              doc.setFont('helvetica', 'normal');
               doc.text(lines, margin + 10, yPos);
               yPos += lines.length * smallLineHeight;
             }
+
+            // Barra de porcentaje del agente
+            checkPageBreak(8);
+            const agentBarWidth = 140;
+            const agentBarHeight = 6;
+            doc.setFillColor(220, 220, 220);
+            doc.rect(margin + 10, yPos, agentBarWidth, agentBarHeight, 'F');
+            doc.setFillColor(...colors.percentBar);
+            doc.rect(margin + 10, yPos, (agentPercent / 100) * agentBarWidth, agentBarHeight, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'bold');
+            doc.text(`${agentPercent}%`, margin + 10 + agentBarWidth - 14, yPos + 5);
+            yPos += agentBarHeight + 6;
+          } else {
+            checkPageBreak(6);
+            doc.setFontSize(10);
+            doc.setTextColor(200, 0, 0);
+            doc.text('No hay análisis disponible', margin + 10, yPos);
+            yPos += 5;
           }
-
-          // Barra de porcentaje del agente
-          const agentBarWidth = 140;
-          const agentBarHeight = 6;
-          doc.setFillColor(220, 220, 220);
-          doc.rect(margin + 10, yPos, agentBarWidth, agentBarHeight, 'F');
-          doc.setFillColor(...colors.percentBar);
-          doc.rect(margin + 10, yPos, (agentPercent / 100) * agentBarWidth, agentBarHeight, 'F');
-          doc.setTextColor(255, 255, 255);
-          doc.setFontSize(9);
-          doc.setFont('helvetica', 'bold');
-          doc.text(`${agentPercent}%`, margin + 10 + agentBarWidth - 14, yPos + 5);
-          yPos += agentBarHeight + 6;
-        } else {
-          doc.setFontSize(10);
-          doc.setTextColor(200, 0, 0);
-          doc.text('No hay análisis disponible', margin + 10, yPos);
-          yPos += 5;
-        }
-
-        if (yPos > pageHeight - margin) {
-          doc.addPage();
-          yPos = margin;
         }
       }
-    }
+    };
 
-    yPos += 5;
-    if (yPos > pageHeight - margin) {
-      doc.addPage();
-      yPos = margin;
-    }
-  };
-
-  // --------------------
-  // Generar PDF
-  // --------------------
-  (async () => {
-    for (let i = 0; i < this.requirements.length; i++) {
-      await addRequirementToPDF(this.requirements[i], i);
-    }
-
-    window.open(doc.output('bloburl'));
-    doc.save(`${this.project?.name}_Requisitos.pdf`);
-  })();
-}
+    (async () => {
+      for (let i = 0; i < this.requirements.length; i++) {
+        await addRequirementToPDF(this.requirements[i], i);
+      }
+      window.open(doc.output('bloburl'));
+      doc.save(`${this.project?.name}_Requisitos.pdf`);
+    })();
+  }
 
 }

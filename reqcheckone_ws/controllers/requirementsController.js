@@ -78,13 +78,20 @@ module.exports = {
         try {
             console.log("Petición recibida en Node.js:", req.body);
 
-            // Generar un ID temporal si no viene del frontend
             const requirement = {
-                id: req.body.id && req.body.id.trim().length > 0 ? req.body.id : `TEMP-${Date.now()}`,
+                id: req.body.id?.trim().length > 0 ? req.body.id : `TEMP-${Date.now()}`,
                 project_id: Number(req.body.project_id),
                 text: req.body.text,
-                context: req.body.context || ""
+                descripcion_proyecto: req.body.descripcion_proyecto, // 👈 CORREGIDO
             };
+
+            // Validar antes de enviar a FastAPI
+            if (!requirement.descripcion_proyecto || requirement.descripcion_proyecto.trim().length < 10) {
+                return res.status(400).send({
+                    status: "error",
+                    message: "La descripción del proyecto es demasiado corta para realizar el análisis."
+                });
+            }
 
             const response = await axios.post(
                 "http://127.0.0.1:8000/analyze",
@@ -93,7 +100,7 @@ module.exports = {
             );
 
             console.log("Respuesta de FastAPI:", response.data);
-            res.status(200).send(response.data);
+            return res.status(200).send(response.data);
 
         } catch (error) {
             console.error("Error en analyze Node.js:", error.message);
@@ -104,10 +111,9 @@ module.exports = {
                 return res.status(error.response.status).send(error.response.data);
             }
 
-            res.status(500).send({ error: "Error al analizar el requisito" });
+            return res.status(500).send({ error: "Error al analizar el requisito" });
         }
     },
-
 
     add(req, res) {
         const payload = {
@@ -119,7 +125,7 @@ module.exports = {
             priority: req.body.priority || 'medium',
             due_date: req.body.due_date,
             version: req.body.version || 1,
-            analysis: JSON.stringify(req.body.analysis), // viene del frontend
+            analysis: JSON.stringify(req.body.analysis),
             created_by: req.body.created_by
         };
 
@@ -174,44 +180,44 @@ module.exports = {
         }
     },
 
-    async delete (req, res) {
-    try {
-        const id = req.params.id;
-        const userId = req.user?.id || null;
+    async delete(req, res) {
+        try {
+            const id = req.params.id;
+            const userId = req.user?.id || null;
 
-        const requirement = await requirements.findByPk(id);
-        if (!requirement) {
-            return res.status(404).send({ message: 'Requirement not found' });
+            const requirement = await requirements.findByPk(id);
+            if (!requirement) {
+                return res.status(404).send({ message: 'Requirement not found' });
+            }
+
+            console.log('🧠 Eliminado por usuario:', req.user);
+
+            // ✅ Marcar como eliminado (sin borrar de la BD)
+            requirement.status = 'eliminado';
+            await requirement.save();
+
+            // ✅ Guardar el cambio en el historial
+            await requirement_history.create({
+                requirement_id: requirement.id,
+                version: requirement.version,
+                text: requirement.text,
+                context: requirement.context,
+                analysis: requirement.analysis,
+                changed_by: userId,
+                updated_at: new Date(),
+            });
+
+            console.log('✅ Historial guardado correctamente');
+            return res.status(200).send({ message: 'Requisito marcado como eliminado' });
+
+        } catch (error) {
+            console.error('❌ Error al eliminar requisito:', error);
+            return res.status(500).send({
+                message: 'Error al eliminar el requisito',
+                error: error.message,
+            });
         }
-
-        console.log('🧠 Eliminado por usuario:', req.user);
-
-        // ✅ Marcar como eliminado (sin borrar de la BD)
-        requirement.status = 'eliminado';
-        await requirement.save();
-
-        // ✅ Guardar el cambio en el historial
-        await requirement_history.create({
-            requirement_id: requirement.id,
-            version: requirement.version,
-            text: requirement.text,
-            context: requirement.context,
-            analysis: requirement.analysis,
-            changed_by: userId,
-            updated_at: new Date(),
-        });
-
-        console.log('✅ Historial guardado correctamente');
-        return res.status(200).send({ message: 'Requisito marcado como eliminado' });
-
-    } catch (error) {
-        console.error('❌ Error al eliminar requisito:', error);
-        return res.status(500).send({
-            message: 'Error al eliminar el requisito',
-            error: error.message,
-        });
     }
-}
 
 
 };
