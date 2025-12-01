@@ -30,6 +30,7 @@ export class UpdateRequirement implements OnInit {
   analysis: any = null;
   agents: any[] = [];
   canSave = false;
+  description = '';
 
   // Modal centralizado
   modalState = {
@@ -73,7 +74,7 @@ export class UpdateRequirement implements OnInit {
     this.form = this.fb.group({
       title: ['', Validators.required],
       text: ['', Validators.required],
-      context: [''],
+      descripcion_proyecto: [''],
       status: ['draft', Validators.required],
       priority: [{ value: 'medium', disabled: true }],
       due_date: [''],
@@ -89,6 +90,7 @@ export class UpdateRequirement implements OnInit {
         if (req.project_id) {
           this.projectsService.getProjectById(req.project_id).subscribe({
             next: (project) => {
+              this.description = project.description
               this.projectName = project.name;
               this.projectId = project.id;
             },
@@ -121,14 +123,14 @@ export class UpdateRequirement implements OnInit {
 
   analyzeRequirement(): void {
     const text = this.form.value.text;
-    const context = this.form.value.context;
+    const descripcion_proyecto = this.form.value.descripcion_proyecto;
     if (!text) return;
 
     this.loadingAnalysis = true;
     this.analysis = null;
     this.canSave = false;
 
-    const payload = { id: 'REQ-TEMP', text, context };
+    const payload = { id: 'REQ-TEMP', text, descripcion_proyecto };
 
     this.openModal('Por favor, espere mientras se analiza el requisito...', 'loading');
 

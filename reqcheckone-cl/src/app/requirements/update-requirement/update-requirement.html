@@ -32,14 +32,14 @@
             class="form-control"
             formControlName="text"
             rows="3"
-            (click)="enableAnalyze()"
+            readonly
           ></textarea>
         </div>
 
         <!-- Contexto -->
         <div class="mb-3">
           <label class="form-label fw-semibold">Contexto:</label>
-          <textarea class="form-control" formControlName="context" rows="2"></textarea>
+          <textarea class="form-control" formControlName="descripcion_proyecto"  [(ngModel)]="description" readonly rows="2"></textarea>
         </div>
 
         <!-- Estado -->
@@ -73,15 +73,6 @@
 
         <!-- Botones -->
         <div class="d-grid gap-2">
-          <button
-            type="button"
-            class="btn btn-warning"
-            [disabled]="!canAnalyze || loadingAnalysis"
-            (click)="analyzeRequirement()"
-          >
-            <span *ngIf="!loadingAnalysis">Analizar Requisito</span>
-            <span *ngIf="loadingAnalysis" class="spinner-border spinner-border-sm"></span>
-          </button>
           <button
             type="button"
             class="btn btn-primary"

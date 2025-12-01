@@ -58,28 +58,48 @@ export class DetailRequirement implements OnInit {
   loadRequirement(id: number) {
     this.requirementsService.getById(id).subscribe({
       next: (req) => {
+        console.log("📥 RAW requirement:", req);
+        console.log("📦 RAW analysis from backend:", req.analysis);
+
         this.requirement = req;
         this.loading = false;
 
-        // 🔍 Si el análisis viene como string, lo parseamos
         if (req.analysis) {
           try {
-            this.analysis =
+            const parsed =
               typeof req.analysis === 'string'
                 ? JSON.parse(req.analysis)
                 : req.analysis;
+
+            console.log("🔍 PARSED analysis:", parsed);
+
+            // ⭐ NORMALIZACIÓN: convertimos la respuesta al formato que el front necesita ⭐
+            this.analysis = {
+              promedio_cumplimiento: parsed.promedio_cumplimiento || 0,
+
+              refined_requirement: {
+                estado: "Generado",
+                mensaje: parsed.opciones_requisito?.requisito_refinado || "No disponible",
+              },
+
+              agents: parsed.agents || parsed.agentes || {}
+            };
+
+            console.log("✅ ANALYSIS FINAL:", this.analysis);
+
           } catch (error) {
-            console.error('Error parseando análisis:', error);
+            console.error("❌ Error parseando análisis:", error);
             this.analysis = null;
           }
         }
       },
       error: (err) => {
-        console.error('Error cargando requisito:', err);
+        console.error("❌ Error cargando requisito:", err);
         this.loading = false;
       },
     });
   }
+
 
   goBack() {
     if (this.requirement) {

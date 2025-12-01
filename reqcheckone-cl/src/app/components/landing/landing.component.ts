@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-landing',
@@ -9,15 +10,24 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./landing.component.css']
 })
 export class LandingComponent {
-  menuOpen = false;
+
+  constructor(private router: Router) { }
 
   scrollToSection(id: string) {
     const element = document.querySelector(`#${id}`);
     element?.scrollIntoView({ behavior: 'smooth' });
-    this.menuOpen = false;
   }
 
-  toggleMenu() {
-    this.menuOpen = !this.menuOpen;
+  /**
+   * Simulación de envío de mensaje (ejemplo).
+   * @param event El evento de formulario.
+   */
+  sendMessage(event: Event) {
+    event.preventDefault();
+    alert('Mensaje enviado. ¡Gracias por contactar a ReqCheckOne!');
+  }
+
+  goToLogin() {
+    this.router.navigate(['/login']);
   }
 }

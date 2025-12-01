@@ -16,8 +16,10 @@ export class RequirementsService {
   }
 
   // Listar requisitos por proyecto
-  getByProject(projectId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/project/${projectId}`, { headers: this.getHeaders() });
+    getByProject(projectId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/project/${projectId}`, {
+      headers: this.getHeaders()
+    });
   }
 
   // Crear requisito

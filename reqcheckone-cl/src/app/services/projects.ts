@@ -27,6 +27,7 @@ export interface Project {
   owner_id?: number;
   owner?: Owner;                  // ✅ ahora existe
   collaborators?: Collaborator[]; // ✅ tipado claro
+  requisitos?: any[];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -47,7 +48,9 @@ export class ProjectsService {
 
   // ✅ Detalle de un proyecto específico
   getProjectById(id: number): Observable<Project> {
-    return this.http.get<Project>(`${this.base}/${id}`, { headers: this.getHeaders() });
+    return this.http.get<Project>(`${this.base}/${id}`, {
+      headers: this.getHeaders()
+    });
   }
 
   // ✅ Crear proyecto con owner y colaboradores

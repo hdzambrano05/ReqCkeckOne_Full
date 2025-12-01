@@ -1,67 +1,45 @@
 <div class="container-fluid mt-4">
   <!-- Encabezado -->
   <div class="text-center mb-5">
-    <h1 class="display-4 fw-bold">Bienvenido a <span class="text-primary">ReqCheckOne</span></h1>
-    <p class="lead text-muted">
-      Gestiona tus proyectos y analiza los requisitos funcionales de manera eficiente
-    </p>
+    <h1 class="display-4 fw-bold">
+      Bienvenido a
+      <span class="text-primary">ReqCheckOne</span>
+    </h1>
+    <p class="lead text-muted">Gestiona tus proyectos y analiza su estado de manera eficiente.</p>
   </div>
 
-  <!-- Tarjetas principales -->
+  <!-- KPIs -->
   <div class="row g-4 mb-5">
-    <!-- Proyectos -->
     <div class="col-md-4">
-      <div class="card card-hover border-0 shadow-lg h-100 text-center p-4 glass-card">
-        <div class="icon-wrapper bg-gradient-primary text-white mb-3">
-          <i class="bi bi-kanban-fill fs-1"></i>
-        </div>
-        <h5 class="card-title fw-bold">Proyectos</h5>
-        <p class="card-text text-muted">
-          Visualiza y administra todos tus proyectos de manera centralizada.
-        </p>
+      <div class="card border-0 shadow-lg p-4 text-center glass-card">
+        <h6 class="text-uppercase text-muted">Total Proyectos</h6>
+        <h2 id="kpiTotalProjects" class="fw-bold display-6">0</h2>
       </div>
     </div>
 
-    <!-- Requisitos -->
     <div class="col-md-4">
-      <div class="card card-hover border-0 shadow-lg h-100 text-center p-4 glass-card">
-        <div class="icon-wrapper bg-gradient-success text-white mb-3">
-          <i class="bi bi-list-check fs-1"></i>
-        </div>
-        <h5 class="card-title fw-bold">Requisitos</h5>
-        <p class="card-text text-muted">
-          Analiza, agrega y valida los requisitos funcionales de cada proyecto.
-        </p>
+      <div class="card border-0 shadow-lg p-4 text-center glass-card">
+        <h6 class="text-uppercase text-muted">Proyectos Activos</h6>
+        <h2 id="kpiActiveProjects" class="fw-bold display-6">0</h2>
       </div>
     </div>
 
-    <!-- Reportes -->
     <div class="col-md-4">
-      <div class="card card-hover border-0 shadow-lg h-100 text-center p-4 glass-card">
-        <div class="icon-wrapper bg-gradient-warning text-white mb-3">
-          <i class="bi bi-bar-chart-line-fill fs-1"></i>
-        </div>
-        <h5 class="card-title fw-bold">Reportes</h5>
-        <p class="card-text text-muted">
-          Genera reportes y visualiza el progreso del análisis de requisitos.
-        </p>
+      <div class="card border-0 shadow-lg p-4 text-center glass-card">
+        <h6 class="text-uppercase text-muted">Proyectos Completados</h6>
+        <h2 id="kpiCompletedProjects" class="fw-bold display-6">0</h2>
       </div>
     </div>
   </div>
 
-  <!-- Estadísticas / Gráficos -->
-  <div class="row g-4">
-    <div class="col-lg-6">
-      <div class="card shadow-lg border-0 p-4 glass-card">
-        <h5 class="card-title fw-bold mb-3">Proyectos Activos</h5>
-        <canvas id="projectsChart" height="200"></canvas>
+  <!-- Gráficos -->
+  <div class="container-fluid mt-4">
+    <!-- 📊 Requisitos por proyecto -->
+    <div class="col-lg-12 mb-4">
+      <div class="card shadow-lg border-0 p-3 glass-card small-chart-card">
+        <h5 class="card-title fw-bold mb-2">Requisitos por Proyecto</h5>
+        <canvas id="requirementsPerProjectChart" height="110"></canvas>
       </div>
     </div>
-    <div class="col-lg-6">
-      <div class="card shadow-lg border-0 p-4 glass-card">
-        <h5 class="card-title fw-bold mb-3">Requisitos Completados</h5>
-        <canvas id="requirementsChart" height="200"></canvas>
-      </div>
-    </div>
-  </div>
+
 </div>
