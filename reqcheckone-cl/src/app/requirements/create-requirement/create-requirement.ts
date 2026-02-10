@@ -310,11 +310,20 @@ export class CreateRequirement implements OnInit, AfterViewInit {
         this.canSave = false;
         this.attributes.forEach(a => (a.value = 0));
         this.attributeSuggestions = {};
+
+        setTimeout(() => {
+          const currentUrl = this.router.url;
+
+          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+            this.router.navigate([currentUrl]);
+          });
+        }, 800);
       },
       error: err => {
         console.error('Error guardando requisito:', err);
         this.openModal('Ocurrió un error al guardar el requisito.', 'error');
       }
+
     });
   }
 
