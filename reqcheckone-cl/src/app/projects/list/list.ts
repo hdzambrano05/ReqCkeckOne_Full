@@ -79,6 +79,11 @@ export class List implements OnInit {
     }
   }
 
+  truncateText(text: string, limit: number = 120): string {
+    if (!text) return '';
+    return text.length > limit ? text.substring(0, limit) + '...' : text;
+  }
+
 
   confirmDelete() {
     if (!this.projectToDelete) return;

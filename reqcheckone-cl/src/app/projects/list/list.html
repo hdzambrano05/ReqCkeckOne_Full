@@ -69,7 +69,9 @@
   <div class="col-md-4" *ngFor="let project of filteredProjects">
     <div class="project-card shadow-sm" (click)="viewProject(project.id)">
       <h5 class="card-title text-gradient">{{ project.name }}</h5>
-      <p class="card-text">{{ project.description }}</p>
+      <p class="card-text">
+        {{ truncateText(project.description, 120) }}
+      </p>
 
       <!-- Colaboradores -->
       <div *ngIf="project.collaborators?.length" class="mb-3">
@@ -133,7 +135,7 @@
   <tbody>
     <tr *ngFor="let project of filteredProjects">
       <td class="fw-semibold text-gradient">{{ project.name }}</td>
-      <td>{{ project.description }}</td>
+      <td> {{ truncateText(project.description, 120) }}</td>
       <td>
         <span *ngFor="let c of project.collaborators" class="badge-collab me-1">{{
           c.username

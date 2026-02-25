@@ -21,13 +21,12 @@ import { DetailRequirement } from './requirements/detail-requirement/detail-requ
 import { HistoryRequirements } from './requirements/history-requirements/history-requirements';
 import { UpdateRequirement } from './requirements/update-requirement/update-requirement';
 import { TaskCreate } from './tasks/task-create/task-create';
+import { Landing } from './pages/landing/landing';
 
 /* Core */
 import { AuthInterceptor } from './core/auth-interceptor';
 import { AuthGuard } from './core/auth-guard';
 
-/* Standalone Components */
-import { LandingComponent } from './components/landing/landing.component'; // ✅ standalone
 
 @NgModule({
   declarations: [
@@ -43,8 +42,9 @@ import { LandingComponent } from './components/landing/landing.component'; // �
     DetailRequirement,
     HistoryRequirements,
     UpdateRequirement,
-    TaskCreate
-    // ❌ NO declarar LandingComponent aquí
+    TaskCreate,
+    Landing
+
   ],
   imports: [
     BrowserModule,
@@ -53,8 +53,7 @@ import { LandingComponent } from './components/landing/landing.component'; // �
     ReactiveFormsModule,
     FormsModule,
     RouterModule,
-    AppRoutingModule,
-    LandingComponent // ✅ Standalone components van en imports
+    AppRoutingModule,// ✅ Standalone components van en imports
   ],
   exports: [Sidebar],
   providers: [

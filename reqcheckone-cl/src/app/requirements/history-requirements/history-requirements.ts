@@ -34,22 +34,30 @@ export class HistoryRequirements {
 
     this.historyService.getByUser().subscribe({
       next: (data) => {
-        // Ordenar historial por fecha descendente
-        this.historyList = data.sort((a, b) => b.updated_at.localeCompare(a.updated_at));
 
-        // Obtener estado actual de cada requisito
+        // Si no hay historial
+        if (!data || data.length === 0) {
+          this.historyList = [];
+          this.groupedHistory = [];
+          this.loading = false;
+          return;
+        }
+
+        // Ordenar por fecha descendente
+        this.historyList = data.sort((a, b) =>
+          b.updated_at.localeCompare(a.updated_at)
+        );
+
         const requests$ = this.historyList.map(item =>
-          this.requirementsService.getById(item.requirement?.id).toPromise()
+          this.requirementsService.getById(item.requirement?.id)
         );
 
         forkJoin(requests$).subscribe({
           next: (requirementsData) => {
-            // Agregar estado actual a cada historial
             this.historyList.forEach((item, index) => {
               item.currentStatus = requirementsData[index]?.status || 'activo';
             });
 
-            // Agrupar por proyecto
             this.groupHistoryByProject();
             this.loading = false;
           },

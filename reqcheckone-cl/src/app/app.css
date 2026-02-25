@@ -10,11 +10,33 @@
   width: 100%;
 }
 
-.content.collapsed {
-  margin-left: 70px;
+/* ===== Layout general ===== */
+.layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden; /* evita cortes visuales */
 }
 
-/* Sin sidebar */
+/* ===== Contenedor principal ===== */
+.content {
+  flex: 1 1 auto;
+  min-width: 0; /* evita overflow horizontal */
+  transition: margin-left 0.35s ease, padding 0.3s ease;
+}
+
+/* ===== Cuando hay sidebar abierto ===== */
+.content.with-sidebar {
+  margin-left: 260px; /* debe coincidir con el width real del sidebar */
+}
+
+/* ===== Sidebar colapsado ===== */
+.content.collapsed {
+  margin-left: 85px; /* debe coincidir con el width colapsado */
+}
+
+/* ===== Cuando NO hay sidebar (login/register) ===== */
 .content.full {
   margin-left: 0;
+  padding: 0;
 }

@@ -10,11 +10,11 @@ import { CreateRequirement } from './requirements/create-requirement/create-requ
 import { DetailRequirement } from './requirements/detail-requirement/detail-requirement';
 import { HistoryRequirements } from './requirements/history-requirements/history-requirements';
 import { UpdateRequirement } from './requirements/update-requirement/update-requirement';
+import { Landing } from './pages/landing/landing';
 import { AuthGuard } from './core/auth-guard';
-import { LandingComponent } from './components/landing/landing.component';
+
 
 const routes: Routes = [
-  { path: 'landing', component: LandingComponent },
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'home', component: Home, canActivate: [AuthGuard] },
@@ -27,7 +27,7 @@ const routes: Routes = [
   { path: 'requirements/history', component: HistoryRequirements, canActivate: [AuthGuard] },
   { path: '', redirectTo: 'landing', pathMatch: 'full' },
   { path: '**', redirectTo: 'landing' },
-  { path: '', component: LandingComponent }, // ← Página principal
+  { path: '', component: Landing }, // ← Página principal
   { path: '**', redirectTo: '' } // ← Redirección si la ruta no existe
 ];
 

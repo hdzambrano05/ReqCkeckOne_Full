@@ -9,6 +9,7 @@
     Cargando historial...
   </div>
 
+
   <!-- Historial agrupado por proyecto -->
   <div *ngIf="!loading && groupedHistory.length > 0">
     <div *ngFor="let project of groupedHistory" class="project-group mb-3">
@@ -43,7 +44,8 @@
               *ngFor="let item of project.requirements"
               [ngClass]="{
                 'table-danger': item.currentStatus === 'eliminado',
-                'table-info': item.currentStatus === 'modificado' || item.currentStatus === 'activo'
+                'table-info':
+                  item.currentStatus === 'modificado' || item.currentStatus === 'activo',
               }"
             >
               <td data-label="Requisito">{{ item.requirement?.title || '—' }}</td>
@@ -52,7 +54,7 @@
               </td>
               <td data-label="Cambio">{{ item.text }}</td>
               <td data-label="Modificado por">{{ item.changer?.username || 'Desconocido' }}</td>
-              <td data-label="Fecha">{{ item.updated_at | date : 'short' }}</td>
+              <td data-label="Fecha">{{ item.updated_at | date: 'short' }}</td>
             </tr>
           </tbody>
         </table>
