@@ -93,6 +93,12 @@ export class Create implements OnInit {
       error: () => this.error = 'No se pudo crear el proyecto'
     });
   }
+  // Método para auto-redimensionar el textarea
+  autoResize(event: Event) {
+    const target = event.target as HTMLTextAreaElement;
+    target.style.height = 'auto'; // Resetear altura
+    target.style.height = target.scrollHeight + 'px'; // Ajustar según contenido
+  }
 
   goBack() {
     this.router.navigate(['/projects']); // 👈 redirige a la lista de proyectos

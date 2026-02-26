@@ -24,6 +24,10 @@ export class List implements OnInit {
   statusFilter: string = '';
   viewMode: 'cards' | 'list' = 'cards';
 
+  // Instancias de modales
+  deleteModalInstance: any = null;
+  notOwnerModalInstance: any = null;
+
   constructor(
     private projectsService: ProjectsService,
     private router: Router
@@ -32,8 +36,20 @@ export class List implements OnInit {
   ngOnInit() {
     this.myId = localStorage.getItem('id');
     this.loadProjects();
+
+    // Inicializar modales
+    const deleteModalEl = document.getElementById('deleteModal');
+    if (deleteModalEl) {
+      this.deleteModalInstance = new bootstrap.Modal(deleteModalEl);
+    }
+
+    const notOwnerModalEl = document.getElementById('notOwnerModal');
+    if (notOwnerModalEl) {
+      this.notOwnerModalInstance = new bootstrap.Modal(notOwnerModalEl);
+    }
   }
 
+  // Cargar proyectos
   loadProjects() {
     this.projectsService.getUserProjects().subscribe({
       next: (data) => {
@@ -49,6 +65,7 @@ export class List implements OnInit {
     });
   }
 
+  // Navegación
   createProject() {
     this.router.navigate(['/projects/create']);
   }
@@ -57,43 +74,36 @@ export class List implements OnInit {
     this.router.navigate([`/projects/${id}`]);
   }
 
+  // Validar dueño
   isOwner(project: Project): boolean {
     return project.owner_id?.toString() === this.myId;
   }
 
+  // Abrir modal de eliminar
   openDeleteModal(project: Project) {
     if (!this.isOwner(project)) {
-      const modalEl = document.getElementById('notOwnerModal');
-      if (modalEl) {
-        const modal = new bootstrap.Modal(modalEl);
-        modal.show();
-      }
+      this.notOwnerModalInstance?.show();
       return;
     }
 
     this.projectToDelete = project;
-    const modalEl = document.getElementById('deleteModal');
-    if (modalEl) {
-      const modal = new bootstrap.Modal(modalEl);
-      modal.show();
-    }
+    this.deleteModalInstance?.show();
   }
 
-  truncateText(text: string, limit: number = 120): string {
-    if (!text) return '';
-    return text.length > limit ? text.substring(0, limit) + '...' : text;
-  }
-
-
+  // Confirmar eliminación
   confirmDelete() {
     if (!this.projectToDelete) return;
 
     this.projectsService.deleteProject(this.projectToDelete.id).subscribe({
       next: () => {
+        // Eliminar del array local
         this.projects = this.projects.filter(
           (p) => p.id !== this.projectToDelete!.id
         );
         this.filterProjects(); // actualizar lista filtrada
+
+        // Cerrar modal
+        this.deleteModalInstance?.hide();
         this.projectToDelete = null;
       },
       error: (err) => {
@@ -104,7 +114,13 @@ export class List implements OnInit {
     });
   }
 
-  // 🔍 Filtrar y buscar
+  // Cancelar eliminación
+  cancelDelete() {
+    this.deleteModalInstance?.hide();
+    this.projectToDelete = null;
+  }
+
+  // Buscar y filtrar
   filterProjects() {
     this.filteredProjects = this.projects.filter(
       (p) =>
@@ -113,13 +129,20 @@ export class List implements OnInit {
     );
   }
 
-  // 🔄 Cambiar vista
+  // Cambiar vista
   toggleView() {
     this.viewMode = this.viewMode === 'cards' ? 'list' : 'cards';
   }
 
+  // Obtener ID del usuario logueado
   getLoggedUserId(): number | null {
     const id = localStorage.getItem('id');
     return id ? Number(id) : null;
+  }
+
+  // Truncar texto
+  truncateText(text: string, limit: number = 120): string {
+    if (!text) return '';
+    return text.length > limit ? text.substring(0, limit) + '...' : text;
   }
 }

@@ -1,222 +1,229 @@
-<div class="project-header d-flex flex-wrap justify-content-between align-items-center mb-5 gap-3">
-  <!-- Título -->
-  <h2 class="fw-bold text-dark fs-2">Mis Proyectos</h2>
-
-  <!-- Panel de acciones -->
-  <div class="d-flex flex-wrap gap-2 align-items-center">
-    <!-- Buscador moderno -->
-    <div class="search-bar shadow-sm d-flex align-items-center rounded-pill px-3 bg-white">
-      <i class="bi bi-search text-primary me-2 fs-5"></i>
-      <input
-        type="text"
-        class="form-control border-0 shadow-none"
-        placeholder="Buscar proyectos..."
-        [(ngModel)]="searchTerm"
-        (input)="filterProjects()"
-      />
+<div class="projects-wrapper">
+  <!-- ================= HEADER ================= -->
+  <div class="projects-toolbar-modern">
+    <!-- Left: Título y subtítulo -->
+    <div class="toolbar-left-modern">
+      <h2>Mis Proyectos</h2>
+      <span class="subtitle-modern">Gestiona, organiza y supervisa tus proyectos activos</span>
     </div>
 
-    <!-- Filtro estado -->
-    <div class="dropdown">
+    <!-- Right: Acciones -->
+    <div class="toolbar-right-modern">
+      <!-- Buscador -->
+      <div class="search-command-modern">
+        <i class="bi bi-search"></i>
+        <input
+          type="text"
+          placeholder="Buscar proyectos..."
+          [(ngModel)]="searchTerm"
+          (input)="filterProjects()"
+        />
+      </div>
+
+      <!-- Toggle Vista -->
       <button
-        class="btn btn-outline-primary dropdown-toggle rounded-pill px-3 py-2"
-        type="button"
-        id="statusDropdown"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
+        class="view-switch-modern"
+        (click)="toggleView()"
+        [title]="viewMode === 'cards' ? 'Ver lista' : 'Ver tarjetas'"
       >
-        {{ statusFilter || 'Filtrar por estado' }}
+        <i class="bi" [ngClass]="viewMode === 'cards' ? 'bi-list' : 'bi-grid'"></i>
       </button>
-      <ul class="dropdown-menu" aria-labelledby="statusDropdown">
-        <li><a class="dropdown-item" (click)="statusFilter = ''; filterProjects()">Todos</a></li>
-        <li>
-          <a class="dropdown-item" (click)="statusFilter = 'activo'; filterProjects()">Activos</a>
-        </li>
-        <li>
-          <a class="dropdown-item" (click)="statusFilter = 'finalizado'; filterProjects()"
-            >Finalizados</a
-          >
-        </li>
-      </ul>
+
+      <!-- Crear proyecto -->
+      <button class="btn-primary-modern-modern" (click)="createProject()">
+        <i class="bi bi-plus-lg"></i> Nuevo Proyecto
+      </button>
     </div>
-
-    <!-- Toggle vista -->
-    <button
-      class="btn btn-outline-secondary rounded-circle p-2 shadow-sm"
-      (click)="toggleView()"
-      [title]="viewMode === 'cards' ? 'Ver lista' : 'Ver tarjetas'"
-    >
-      <i class="bi" [ngClass]="viewMode === 'cards' ? 'bi-list-ul' : 'bi-grid-3x3-gap'"></i>
-    </button>
-
-    <!-- Crear proyecto -->
-    <button class="btn btn-gradient shadow-sm rounded-pill px-4 py-2" (click)="createProject()">
-      <i class="bi bi-plus-lg me-2"></i> Crear Proyecto
-    </button>
   </div>
-</div>
 
-<!-- Mensajes de estado -->
-<div *ngIf="loading" class="text-center text-primary fw-semibold my-3">
-  <i class="bi bi-arrow-repeat spin"></i> Cargando proyectos...
-</div>
-<div *ngIf="error" class="text-center text-danger fw-semibold my-3">
-  <i class="bi bi-exclamation-triangle"></i> {{ error }}
-</div>
+  <!-- ================= STATES ================= -->
 
-<!-- VISTA TARJETAS -->
-<div class="row g-3" *ngIf="!loading && !error && viewMode === 'cards'">
-  <div class="col-md-4" *ngFor="let project of filteredProjects">
-    <div class="project-card shadow-sm" (click)="viewProject(project.id)">
-      <h5 class="card-title text-gradient">{{ project.name }}</h5>
-      <p class="card-text">
-        {{ truncateText(project.description, 120) }}
-      </p>
+  <div *ngIf="loading" class="state-box loading">
+    <i class="bi bi-arrow-repeat spin"></i>
+    Cargando proyectos...
+  </div>
 
-      <!-- Colaboradores -->
-      <div *ngIf="project.collaborators?.length" class="mb-3">
-        <h6 class="text-muted"><i class="bi bi-people-fill me-1"></i> Colaboradores</h6>
-        <div class="d-flex flex-wrap gap-2 mt-2">
+  <div *ngIf="error" class="state-box error">
+    <i class="bi bi-exclamation-circle"></i>
+    {{ error }}
+  </div>
+
+  <!-- ================= CARDS MODERNAS ================= -->
+
+  <div class="cards-grid-modern" *ngIf="!loading && !error && viewMode === 'cards'">
+    <div
+      class="project-card-modern"
+      *ngFor="let project of filteredProjects"
+      (click)="viewProject(project.id)"
+    >
+      <!-- Barra de estado lateral -->
+      <div
+        class="accent-bar-modern"
+        [ngClass]="project.status === 'activo' ? 'active' : 'done'"
+      ></div>
+
+      <!-- Contenido -->
+      <div class="card-content-modern">
+        <!-- Header: Nombre y Chip Estado -->
+        <div class="card-header-modern">
+          <h4 class="project-title">{{ project.name }}</h4>
           <span
-            *ngFor="let c of project.collaborators"
-            class="badge-collab"
-            (click)="$event.stopPropagation()"
+            class="status-chip-modern"
+            [ngClass]="project.status === 'activo' ? 'chip-active' : 'chip-done'"
           >
-            <i class="bi bi-person me-1"></i>{{ c.username }}
-            <small>({{ c.role }})</small>
-            <span *ngIf="c.id === getLoggedUserId()" class="badge bg-success ms-1">
-              <i class="bi bi-person-check"></i> Tú
-            </span>
+            {{ project.status || 'Sin estado' }}
           </span>
         </div>
-      </div>
-      <div *ngIf="!project.collaborators?.length" class="text-muted mb-3">
-        No hay colaboradores asignados.
-      </div>
 
-      <!-- Meta -->
-      <div class="project-meta small text-muted mt-2">
-        <span *ngIf="project.status">
-          <i class="bi bi-flag-fill me-1"></i>{{ project.status }} </span
-        ><br />
-        <span *ngIf="project.deadline">
-          <i class="bi bi-calendar-event me-1"></i>{{ project.deadline }}
-        </span>
-      </div>
+        <!-- Descripción -->
+        <p class="description-modern">{{ truncateText(project.description, 130) }}</p>
 
-      <!-- Acciones -->
-      <div class="actions mt-3 d-flex gap-2">
-        <button
-          class="btn btn-sm rounded-pill btn-danger"
-          (click)="openDeleteModal(project); $event.stopPropagation()"
-        >
-          <i class="bi bi-trash me-1"></i> Eliminar
-        </button>
+        <!-- Footer: Avatares y Deadline -->
+        <div class="card-footer-modern">
+          <div class="avatars-modern">
+            <span
+              *ngFor="let c of project.collaborators"
+              class="avatar-modern"
+              [title]="c.username + ' (' + c.role + ')'"
+              (click)="$event.stopPropagation()"
+            >
+              {{ c.username.charAt(0) | uppercase }}
+            </span>
+            <span *ngIf="!project.collaborators?.length" class="no-collaborators">—</span>
+          </div>
+
+          <div class="deadline-modern" *ngIf="project.deadline">
+            <i class="bi bi-calendar-event"></i> {{ project.deadline }}
+          </div>
+        </div>
+
+        <!-- Acciones -->
+        <div class="card-actions-modern">
+          <button
+            class="btn-danger-modern"
+            (click)="openDeleteModal(project); $event.stopPropagation()"
+          >
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- VISTA LISTA -->
-<table
-  *ngIf="!loading && !error && viewMode === 'list'"
-  class="table table-hover align-middle shadow-sm rounded"
->
-  <thead class="table-light">
-    <tr>
-      <th>Proyecto</th>
-      <th>Descripción</th>
-      <th>Colaboradores</th>
-      <th>Estado</th>
-      <th>Fecha límite</th>
-      <th class="text-center">Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let project of filteredProjects">
-      <td class="fw-semibold text-gradient">{{ project.name }}</td>
-      <td> {{ truncateText(project.description, 120) }}</td>
-      <td>
-        <span *ngFor="let c of project.collaborators" class="badge-collab me-1">{{
-          c.username
-        }}</span>
-        <span *ngIf="!project.collaborators?.length" class="text-muted small">—</span>
-      </td>
-      <td>{{ project.status || '—' }}</td>
-      <td>{{ project.deadline || '—' }}</td>
-      <td class="text-center">
-        <button class="btn btn-sm rounded-pill btn-primary me-1" (click)="viewProject(project.id)">
-          <i class="bi bi-eye"></i>
-        </button>
-        <button class="btn btn-sm rounded-pill btn-danger" (click)="openDeleteModal(project)">
-          <i class="bi bi-trash"></i>
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <!-- ================= LIST VIEW MODERNA ================= -->
 
-<!-- Modal Eliminar Proyecto -->
-<div
-  class="modal fade"
-  id="deleteModal"
-  tabindex="-1"
-  aria-labelledby="deleteModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="deleteModalLabel">
-          <i class="bi bi-trash me-2"></i> Confirmar eliminación
-        </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <p>
-          ¿Seguro que deseas eliminar el proyecto <strong>{{ projectToDelete?.name }}</strong
-          >?<br />
-          Esta acción no se puede deshacer.
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary rounded-pill px-3" data-bs-dismiss="modal">
-          Cancelar
-        </button>
-        <button
-          type="button"
-          class="btn btn-danger rounded-pill px-3"
-          (click)="confirmDelete()"
-          data-bs-dismiss="modal"
-        >
-          <i class="bi bi-trash me-1"></i> Eliminar
-        </button>
+  <div *ngIf="!loading && !error && viewMode === 'list'" class="table-modern-wrapper">
+    <table class="table-modern">
+      <thead>
+        <tr>
+          <th>Proyecto</th>
+          <th>Estado</th>
+          <th>Fecha</th>
+          <th>Colaboradores</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let project of filteredProjects" class="table-row-modern">
+          <!-- Nombre + Descripción -->
+          <td class="project-name-modern">
+            <div class="project-title">{{ project.name }}</div>
+            <div class="project-desc">
+              {{ truncateText(project.description, 60) }}
+            </div>
+          </td>
+
+          <!-- Estado -->
+          <td>
+            <span
+              class="status-chip-modern"
+              [ngClass]="project.status === 'activo' ? 'chip-active' : 'chip-done'"
+            >
+              {{ project.status || '—' }}
+            </span>
+          </td>
+
+          <!-- Fecha -->
+          <td>{{ project.deadline || '—' }}</td>
+
+          <!-- Colaboradores -->
+          <td>
+            <div class="avatars-modern">
+              <span
+                *ngFor="let c of project.collaborators"
+                class="avatar-modern small"
+                [title]="c.username + ' (' + c.role + ')'"
+              >
+                {{ c.username.charAt(0) | uppercase }}
+              </span>
+              <span *ngIf="!project.collaborators?.length" class="no-collaborators">—</span>
+            </div>
+          </td>
+
+          <!-- Acciones -->
+          <td class="actions-modern">
+            <button class="btn-danger-modern" (click)="openDeleteModal(project)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ================= MODAL DELETE MODERNO ================= -->
+  <div class="modal fade modern-modal" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content-modern">
+        <div class="modal-body-modern text-center">
+          <!-- Icono de alerta -->
+          <div class="icon-danger-modern mb-3">
+            <i class="bi bi-trash-fill"></i>
+          </div>
+
+          <!-- Título -->
+          <h4 class="modal-title-modern mb-2">Eliminar Proyecto</h4>
+
+          <!-- Mensaje -->
+          <p class="modal-text-modern mb-4">
+            ¿Seguro que deseas eliminar <strong>{{ projectToDelete?.name }}</strong
+            >?
+            <br />
+            Esta acción no se puede deshacer.
+          </p>
+
+          <!-- Acciones -->
+          <div class="modal-actions-modern d-flex justify-content-center gap-3">
+            <button class="btn-secondary-modern" (click)="cancelDelete()">Cancelar</button>
+            <button class="btn-danger-modern" (click)="confirmDelete()">Eliminar</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Modal: No es dueño -->
-<div
-  class="modal fade"
-  id="notOwnerModal"
-  tabindex="-1"
-  aria-labelledby="notOwnerModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-warning text-dark">
-        <h5 class="modal-title" id="notOwnerModalLabel">
-          <i class="bi bi-exclamation-triangle-fill me-2"></i> Acción no permitida
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">Solo el dueño del proyecto puede eliminarlo.</div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary rounded-pill px-3" data-bs-dismiss="modal">
-          Entendido
-        </button>
+  <!-- ================= MODAL NO OWNER MODERNO ================= -->
+  <div class="modal fade modern-modal" id="notOwnerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content-modern">
+        <div class="modal-body-modern text-center">
+          <!-- Icono de advertencia -->
+          <div class="icon-warning-modern mb-3">
+            <i class="bi bi-shield-exclamation-fill"></i>
+          </div>
+
+          <!-- Título -->
+          <h4 class="modal-title-modern mb-2">Acción no permitida</h4>
+
+          <!-- Mensaje -->
+          <p class="modal-text-modern mb-4">Solo el dueño puede eliminar este proyecto.</p>
+
+          <!-- Acción -->
+          <div class="modal-actions-modern d-flex justify-content-center">
+            <button class="btn-primary-modern" data-bs-dismiss="modal">Entendido</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

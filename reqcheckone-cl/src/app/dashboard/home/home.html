@@ -1,9 +1,8 @@
-<div class="container-fluid mt-4">
+<div class="container-fluid mt-5">
   <!-- Encabezado -->
   <div class="text-center mb-5">
-    <h1 class="display-4 fw-bold">
-      Bienvenido a
-      <span class="text-primary">ReqCheckOne</span>
+    <h1 class="display-4 fw-bold header-futuristic">
+      Bienvenido a <span class="text-primary">ReqCheckOne</span>
     </h1>
     <p class="lead text-muted">Gestiona tus proyectos y analiza su estado de manera eficiente.</p>
   </div>
@@ -11,35 +10,43 @@
   <!-- KPIs -->
   <div class="row g-4 mb-5">
     <div class="col-md-4">
-      <div class="card border-0 shadow-lg p-4 text-center glass-card">
-        <h6 class="text-uppercase text-muted">Total Proyectos</h6>
-        <h2 id="kpiTotalProjects" class="fw-bold display-6">0</h2>
+      <div class="card glass-card card-hover text-center">
+        <div class="icon-wrapper bg-gradient-blue mb-3">
+          <i class="bi bi-kanban-fill"></i>
+        </div>
+        <h6 class="text-muted text-uppercase">Total Proyectos</h6>
+        <h2 id="kpiTotalProjects" class="fw-bold kpi-number">12</h2>
       </div>
     </div>
 
     <div class="col-md-4">
-      <div class="card border-0 shadow-lg p-4 text-center glass-card">
-        <h6 class="text-uppercase text-muted">Proyectos Activos</h6>
-        <h2 id="kpiActiveProjects" class="fw-bold display-6">0</h2>
+      <div class="card glass-card card-hover text-center">
+        <div class="icon-wrapper bg-gradient-green mb-3">
+          <i class="bi bi-play-circle-fill"></i>
+        </div>
+        <h6 class="text-muted text-uppercase">Proyectos Activos</h6>
+        <h2 id="kpiActiveProjects" class="fw-bold kpi-number">7</h2>
       </div>
     </div>
 
     <div class="col-md-4">
-      <div class="card border-0 shadow-lg p-4 text-center glass-card">
-        <h6 class="text-uppercase text-muted">Proyectos Completados</h6>
-        <h2 id="kpiCompletedProjects" class="fw-bold display-6">0</h2>
+      <div class="card glass-card card-hover text-center">
+        <div class="icon-wrapper bg-gradient-orange mb-3">
+          <i class="bi bi-check-circle-fill"></i>
+        </div>
+        <h6 class="text-muted text-uppercase">Proyectos Completados</h6>
+        <h2 id="kpiCompletedProjects" class="fw-bold kpi-number">5</h2>
       </div>
     </div>
   </div>
 
-  <!-- Gráficos -->
-  <div class="container-fluid mt-4">
-    <!-- 📊 Requisitos por proyecto -->
-    <div class="col-lg-12 mb-4">
-      <div class="card shadow-lg border-0 p-3 glass-card small-chart-card">
-        <h5 class="card-title fw-bold mb-2">Requisitos por Proyecto</h5>
-        <canvas id="requirementsPerProjectChart" height="110"></canvas>
+  <!-- Gráfico -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card glass-card card-hover p-4">
+        <h5 class="card-title header-futuristic mb-3">Requisitos por Proyecto</h5>
+        <canvas id="requirementsPerProjectChart" height="150"></canvas>
       </div>
     </div>
-
+  </div>
 </div>

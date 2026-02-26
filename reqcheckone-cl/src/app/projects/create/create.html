@@ -1,136 +1,157 @@
-<!-- create.html -->
-<!-- Flecha para regresar -->
-<button
-  class="btn btn-outline-secondary btn-sm mb-3 d-flex align-items-center gap-1"
-  (click)="goBack()"
->
-  <i class="bi bi-arrow-left"></i> Regresar
-</button>
-<div class="container mt-4">
-  <div class="card shadow-lg border-0 rounded-4">
-    <div class="card-body p-4">
-      <h3 class="fw-bold text-gradient mb-4 text-center">✨ Crear Proyecto</h3>
+<!-- ============================
+     LANDING / FORMULARIO PROYECTO
+============================ -->
+<div class="container mt-5">
+  <!-- Card principal -->
+  <div class="card project-card">
+    <!-- Botón regresar -->
+    <button class="btn btn-back" (click)="goBack()">
+      <i class="bi bi-arrow-left"></i> Regresar
+    </button>
 
-      <form [formGroup]="projectForm" (ngSubmit)="createProject()">
-        <!-- Nombre -->
-        <div class="mb-3">
-          <label class="form-label fw-semibold">Nombre</label>
-          <input
-            type="text"
-            class="form-control stylish-input"
-            formControlName="name"
-            placeholder="Ej: Plataforma Ecommerce"
-          />
-          <div
-            *ngIf="projectForm.get('name')?.invalid && projectForm.get('name')?.touched"
-            class="text-danger mt-1"
-          >
-            El nombre es obligatorio.
-          </div>
+    <!-- Título -->
+    <h3 class="fw-bold title text-gradient text-center mb-4">
+      <i class="bi bi-kanban-fill me-2"></i> Crear Proyecto
+      <i class="bi bi-rocket-takeoff-fill ms-2"></i>
+    </h3>
+
+    <!-- Formulario -->
+    <form [formGroup]="projectForm" (ngSubmit)="createProject()" class="project-form">
+      <!-- Nombre -->
+      <div class="form-group mb-4 floating-label position-relative">
+        <input
+          type="text"
+          class="form-control stylish-input"
+          formControlName="name"
+          placeholder=" "
+        />
+        <label>Nombre</label>
+
+        <!-- Mensaje de error profesional -->
+        <div
+          *ngIf="projectForm.get('name')?.invalid && projectForm.get('name')?.touched"
+          class="text-error-pro fade-slide"
+        >
+          <i class="bi bi-exclamation-circle-fill me-1"></i>
+          Este campo es obligatorio para continuar
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div class="form-group mb-4 floating-label position-relative">
+        <textarea
+          class="form-control stylish-input auto-resize-textarea"
+          formControlName="description"
+          rows="1"
+          placeholder=" "
+          (input)="autoResize($event)"
+        ></textarea>
+        <label>Descripción</label>
+      </div>
+
+      <!-- Fecha límite -->
+      <div class="form-group mb-4 floating-label position-relative">
+        <input
+          type="date"
+          class="form-control stylish-input date-input"
+          formControlName="deadline"
+          placeholder=" "
+        />
+        <label>Fecha límite</label>
+        <i class="bi bi-calendar-date-fill calendar-icon"></i>
+      </div>
+
+      <!-- Estado -->
+      <div class="form-group mb-4 floating-label position-relative">
+        <select class="form-select stylish-input select-input" formControlName="status">
+          <option value="" disabled selected hidden></option>
+          <!-- placeholder invisible -->
+          <option value="active">Activo</option>
+          <option value="completed">Completado</option>
+          <option value="archived">Archivado</option>
+        </select>
+        <label>Estado</label>
+      </div>
+
+      <!-- Colaboradores Mejorado -->
+      <div class="form-group mb-4">
+        <label class="form-label fw-bold">Colaboradores</label>
+
+        <!-- Contenedor de badges -->
+        <div class="selected-collaborators mb-2">
+          <span *ngFor="let col of selectedCollaborators" class="badge-collab">
+            {{ col.username }}
+            <i class="remove-collab bi bi-x"></i>
+          </span>
         </div>
 
-        <!-- Descripción -->
-        <div class="mb-3">
-          <label class="form-label fw-semibold">Descripción</label>
-          <textarea
-            class="form-control stylish-input"
-            formControlName="description"
-            rows="3"
-            placeholder="Describe el objetivo del proyecto..."
-          ></textarea>
-        </div>
+        <!-- Botón añadir colaboradores -->
+        <button type="button" class="btn-add-collab" (click)="openCollaboratorsModal()">
+          + Añadir colaboradores
+        </button>
+      </div>
 
-        <!-- Fecha límite -->
-        <div class="mb-3">
-          <label class="form-label fw-semibold">Fecha límite</label>
-          <input type="date" class="form-control stylish-input" formControlName="deadline" />
-        </div>
+      <!-- Botones -->
+      <div class="d-flex justify-content-end gap-3 mt-4">
+        <button class="btn btn-cancel" type="button" (click)="goBack()">Cancelar</button>
+        <button class="btn btn-gradient" type="submit">Crear</button>
+      </div>
 
-        <!-- Estado -->
-        <div class="mb-3">
-          <label class="form-label fw-semibold">Estado</label>
-          <select class="form-select stylish-input" formControlName="status">
-            <option value="active">Activo</option>
-            <option value="completed">Completado</option>
-            <option value="archived">Archivado</option>
-          </select>
-        </div>
-
-        <!-- Colaboradores -->
-        <div class="mb-3">
-          <label class="form-label fw-semibold">Colaboradores</label>
-          <div class="d-flex flex-wrap gap-2 mb-2">
-            <span *ngFor="let col of selectedCollaborators" class="badge rounded-pill badge-collab">
-              {{ col.username }}
-              <i class="bi bi-x ms-1" (click)="removeCollaborator(col)"></i>
-            </span>
-          </div>
-          <button
-            type="button"
-            class="btn btn-outline-primary btn-sm rounded-pill"
-            (click)="openCollaboratorsModal()"
-          >
-            + Añadir colaboradores
-          </button>
-        </div>
-
-        <!-- Botones -->
-        <div class="d-flex justify-content-end gap-2 mt-4">
-          <button class="btn btn-secondary rounded-pill px-4" type="button" (click)="goBack()">
-            Cancelar
-          </button>
-          <button class="btn btn-gradient rounded-pill px-4" type="submit">Crear</button>
-        </div>
-
-        <!-- Error -->
-        <div *ngIf="error" class="text-danger mt-3 fw-semibold text-center">{{ error }}</div>
-      </form>
-    </div>
+      <!-- Error -->
+      <div *ngIf="error" class="text-error mt-3 text-center">{{ error }}</div>
+    </form>
   </div>
 </div>
 
-<!-- Modal -->
+<!-- ============================
+     MODAL COLABORADORES
+============================ -->
 <div class="modal fade" id="collaboratorsModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content p-3 rounded-4 shadow-lg border-0">
+    <div class="modal-content modal-modern">
+      <!-- Header -->
       <div class="modal-header border-0">
-        <h5 class="modal-title fw-bold text-gradient">👥 Seleccionar colaboradores</h5>
+        <h5 class="modal-title text-gradient">👥 Seleccionar colaboradores</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body">
-        <input
-          type="text"
-          class="form-control stylish-input mb-3"
-          placeholder="Buscar usuario..."
-          [(ngModel)]="searchTerm"
-        />
 
+      <!-- Body -->
+      <div class="modal-body">
+        <!-- Input de búsqueda -->
+        <div class="search-wrapper mb-3">
+          <input
+            type="text"
+            class="form-control stylish-input search-input"
+            placeholder="Buscar usuario..."
+            [(ngModel)]="searchTerm"
+          />
+          <i class="bi bi-search search-icon"></i>
+        </div>
+
+        <!-- Lista de usuarios -->
         <div class="user-list">
-          <div
-            *ngFor="let u of filteredUsers()"
-            class="user-item d-flex justify-content-between align-items-center p-2 rounded"
-          >
-            <div>
+          <div *ngFor="let u of filteredUsers()" class="user-item">
+            <div class="user-info">
               <strong>{{ u.username }}</strong>
               <small class="text-muted d-block">{{ u.email }}</small>
             </div>
-            <input type="checkbox" [checked]="isSelected(u)" (change)="toggleCollaborator(u)" />
+            <label class="checkbox-wrapper">
+              <input type="checkbox" [checked]="isSelected(u)" (change)="toggleCollaborator(u)" />
+              <span class="checkmark"></span>
+            </label>
           </div>
         </div>
       </div>
+
+      <!-- Footer -->
       <div class="modal-footer border-0">
-        <button
-          type="button"
-          class="btn btn-outline-secondary rounded-pill px-4"
-          data-bs-dismiss="modal"
-        >
+        <button type="button" class="btn btn-outline-secondary btn-modal" data-bs-dismiss="modal">
           Cancelar
         </button>
-        <button type="button" class="btn btn-gradient rounded-pill px-4" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-gradient btn-modal" data-bs-dismiss="modal">
           Confirmar
         </button>
       </div>
     </div>
   </div>
 </div>
-```

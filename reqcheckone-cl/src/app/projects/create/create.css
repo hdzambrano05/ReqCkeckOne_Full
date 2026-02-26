@@ -1,72 +1,630 @@
-/* create.css */
+/* ==============================
+   TIPOGRAFÍA Y GRADIENTES PREMIUM
+============================== */
 .text-gradient {
-    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    background: linear-gradient(120deg, #6a11cb, #2575fc, #00d4ff);
     -webkit-background-clip: text;
-    /* Compatibilidad WebKit */
-    background-clip: text;
-    /* Estándar */
     -webkit-text-fill-color: transparent;
-    color: transparent;
-    /* fallback */
+    font-weight: 700;
+    font-size: 1.6rem;
+    transition: all 0.5s ease;
+    background-size: 200% 200%;
+    animation: gradientMove 5s ease infinite;
 }
 
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* ==============================
+   CARD PRINCIPAL PREMIUM
+============================== */
+.project-card {
+    border-radius: 32px;
+    background: #ffffff;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.12);
+    transition: all 0.4s ease;
+    position: relative;
+    padding: 2.5rem;
+}
+
+.project-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 32px 64px rgba(0, 0, 0, 0.16);
+}
+
+/* ==============================
+   BOTÓN REGRESAR
+============================== */
+.btn-back {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 50px;
+    border: 1px solid #cbd5e0;
+    background: #f8f9fa;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.btn-back:hover {
+    transform: translateX(-5px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* ==============================
+   INPUTS Y TEXTAREA PREMIUM
+============================== */
 .stylish-input {
-    border-radius: 12px;
-    padding: 10px 14px;
-    border: 1px solid #ddd;
-    transition: all 0.2s ease;
+    border-radius: 18px;
+    padding: 16px 18px;
+    border: 1px solid #d1d5db;
+    background-color: #f7f9fc;
+    font-size: 1rem;
+    transition: all 0.4s ease;
+    outline: none;
 }
 
 .stylish-input:focus {
-    border-color: #4e54c8;
-    box-shadow: 0 0 6px rgba(78, 84, 200, 0.4);
+    border-color: #6a11cb;
+    box-shadow: 0 6px 20px rgba(106, 17, 203, 0.25);
+    background-color: #ffffff;
 }
 
-.btn-gradient {
-    background: linear-gradient(135deg, #43cea2, #185a9d);
-    color: #fff;
-    font-weight: 600;
-    border: none;
-    transition: all 0.3s;
-    border-radius: 50px;
+/* Mensaje de error profesional */
+.text-error-pro {
+    color: #d32f2f;
+    /* rojo profesional */
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: all 0.3s ease;
 }
 
-.btn-gradient:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+/* Mantener diseño elegante y responsive */
+.auto-resize-textarea {
+    overflow: hidden;
+    /* Oculta scroll */
+    resize: none;
+    /* Evita que el usuario cambie tamaño manualmente */
+    min-height: 60px;
+    /* Altura mínima */
+    max-height: 300px;
+    /* Altura máxima para no romper el diseño */
+    transition: all 0.3s ease;
 }
 
+/* Contenedor de fecha con icono */
+.date-input {
+    padding-right: 40px;
+    /* espacio para el icono */
+    transition: all 0.3s ease;
+}
+
+.date-input:focus {
+    border-color: #6a11cb;
+    box-shadow: 0 6px 20px rgba(106, 17, 203, 0.25);
+    background-color: #fff;
+}
+
+/* Icono calendario */
+.calendar-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+    font-size: 1.2rem;
+    pointer-events: none;
+    /* para que no interfiera con el input */
+    transition: all 0.3s ease;
+}
+
+/* Cambiar color del icono al focus */
+.date-input:focus+label+.calendar-icon {
+    color: #6a11cb;
+    transform: translateY(-50%) scale(1.1);
+}
+
+
+/* Contenedor de select premium */
+.select-input {
+    appearance: none;
+    /* elimina estilo nativo del select */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 40px;
+    /* espacio para icono */
+    border-radius: 16px;
+    border: 1px solid #d1d5db;
+    background-color: #f7f9fc;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.select-input:focus {
+    border-color: #6a11cb;
+    box-shadow: 0 6px 20px rgba(106, 17, 203, 0.25);
+    background-color: #fff;
+    outline: none;
+}
+
+/* Floating label */
+.floating-label label {
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+    color: #6b7280;
+    pointer-events: none;
+    transition: all 0.2s ease;
+}
+
+.select-input:focus+label,
+.select-input:not(:placeholder-shown)+label {
+    top: -8px;
+    font-size: 0.75rem;
+    color: #6a11cb;
+    background: #fff;
+    padding: 0 4px;
+}
+
+/* Icono del select */
+.select-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    color: #6b7280;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+/* Contenedor de select premium */
+.select-input {
+    appearance: none;
+    /* elimina estilo nativo del select */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 40px;
+    /* espacio para icono */
+    border-radius: 16px;
+    border: 1px solid #d1d5db;
+    background-color: #f7f9fc;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.select-input:focus {
+    border-color: #6a11cb;
+    box-shadow: 0 6px 20px rgba(106, 17, 203, 0.25);
+    background-color: #fff;
+    outline: none;
+}
+
+/* Floating label */
+.floating-label label {
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+    color: #6b7280;
+    pointer-events: none;
+    transition: all 0.2s ease;
+}
+
+.select-input:focus+label,
+.select-input:not(:placeholder-shown)+label {
+    top: -8px;
+    font-size: 0.75rem;
+    color: #6a11cb;
+    background: #fff;
+    padding: 0 4px;
+}
+
+/* Icono del select */
+.select-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    color: #6b7280;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.select-input:focus+label+.select-icon {
+    color: #6a11cb;
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* ==============================
+   COLABORADORES PREMIUM
+============================== */
+
+/* Contenedor de badges */
+.selected-collaborators {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-height: 120px;
+    /* scroll si hay muchos colaboradores */
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Badge de colaborador */
 .badge-collab {
-    background: linear-gradient(135deg, #f7971e, #ffd200);
-    color: #fff;
-    padding: 6px 12px;
-    font-size: 0.85rem;
-    cursor: default;
-    border-radius: 30px;
     display: inline-flex;
     align-items: center;
-}
-
-.badge-collab i {
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-weight: 500;
     cursor: pointer;
-    margin-left: 6px;
-    font-size: 1rem;
+    background: linear-gradient(135deg, #ffffff, #0026ff);
+    /* verde premium */
+    color: #000000;
+    transition: all 0.3s ease;
 }
 
-.user-list {
-    max-height: 300px;
-    overflow-y: auto;
+.badge-collab:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.user-item {
-    background: #f9f9f9;
-    border: 1px solid #ececec;
-    margin-bottom: 6px;
-    transition: all 0.2s;
+/* Icono para eliminar colaborador */
+.remove-collab {
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.remove-collab:hover {
+    color: #ff4d4f;
+    transform: scale(1.2);
+}
+
+/* Botón añadir colaboradores */
+.btn-add-collab {
+    padding: 8px 20px;
+    font-weight: 600;
+    border-radius: 50px;
+    border: 1px solid #6a11cb;
+    background: #fff;
+    color: #6a11cb;
+    transition: all 0.3s ease;
+}
+
+.btn-add-collab:hover {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Scroll personalizado para badges */
+.selected-collaborators::-webkit-scrollbar {
+    width: 6px;
+}
+
+.selected-collaborators::-webkit-scrollbar-track {
+    background: #f1f1f1;
     border-radius: 10px;
 }
 
+.selected-collaborators::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    border-radius: 10px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .badge-collab {
+        padding: 5px 12px;
+        font-size: 0.9rem;
+    }
+
+    .btn-add-collab {
+        padding: 6px 16px;
+        font-size: 0.9rem;
+    }
+}
+
+
+
+
+
+/* Floating label ya se mantiene del CSS premium anterior */
+
+/* Animación fade + slide */
+.fade-slide.ng-trigger.ng-trigger-:enter {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+/* Alternativa simple sin Angular animations */
+.fade-slide {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+/* Icono dentro del mensaje */
+.text-error-pro i {
+    font-size: 1rem;
+    color: #d32f2f;
+}
+
+/* ==============================
+   FLOATING LABELS
+============================== */
+.floating-label {
+    position: relative;
+}
+
+.floating-label label {
+    position: absolute;
+    top: 50%;
+    left: 18px;
+    transform: translateY(-50%);
+    color: #6b7280;
+    pointer-events: none;
+    transition: all 0.25s ease;
+    background: transparent;
+    padding: 0 4px;
+}
+
+.floating-label input:focus+label,
+.floating-label textarea:focus+label,
+.floating-label input:not(:placeholder-shown)+label,
+.floating-label textarea:not(:placeholder-shown)+label {
+    top: -10px;
+    font-size: 0.8rem;
+    color: #6a11cb;
+    background: #fff;
+}
+
+/* ==============================
+   MODAL MODERNO
+============================== */
+.modal-dialog {
+    max-width: 600px;
+    margin: 0 auto;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.modal-content.modal-modern {
+    max-height: 90vh;
+    overflow: hidden;
+    /* Evita scroll de toda la página */
+    border-radius: 28px;
+    padding: 2rem;
+    background: #ffffff;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.15);
+    transition: all 0.4s ease;
+    backdrop-filter: blur(6px);
+}
+
+/* Título */
+.modal-modern .modal-title {
+    font-size: 1.7rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+/* ==============================
+   INPUT BUSCAR
+============================== */
+.search-wrapper {
+    position: relative;
+}
+
+.search-input {
+    padding-right: 42px;
+    border-radius: 18px;
+}
+
+.search-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus+.search-icon {
+    color: #6a11cb;
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* ==============================
+   LISTA DE USUARIOS
+============================== */
+.user-list {
+    max-height: 50vh;
+    /* Scroll interno si es muy largo */
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+.user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    background: #f7f9fc;
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+}
+
 .user-item:hover {
-    background: #eef1ff;
-    transform: translateX(3px);
+    background: #eef2ff;
+    transform: translateX(5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* ==============================
+   CHECKBOX
+============================== */
+.checkbox-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+}
+
+.checkbox-wrapper input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 26px;
+    width: 26px;
+    background-color: #e5e7eb;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.checkbox-wrapper input:checked~.checkmark {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.checkbox-wrapper input:checked~.checkmark:after {
+    display: block;
+    left: 8px;
+    top: 4px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* ==============================
+   BOTONES PEQUEÑOS
+============================== */
+.btn-modal,
+.btn-gradient,
+.btn-outline-primary,
+.btn-cancel {
+    border-radius: 50px;
+    padding: 8px 20px;
+    /* más pequeños */
+    font-weight: 700;
+    font-size: 0.9rem;
+    /* tamaño de letra reducido */
+    transition: all 0.3s ease;
+    /* transición más rápida */
+}
+
+.btn-gradient {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: #fff;
+    border: none;
+}
+
+.btn-gradient:hover {
+    background: linear-gradient(135deg, #2575fc, #6a11cb);
+    transform: translateY(-1px) scale(1.03);
+    /* efecto más sutil */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-cancel {
+    background: #f8f9fa;
+    border: 1px solid #d1d5db;
+}
+
+.btn-cancel:hover {
+    transform: translateY(-1px) scale(1.02);
+    /* efecto más sutil */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* ==============================
+   SCROLL PERSONALIZADO
+============================== */
+.user-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.user-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.user-list::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    border-radius: 10px;
+}
+
+/* ==============================
+   RESPONSIVE
+============================== */
+@media (max-width: 768px) {
+    .modal-modern {
+        padding: 1.5rem;
+    }
+
+    .user-item {
+        padding: 10px 14px;
+    }
+
+    .stylish-input {
+        font-size: 0.9rem;
+        padding: 12px 14px;
+    }
+
+    .btn-modal,
+    .btn-gradient,
+    .btn-outline-primary,
+    .btn-cancel {
+        font-size: 0.9rem;
+        padding: 8px 20px;
+    }
+
+    .search-input {
+        padding: 10px 36px 10px 12px;
+    }
 }
