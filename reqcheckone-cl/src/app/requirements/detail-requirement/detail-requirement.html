@@ -1,76 +1,134 @@
-<div class="requirement-container" *ngIf="!loading && requirement; else loadingState">
-  <!-- Botón Volver -->
-  <button class="btn btn-outline-primary back-btn" (click)="goBack()">
+<div
+  class="requirement-container container py-4"
+  *ngIf="!loading && requirement as req; else loadingState"
+>
+  <!-- Botón volver -->
+  <button class="btn btn-outline-primary rounded-pill px-4 mb-4" (click)="goBack()">
     <i class="bi bi-arrow-left"></i> Volver al proyecto
   </button>
 
-  <!-- Encabezado -->
-  <div class="requirement-header card shadow-sm p-4 mb-4 animate-fade-in">
-    <h2 class="mb-2 text-primary fw-bold">
-      <i class="bi bi-file-earmark-text"></i> {{ requirement.title }}
-    </h2>
-    <div class="d-flex flex-wrap gap-3 mt-2">
-      <span class="badge bg-info text-dark px-3 py-2">Estado: {{ requirement.status }}</span>
-      <span class="badge bg-warning text-dark px-3 py-2"
-        >Prioridad: {{ requirement.priority }}</span
-      >
-      <span class="badge bg-secondary px-3 py-2">Versión: {{ requirement.version }}</span>
-    </div>
-  </div>
-
-  <!-- Descripción -->
-  <div class="card description-card shadow-sm animate-slide-up">
+  <!-- HEADER PRINCIPAL -->
+  <div class="card shadow border-0 mb-4">
     <div class="card-body">
-      <h5 class="card-title text-secondary mb-3"><i class="bi bi-journal-text"></i> Descripción</h5>
-      <p class="mb-2 text-muted">{{ requirement.text }}</p>
-      <p *ngIf="requirement.context" class="fst-italic">
-        <strong>Contexto:</strong> {{ requirement.context }}
-      </p>
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+        <div>
+          <h2 class="fw-bold text-primary mb-2">
+            <i class="bi bi-file-earmark-text"></i>
+            {{ req.title }}
+          </h2>
+
+          <div class="d-flex flex-wrap gap-2">
+            <span
+              class="badge px-3 py-2"
+              [ngClass]="{
+                'bg-success': req.status === 'aprobado',
+                'bg-warning text-dark': req.status === 'pendiente',
+                'bg-danger': req.status === 'rechazado',
+                'bg-secondary': !req.status,
+              }"
+            >
+              Estado: {{ req.status || 'N/A' }}
+            </span>
+
+            <span class="badge bg-info text-dark px-3 py-2">
+              Prioridad: {{ req.priority || 'N/A' }}
+            </span>
+
+            <span class="badge bg-dark px-3 py-2"> Versión: {{ req.version || '1.0' }} </span>
+          </div>
+        </div>
+
+        <!-- Score global -->
+        <div *ngIf="analysis?.promedio_cumplimiento != null" class="text-center">
+          <h6 class="text-muted mb-1">Cumplimiento Global</h6>
+          <h3 class="fw-bold text-success">{{ analysis?.promedio_cumplimiento }}%</h3>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Sección de análisis -->
-  <div *ngIf="analysis" class="analysis-section mt-5 animate-fade-in">
-    <h4 class="text-success fw-bold mb-3">
-      <i class="bi bi-bar-chart-line"></i> Análisis del Requisito
+  <!-- DESCRIPCIÓN -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+      <h5 class="text-secondary mb-3"><i class="bi bi-journal-text"></i> Descripción</h5>
+
+      <p class="text-muted mb-3">
+        {{ req.text || 'No se ha definido descripción.' }}
+      </p>
+
+      <div *ngIf="req.context" class="alert alert-light border-start border-4 border-primary">
+        <strong>Contexto:</strong>
+        <div class="mt-1 text-muted">
+          {{ req.context }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ANALISIS ================= -->
+  <div *ngIf="analysis as a" class="analysis-section mt-5">
+    <h4 class="fw-bold text-success mb-4">
+      <i class="bi bi-bar-chart-line"></i> Análisis Inteligente del Requisito
     </h4>
 
-    <div class="card shadow-sm mb-4 border-success border-opacity-25">
+    <!-- Resultado general -->
+    <div class="card border-success border-opacity-25 shadow-sm mb-4">
       <div class="card-body">
-        <p class="mb-2">
-          <strong>Promedio de Cumplimiento:</strong>
-          <span class="text-success fw-semibold">{{ analysis.promedio_cumplimiento }}%</span>
-        </p>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+          <div>
+            <h6 class="text-muted mb-1">Resultado General</h6>
+            <p class="fw-semibold mb-0">
+              {{ a?.refined_requirement?.estado | titlecase }}
+            </p>
+            <small class="text-muted">
+              {{ a?.refined_requirement?.mensaje }}
+            </small>
+          </div>
 
-        <div class="alert alert-info mt-3">
-          <strong>Resultado general:</strong>
-          {{ analysis.refined_requirement.estado | titlecase }} -
-          {{ analysis.refined_requirement.mensaje }}
+          <!-- Barra de progreso -->
+          <div class="w-50">
+            <div class="progress" style="height: 10px">
+              <div
+                class="progress-bar bg-success"
+                role="progressbar"
+                [style.width.%]="a?.promedio_cumplimiento || 0"
+              ></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <h5 class="mt-4 mb-3 text-primary fw-semibold">
-      <i class="bi bi-people"></i> Análisis por Agente
+    <!-- ANALISIS POR AGENTES -->
+    <h5 class="text-primary fw-semibold mb-3">
+      <i class="bi bi-people"></i> Evaluación por Agentes
     </h5>
 
-    <div class="row g-3">
-      <div *ngFor="let key of analysis.agents | keyvalue" class="col-md-6">
-        <div class="card agent-card shadow-sm border-light animate-slide-up">
+    <div class="row g-4">
+      <div *ngFor="let agent of a?.agents | keyvalue" class="col-md-6">
+        <div class="card border-0 shadow-sm h-100">
           <div class="card-body">
-            <h6 class="text-primary fw-bold mb-3">
-              <i class="bi bi-person-badge"></i> {{ key.value.role }}
-            </h6>
-            <ul class="list-unstyled ms-3">
-              <li *ngFor="let k of key.value.analysis | keyvalue" class="mb-1">
-                <strong>{{ k.key | titlecase }}:</strong>
-                <span class="text-muted">{{ k.value }}</span>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="fw-bold text-primary mb-0">
+                <i class="bi bi-person-badge"></i>
+                {{ agent?.value?.role }}
+              </h6>
+
+              <span class="badge bg-success px-3 py-2"> {{ agent?.value?.porcentaje }}% </span>
+            </div>
+
+            <ul class="list-group list-group-flush" *ngIf="agent?.value?.analysis">
+              <li class="list-group-item" *ngFor="let item of agent?.value?.analysis | keyvalue">
+                <div class="d-flex justify-content-between">
+                  <span class="fw-semibold">
+                    {{ item.key | titlecase }}
+                  </span>
+                  <span class="text-muted">
+                    {{ item.value }}
+                  </span>
+                </div>
               </li>
             </ul>
-            <p class="mt-3">
-              <strong>Porcentaje:</strong>
-              <span class="text-success fw-semibold fs-2"> {{ key.value.porcentaje }}% </span>
-            </p>
           </div>
         </div>
       </div>
@@ -78,10 +136,10 @@
   </div>
 </div>
 
-<!-- Estado de carga -->
+<!-- ================= LOADING ================= -->
 <ng-template #loadingState>
-  <div class="text-center py-5 loading-spinner animate-fade-in">
+  <div class="text-center py-5">
     <div class="spinner-border text-primary" role="status"></div>
-    <p class="mt-3 text-muted">Cargando requisito...</p>
+    <p class="mt-3 text-muted">Cargando análisis del requisito...</p>
   </div>
 </ng-template>

@@ -1,67 +1,272 @@
-/* Estilo base para todos los botones de acción */
-.btn-action,
-.btn-add {
-    font-weight: 600;
-    border-radius: 0.75rem;
-    padding: 0.45rem 0.9rem;
-    transition: all 0.3s ease-in-out;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
+/* =====================================================
+   🎯 IDENTIDAD VISUAL PREMIUM – PROJECT VIEW
+===================================================== */
+
+:root {
+  --primary: #6366f1;
+  --primary-soft: #eef2ff;
+  --accent: #0ea5e9;
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+
+  --bg-page: #f8fafc;
+  --card-bg: #ffffff;
+
+  --text-main: #0f172a;
+  --text-soft: #64748b;
+
+  --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 12px 30px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.12);
+
+  --radius-xl: 18px;
+  --radius-lg: 14px;
 }
 
-/* Hover general */
-.btn-action:hover,
-.btn-add:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-    color: #fff !important;
+/* =====================================================
+   🌎 FONDO GENERAL
+===================================================== */
+
+body {
+  background: linear-gradient(135deg, #f1f5f9, #eef2ff);
 }
 
-/* Botón Ver */
-.btn-outline-primary.btn-action:hover {
-    background: linear-gradient(135deg, #007bff, #6610f2);
-    border-color: #6610f2;
+/* =====================================================
+   📦 CARD PRINCIPAL
+===================================================== */
+
+.card {
+  border: none !important;
+  border-radius: var(--radius-xl) !important;
+  background: var(--card-bg);
+  box-shadow: var(--shadow-md);
+  transition: all 0.4s cubic-bezier(.4,0,.2,1);
 }
 
-/* Botón Editar */
-.btn-outline-warning.btn-action:hover {
-    background: linear-gradient(135deg, #ffc107, #ff8c00);
-    border-color: #ff8c00;
-}
-
-/* Botón Eliminar */
-.btn-outline-danger.btn-action:hover {
-    background: linear-gradient(135deg, #dc3545, #a71d2a);
-    border-color: #a71d2a;
-}
-
-/* Botón Agregar */
-.btn-add {
-    background: linear-gradient(135deg, #28a745, #20c997);
-    border: none;
-    color: #fff;
-}
-
-.btn-add:hover {
-    background: linear-gradient(135deg, #20c997, #218838);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
-}
-
-/* Iconos con margen */
-.btn-action i,
-.btn-add i {
-    vertical-align: middle;
-}
-
-/* Opcional: añadir sombra suave a hover de tarjetas y listas */
 .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* =====================================================
+   🏷 TITULO DEL PROYECTO
+===================================================== */
+
+h2 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--text-main) !important;
+  letter-spacing: -0.5px;
+}
+
+.text-muted {
+  color: var(--text-soft) !important;
+}
+
+/* =====================================================
+   🎖 BADGES REDEFINIDOS
+===================================================== */
+
+.badge {
+  border-radius: 999px;
+  font-weight: 600;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.75rem;
+}
+
+.bg-info {
+  background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+  color: white !important;
+}
+
+.bg-warning {
+  background: linear-gradient(135deg, #fbbf24, #f97316) !important;
+  color: white !important;
+}
+
+.bg-secondary {
+  background: #e2e8f0 !important;
+  color: #334155 !important;
+}
+
+/* =====================================================
+   👥 COLABORADORES CHIP STYLE
+===================================================== */
+
+.badge.bg-dark-subtle {
+  background: #f1f5f9 !important;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.badge.bg-dark-subtle:hover {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* =====================================================
+   📋 LISTA DE REQUISITOS
+===================================================== */
+
+.list-group-item {
+  border: none !important;
+  border-radius: var(--radius-lg);
+  background: #ffffff;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1rem;
+  padding: 1.2rem 1.3rem;
+  transition: all 0.35s ease;
 }
 
 .list-group-item:hover {
-    background-color: #f8f9fa;
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Línea lateral elegante */
+.list-group-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20%;
+  height: 60%;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  background: linear-gradient(180deg, var(--primary), var(--accent));
+}
+
+/* =====================================================
+   🚀 BOTONES PROFESIONALES
+===================================================== */
+
+.btn {
+  border-radius: 999px !important;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(.4,0,.2,1);
+}
+
+/* Botón principal */
+.btn-add {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border: none;
+  color: white;
+  padding: 0.6rem 1.4rem;
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.35);
+}
+
+.btn-add:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(99, 102, 241, 0.45);
+}
+
+/* Acciones */
+.btn-outline-primary {
+  border: 1.5px solid var(--primary);
+  color: var(--primary);
+}
+
+.btn-outline-primary:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-outline-warning {
+  border: 1.5px solid var(--warning);
+  color: var(--warning);
+}
+
+.btn-outline-warning:hover {
+  background: var(--warning);
+  color: white;
+}
+
+.btn-outline-danger {
+  border: 1.5px solid var(--danger);
+  color: var(--danger);
+}
+
+.btn-outline-danger:hover {
+  background: var(--danger);
+  color: white;
+}
+
+/* =====================================================
+   🔔 BOTÓN NOTIFICACIÓN
+===================================================== */
+
+.btn-outline-dark {
+  background: white;
+  border: none !important;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-outline-dark:hover {
+  transform: scale(1.08);
+  box-shadow: var(--shadow-md);
+}
+
+/* Badge animado */
+.badge.bg-danger {
+  background: linear-gradient(135deg, #ef4444, #b91c1c) !important;
+  animation: pulseNotif 1.8s infinite;
+}
+
+@keyframes pulseNotif {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+/* =====================================================
+   🧾 MODALES ESTILO APP ENTERPRISE
+===================================================== */
+
+.modal-content {
+  border-radius: var(--radius-xl);
+  border: none;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border: none;
+}
+
+.modal-title {
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.modal-footer {
+  background: #f8fafc !important;
+}
+
+/* =====================================================
+   ✨ MICRO INTERACCIONES
+===================================================== */
+
+button i {
+  transition: transform 0.25s ease;
+}
+
+button:hover i {
+  transform: scale(1.15);
+}
+
+/* =====================================================
+   📄 BOTÓN PDF MEJORADO
+===================================================== */
+
+.btn-success {
+  background: linear-gradient(135deg, #16a34a, #059669) !important;
+  border: none !important;
+  box-shadow: 0 10px 20px rgba(22, 163, 74, 0.35);
+}
+
+.btn-success:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(22, 163, 74, 0.45);
 }

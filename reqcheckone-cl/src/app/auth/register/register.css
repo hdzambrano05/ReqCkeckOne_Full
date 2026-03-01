@@ -184,6 +184,76 @@
     text-decoration: none;
 }
 
+/* ==============================
+   MENSAJES DE ERROR INPUT
+============================== */
+
+.error-msg {
+    margin-top: 6px;
+    animation: fadeIn 0.3s ease;
+}
+
+.error-msg small {
+    display: block;
+    color: #ff4d4f;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+/* Borde rojo cuando hay error */
+.input-error {
+    border-color: #ff4d4f !important;
+}
+
+.input-error+label {
+    color: #ff4d4f !important;
+}
+
+/* ==============================
+   MENSAJES BACKEND
+============================== */
+
+.server-error {
+    margin-top: 18px;
+    padding: 12px;
+    background: #ffeaea;
+    color: #d63031;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    text-align: center;
+    font-weight: 500;
+    animation: fadeIn 0.3s ease;
+}
+
+.server-success {
+    margin-top: 18px;
+    padding: 12px;
+    background: #eafaf1;
+    color: #27ae60;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    text-align: center;
+    font-weight: 500;
+    animation: fadeIn 0.3s ease;
+}
+
+/* ==============================
+   ANIMACIÓN SUAVE
+============================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 900px) {
     .auth-container {

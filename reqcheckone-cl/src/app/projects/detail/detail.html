@@ -1,316 +1,383 @@
-<div class="container mt-4" *ngIf="project">
-  <!-- Flecha para regresar -->
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <button
-      class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1"
-      (click)="goBack()"
-    >
-      <i class="bi bi-arrow-left"></i> Regresar
+<div
+  class="project-header d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 p-4 rounded-4 shadow-sm bg-white"
+>
+  <div class="d-flex align-items-start gap-3 flex-wrap">
+    <button class="btn btn-light rounded-pill shadow-sm" (click)="goBack()">
+      <i class="bi bi-arrow-left"></i>
+      Regresar
     </button>
 
-    <!-- Botón de notificaciones -->
+    <div>
+      <h1 class="h3 fw-bold mb-1 text-primary">
+        <i class="bi bi-folder2-open me-2"></i>
+        {{ project?.name }}
+      </h1>
+      <p class="text-muted mb-0">
+        {{ project?.description || 'Sin descripción disponible' }}
+      </p>
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center gap-3">
     <button
-      type="button"
-      class="btn btn-outline-dark position-relative p-2"
+      class="btn btn-light position-relative rounded-circle shadow-sm"
       (click)="openTasksModal()"
-      title="Ver tareas asignadas"
-      style="
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      "
     >
-      <i class="bi bi-bell-fill fs-5"></i>
+      <i class="bi bi-bell-fill"></i>
       <span
         *ngIf="unreadTasks > 0"
-        class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger"
-        style="
-          width: 16px;
-          height: 16px;
-          font-size: 0.65rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: transform 0.3s;
-        "
+        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
       >
         {{ unreadTasks }}
       </span>
     </button>
-  </div>
 
-<!-- Botón Generar PDF profesional compacto -->
-<div class="d-flex justify-content-end mb-3">
-  <button
-    #pdfBtn
-    class="btn btn-success d-flex align-items-center gap-2"
-    style="
-      padding: 0.45rem 0.9rem;
-      font-size: 0.95rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      transition: all 0.3s ease;
-    "
-    (click)="generatePDF()"
-    (mouseover)="pdfBtn.style.transform='scale(1.05)'"
-    (mouseout)="pdfBtn.style.transform='scale(1)'"
-    title="Generar PDF del proyecto"
-  >
-    <i class="bi bi-file-earmark-pdf fs-5"></i>
-    <span>Generar PDF</span>
-  </button>
+    <button class="btn btn-danger rounded-pill shadow-sm" (click)="generatePDF()">
+      <i class="bi bi-file-earmark-pdf me-2"></i>
+      Exportar PDF
+    </button>
+  </div>
 </div>
 
-  <!-- Tarjeta principal -->
-  <div class="card shadow-lg border-0 rounded-3">
-    <div class="card-body">
-      <!-- Título y descripción -->
-      <h2 class="fw-bold text-primary mb-2">
-        <i class="bi bi-folder2-open"></i> {{ project.name }}
-      </h2>
-      <p class="text-muted mb-3">{{ project.description || 'Sin descripción' }}</p>
-
-      <!-- Meta info -->
-      <div class="d-flex flex-wrap gap-4 mb-4">
-        <span class="badge bg-info text-dark">
-          <i class="bi bi-check2-circle"></i> Estado: {{ project.status || '—' }}
-        </span>
-        <span class="badge bg-warning text-dark">
-          <i class="bi bi-calendar-event"></i> Fecha límite: {{ project.deadline || '—' }}
-        </span>
-      </div>
-
-      <!-- Creador -->
-      <div class="mb-4">
-        <h6 class="text-uppercase text-secondary fw-semibold mb-1">
-          <i class="bi bi-person-circle"></i> Creador
-        </h6>
-        <p class="fw-semibold text-dark mb-0">{{ project.owner?.username }}</p>
-        <small class="text-muted">{{ project.owner?.email }}</small>
-      </div>
-
-      <!-- Colaboradores -->
-      <div class="mb-4">
-        <h6 class="text-uppercase text-secondary fw-semibold mb-2">
-          <i class="bi bi-people"></i> Colaboradores
-        </h6>
-        <div *ngIf="project.collaborators?.length; else noCollabs" class="d-flex flex-wrap gap-2">
-          <span
-            *ngFor="let c of project.collaborators"
-            class="badge bg-dark-subtle text-dark border rounded-pill px-3 py-2 shadow-sm"
-          >
-            <i class="bi bi-person"></i> {{ c.username }}
-            <span class="ms-1 text-primary fw-semibold">({{ c.role }})</span>
-          </span>
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
+      <div class="d-flex align-items-center gap-3">
+        <i class="bi bi-check2-circle fs-3 text-success"></i>
+        <div>
+          <small class="text-muted">Estado</small>
+          <div class="fw-semibold">{{ project?.status || '—' }}</div>
         </div>
-        <ng-template #noCollabs>
-          <p class="text-muted fst-italic">No hay colaboradores asignados.</p>
-        </ng-template>
       </div>
+    </div>
+  </div>
 
-      <!-- Botón agregar requisito -->
-      <div class="text-end mb-3">
-        <button class="btn btn-add btn-lg shadow-sm" (click)="goToAddRequirement()">
-          <i class="bi bi-plus-circle"></i> Agregar requisito
-        </button>
+  <div class="col-md-4">
+    <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
+      <div class="d-flex align-items-center gap-3">
+        <i class="bi bi-calendar-event fs-3 text-warning"></i>
+        <div>
+          <small class="text-muted">Fecha límite</small>
+          <div class="fw-semibold">{{ project?.deadline || '—' }}</div>
+        </div>
       </div>
+    </div>
+  </div>
 
-      <!-- Requisitos -->
-      <div>
-        <h6 class="text-uppercase text-secondary fw-semibold mb-3 d-flex align-items-center gap-1">
-          <i class="bi bi-list-check"></i> Requisitos del Proyecto
-        </h6>
-        <ul class="list-group list-group-flush mb-4">
-          <li
-            *ngFor="let req of requirements"
-            class="list-group-item d-flex justify-content-between align-items-center flex-wrap gap-3"
-          >
-            <div class="flex-grow-1 me-3">
-              <strong class="text-dark d-flex align-items-center gap-1">
-                <i class="bi bi-file-earmark-text"></i> {{ req.title }}
-              </strong>
-              <p class="mb-1 text-muted">{{ req.text }}</p>
-              <small class="text-secondary d-flex flex-wrap gap-3">
-                <span>
-                  <i class="bi bi-exclamation-triangle-fill text-warning me-1"></i>
-                  Prioridad: <span class="fw-semibold">{{ req.priority }}</span>
-                </span>
-                <span>
-                  <i class="bi bi-pin-angle-fill text-primary me-1"></i>
-                  Estado: <span class="fw-semibold">{{ req.status }}</span>
-                </span>
-              </small>
-            </div>
-            <div class="d-flex flex-column flex-sm-row gap-2 align-items-sm-end ms-auto">
-              <button
-                class="btn btn-outline-primary btn-sm btn-action"
-                (click)="viewRequirement(req.id)"
-              >
-                <i class="bi bi-eye me-1"></i> Ver
-              </button>
-              <button
-                class="btn btn-outline-warning btn-sm btn-action"
-                (click)="editRequirement(req.id)"
-              >
-                <i class="bi bi-pencil me-1"></i> Editar
-              </button>
-              <button
-                class="btn btn-outline-danger btn-sm btn-action"
-                (click)="deleteRequirement(req.id)"
-              >
-                <i class="bi bi-trash me-1"></i> Eliminar
-              </button>
-            </div>
-          </li>
-          <li *ngIf="!requirements.length" class="list-group-item text-muted fst-italic">
-            No hay requisitos aún.
-          </li>
-        </ul>
+  <div class="col-md-4">
+    <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
+      <div class="d-flex align-items-center gap-3">
+        <i class="bi bi-person-circle fs-3 text-primary"></i>
+        <div>
+          <small class="text-muted">Creador</small>
+          <div class="fw-semibold">{{ project?.owner?.username }}</div>
+          <small class="text-muted">{{ project?.owner?.email }}</small>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 🧾 Modal de Tareas -->
+<section class="card border-0 shadow-sm rounded-4 mb-4 p-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="fw-bold mb-0">
+      <i class="bi bi-people me-2 text-primary"></i>
+      Colaboradores
+    </h5>
+  </div>
+
+  <div *ngIf="project?.collaborators?.length; else noCollabs" class="row g-3">
+    <div *ngFor="let c of project?.collaborators" class="col-md-4">
+      <div class="card border-0 bg-light rounded-4 p-3 h-100 shadow-sm">
+        <div class="d-flex align-items-center gap-3">
+          <div
+            class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+            style="width: 50px; height: 50px"
+          >
+            {{ c.username.charAt(0) | uppercase }}
+          </div>
+
+          <div>
+            <div class="fw-semibold">{{ c.username }}</div>
+            <span class="badge bg-secondary-subtle text-dark">
+              {{ c.role }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noCollabs>
+    <div class="text-center text-muted py-4">No hay colaboradores asignados.</div>
+  </ng-template>
+</section>
+
+<section class="card border-0 shadow-sm rounded-4 p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="fw-bold mb-0">
+      <i class="bi bi-list-check me-2 text-primary"></i>
+      Requisitos
+    </h5>
+
+    <button class="btn btn-primary rounded-pill shadow-sm" (click)="goToAddRequirement()">
+      <i class="bi bi-plus-circle me-2"></i>
+      Nuevo requisito
+    </button>
+  </div>
+
+  <div *ngIf="requirements.length; else noRequirements" class="row g-3">
+    <div *ngFor="let req of requirements" class="col-md-6">
+      <div class="card border-0 rounded-4 shadow-sm p-3 h-100">
+        <h6 class="fw-bold">
+          <i class="bi bi-file-earmark-text me-2 text-primary"></i>
+          {{ req.title }}
+        </h6>
+
+        <p class="text-muted small">
+          {{ req.text }}
+        </p>
+
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <div class="d-flex gap-2">
+            <span class="badge bg-warning text-dark">
+              {{ req.priority }}
+            </span>
+
+            <span class="badge bg-info text-dark">
+              {{ req.status }}
+            </span>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-light rounded-circle" (click)="viewRequirement(req.id)">
+              <i class="bi bi-eye"></i>
+            </button>
+
+            <button class="btn btn-sm btn-light rounded-circle" (click)="editRequirement(req.id)">
+              <i class="bi bi-pencil"></i>
+            </button>
+
+            <button
+              class="btn btn-sm btn-light rounded-circle text-danger"
+              (click)="deleteRequirement(req.id)"
+            >
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noRequirements>
+    <div class="text-center text-muted py-4">No hay requisitos aún.</div>
+  </ng-template>
+</section>
+
+<!-- 🧾 Modal de Tareas Profesional -->
 <div
   class="modal fade"
   id="tasksModal"
   tabindex="-1"
   aria-labelledby="tasksModalLabel"
   aria-hidden="true"
+  data-bs-backdrop="static"
 >
-  <div class="modal-dialog modal-dialog-scrollable modal-lg">
-    <div class="modal-content bg-white text-dark shadow-lg rounded-4 border-0">
-      <div class="modal-header bg-primary text-white rounded-top-4">
-        <h5 class="modal-title fw-bold d-flex align-items-center gap-2" id="tasksModalLabel">
-          <i class="bi bi-check2-square"></i> Tareas del Proyecto
-        </h5>
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+  <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <!-- HEADER MODERNO -->
+      <div class="modal-header border-0 pb-0">
+        <div class="d-flex align-items-center gap-3">
+          <div
+            class="d-flex align-items-center justify-content-center rounded-circle"
+            style="width: 55px; height: 55px; background: linear-gradient(135deg, #0d6efd, #4dabf7)"
+          >
+            <i class="bi bi-check2-square text-white fs-4"></i>
+          </div>
+
+          <div>
+            <h5 class="modal-title fw-bold mb-0" id="tasksModalLabel">Gestión de Tareas</h5>
+            <small class="text-muted"> Seguimiento y control del proyecto </small>
+          </div>
+        </div>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 
-      <div class="modal-body">
-        <!-- Loader -->
-        <div *ngIf="loadingTasks" class="text-center my-4">
-          <div class="spinner-border text-primary"></div>
+      <!-- BODY -->
+      <div class="modal-body pt-4">
+        <!-- Loader elegante -->
+        <div *ngIf="loadingTasks" class="text-center py-5">
+          <div class="spinner-border text-primary mb-3"></div>
+          <div class="text-muted small">Cargando tareas...</div>
         </div>
 
-        <!-- Sin tareas -->
-        <div *ngIf="!loadingTasks && tasks.length === 0" class="text-center text-muted py-4">
-          <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-          No hay tareas asignadas.
+        <!-- Empty State moderno -->
+        <div *ngIf="!loadingTasks && tasks.length === 0" class="text-center py-5">
+          <i class="bi bi-inbox display-5 text-secondary mb-3"></i>
+          <h6 class="fw-semibold text-secondary">No hay tareas asignadas</h6>
+          <small class="text-muted"> Cuando se creen tareas aparecerán aquí. </small>
         </div>
 
-        <!-- Lista de tareas -->
-        <ul *ngIf="tasks.length > 0" class="list-group list-group-flush">
-          <li
+        <!-- Lista moderna -->
+        <div *ngIf="tasks.length > 0" class="d-flex flex-column gap-3">
+          <div
             *ngFor="let task of tasks"
-            class="list-group-item bg-light border-0 shadow-sm mb-2 rounded-3"
+            class="card border-0 shadow-sm rounded-4 p-3 hover-shadow transition"
+            style="background: #f9fafb"
           >
-            <div class="d-flex justify-content-between align-items-start flex-column flex-md-row">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+              <!-- Información -->
               <div class="flex-grow-1">
-                <h6 class="fw-bold mb-1 text-primary d-flex align-items-center gap-2">
-                  <i class="bi bi-clipboard-check"></i> {{ task.title }}
-                  <span *ngIf="!task.read_by_user" class="badge bg-success ms-2">Nuevo</span>
-                </h6>
-                <p class="mb-1 text-secondary">{{ task.description }}</p>
-                <small class="text-muted d-block">
-                  <i class="bi bi-person-circle"></i>
-                  Asignado a:
-                  <span class="fw-semibold text-dark">
-                    {{ task.assignedUser?.username || 'Sin asignar' }}
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <h6 class="fw-bold mb-0 text-dark">
+                    {{ task.title }}
+                  </h6>
+
+                  <span *ngIf="!task.read_by_user" class="badge rounded-pill bg-success">
+                    Nuevo
                   </span>
-                </small>
-                <small class="text-muted d-block">
-                  <i class="bi bi-calendar-event"></i>
-                  Fecha límite:
-                  <span class="fw-semibold">{{ task.due_date | date : 'mediumDate' }}</span>
-                </small>
-                <small class="text-muted d-block mt-1">
-                  <i class="bi bi-info-circle"></i>
-                  Estado: <span class="fw-semibold text-primary">{{ task.status }}</span>
-                </small>
+                </div>
+
+                <p class="text-secondary small mb-2">
+                  {{ task.description }}
+                </p>
+
+                <div class="d-flex flex-wrap gap-3 small text-muted">
+                  <div>
+                    <i class="bi bi-person-circle me-1"></i>
+                    <strong class="text-dark">
+                      {{ task.assignedUser?.username || 'Sin asignar' }}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <i class="bi bi-calendar-event me-1"></i>
+                    {{ task.due_date | date: 'mediumDate' }}
+                  </div>
+
+                  <div>
+                    <i class="bi bi-info-circle me-1"></i>
+                    <span class="fw-semibold text-primary">
+                      {{ task.status | titlecase }}
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              <!-- Botones Aceptar / Rechazar para colaborador -->
-              <div class="mt-2 mt-md-0 ms-md-3 d-flex gap-2 flex-wrap">
-                <button
+              <!-- Acciones -->
+              <div class="d-flex flex-column align-items-end gap-2">
+                <!-- Pendiente -->
+                <div
                   *ngIf="task.assignee_id === userId && task.status === 'pending'"
-                  class="btn btn-success btn-sm"
-                  (click)="respondTask(task.id, true)"
+                  class="d-flex gap-2"
                 >
-                  <i class="bi bi-check-lg me-1"></i> Aceptar
-                </button>
-                <button
-                  *ngIf="task.assignee_id === userId && task.status === 'pending'"
-                  class="btn btn-danger btn-sm"
-                  (click)="respondTask(task.id, false)"
-                >
-                  <i class="bi bi-x-lg me-1"></i> Rechazar
-                </button>
+                  <button class="btn btn-sm btn-success px-3" (click)="respondTask(task.id, true)">
+                    <i class="bi bi-check-lg me-1"></i>
+                    Aceptar
+                  </button>
+
+                  <button
+                    class="btn btn-sm btn-outline-danger px-3"
+                    (click)="respondTask(task.id, false)"
+                  >
+                    <i class="bi bi-x-lg me-1"></i>
+                    Rechazar
+                  </button>
+                </div>
+
+                <!-- Estado no pendiente -->
                 <span
                   *ngIf="task.status !== 'pending'"
-                  class="badge bg-secondary align-self-center"
+                  class="badge bg-light text-dark border px-3 py-2"
                 >
                   {{ task.status | titlecase }}
                 </span>
               </div>
             </div>
-          </li>
-        </ul>
+          </div>
+        </div>
       </div>
 
-      <div class="modal-footer bg-light border-0">
-        <!-- Botón de crear tarea solo para creador -->
+      <!-- FOOTER -->
+      <div class="modal-footer border-0 pt-0 d-flex justify-content-between">
+        <div class="text-muted small">Total de tareas: {{ tasks.length }}</div>
+
         <button
           *ngIf="project?.owner_id === userId"
-          class="btn btn-primary rounded-pill px-4"
+          class="btn btn-primary rounded-pill px-4 shadow-sm"
           data-bs-toggle="modal"
           data-bs-target="#createTaskModal"
         >
-          <i class="bi bi-plus-circle"></i> Nueva Tarea
+          <i class="bi bi-plus-circle me-2"></i>
+          Crear nueva tarea
         </button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 📋 Modal para Crear Tarea -->
+<!-- 📋 Modal Profesional para Crear Tarea -->
 <div
   class="modal fade"
   id="createTaskModal"
   tabindex="-1"
   aria-labelledby="createTaskModalLabel"
   aria-hidden="true"
+  data-bs-backdrop="static"
 >
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content bg-white text-dark shadow-lg rounded-4 border-0">
-      <div class="modal-header bg-primary text-white rounded-top-4">
-        <h5 class="modal-title fw-bold d-flex align-items-center gap-2" id="createTaskModalLabel">
-          <i class="bi bi-plus-circle"></i> Crear Tarea
-        </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <!-- HEADER MODERNO -->
+      <div class="modal-header border-0 pb-0">
+        <div class="d-flex align-items-center gap-3">
+          <!-- Icono con gradiente -->
+          <div
+            class="d-flex align-items-center justify-content-center rounded-circle"
+            style="width: 55px; height: 55px; background: linear-gradient(135deg, #198754, #20c997)"
+          >
+            <i class="bi bi-plus-circle text-white fs-4"></i>
+          </div>
+
+          <div>
+            <h5 class="modal-title fw-bold mb-0" id="createTaskModalLabel">Nueva Tarea</h5>
+            <small class="text-muted"> Asigna responsabilidades dentro del proyecto </small>
+          </div>
+        </div>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 
-      <div class="modal-body">
-        <app-task-create
-          *ngIf="project?.id"
-          [projectId]="project!.id"
-          (taskCreated)="loadTasks(project!.id, true)"
-        ></app-task-create>
+      <!-- BODY -->
+      <div class="modal-body pt-4">
+        <!-- Contenedor tipo card interno -->
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-light-subtle">
+          <app-task-create
+            *ngIf="project?.id"
+            [projectId]="project!.id"
+            (taskCreated)="loadTasks(project!.id, true)"
+          ></app-task-create>
+        </div>
+      </div>
+
+      <!-- FOOTER MODERNO -->
+      <div class="modal-footer border-0 pt-0 d-flex justify-content-between align-items-center">
+        <small class="text-muted"> Complete la información requerida para crear la tarea. </small>
+
+        <button
+          type="button"
+          class="btn btn-outline-secondary rounded-pill px-4"
+          data-bs-dismiss="modal"
+        >
+          Cancelar
+        </button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Modal de confirmación de eliminación -->
+<!-- Modal Confirmación Eliminación -->
 <div
   class="modal fade"
   id="confirmDeleteModal"
@@ -319,23 +386,58 @@
   aria-hidden="true"
 >
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        ¿Estás seguro de que deseas eliminar este requisito? Esta acción no se puede deshacer.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <!-- HEADER -->
+      <div class="modal-header border-0 pb-0">
+        <div class="d-flex align-items-center gap-3">
+          <div
+            class="d-flex align-items-center justify-content-center rounded-circle"
+            style="width: 50px; height: 50px; background-color: #ffe5e5"
+          >
+            <i class="bi bi-exclamation-triangle-fill text-danger fs-4"></i>
+          </div>
+
+          <div>
+            <h5 class="modal-title fw-bold mb-0" id="confirmDeleteModalLabel">
+              Confirmar eliminación
+            </h5>
+            <small class="text-muted"> Acción irreversible </small>
+          </div>
+        </div>
+
         <button
           type="button"
-          class="btn btn-danger"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Cerrar"
+        ></button>
+      </div>
+
+      <!-- BODY -->
+      <div class="modal-body pt-3 pb-2">
+        <p class="text-secondary mb-3">Estás a punto de eliminar este requisito del proyecto.</p>
+
+        <div class="alert alert-light border rounded-3 small">
+          <i class="bi bi-info-circle me-2 text-danger"></i>
+          Esta acción no se puede deshacer. Toda la información asociada será eliminada
+          permanentemente.
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="modal-footer border-0 pt-0 d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-danger px-4 shadow-sm"
           (click)="confirmDelete()"
           data-bs-dismiss="modal"
         >
-          Eliminar
+          <i class="bi bi-trash me-2"></i>
+          Eliminar definitivamente
         </button>
       </div>
     </div>
