@@ -35,52 +35,88 @@ export class Create implements OnInit {
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.loadUsers();
+  }
+
+  loadUsers(): void {
     this.http.get<any[]>(`${environment.apiUrl}/users`, {
       headers: this.projectsService['getHeaders']()
     }).subscribe({
-      next: (data) => this.users = data,
-      error: (err) => console.error('Error cargando usuarios', err)
+      next: (data) => {
+        this.users = data || [];
+      },
+      error: (err) => {
+        console.error('Error cargando usuarios', err);
+      }
     });
   }
 
-  /** Modal de colaboradores */
-  openCollaboratorsModal() {
-    const modal = new bootstrap.Modal(document.getElementById('collaboratorsModal'));
+  openCollaboratorsModal(): void {
+    const modalElement = document.getElementById('collaboratorsModal');
+    if (!modalElement) return;
+
+    const modal = new bootstrap.Modal(modalElement);
     modal.show();
   }
 
-  filteredUsers() {
-    return this.users.filter(u =>
-      u.username.toLowerCase().includes(this.searchTerm.toLowerCase())
+  filteredUsers(): any[] {
+    const term = this.searchTerm.trim().toLowerCase();
+
+    if (!term) {
+      return this.users;
+    }
+
+    return this.users.filter((u) =>
+      `${u.username || ''} ${u.email || ''}`.toLowerCase().includes(term)
     );
   }
 
-  toggleCollaborator(user: any) {
+  toggleCollaborator(user: any): void {
     if (this.isSelected(user)) {
-      this.selectedCollaborators = this.selectedCollaborators.filter(u => u.id !== user.id);
+      this.selectedCollaborators = this.selectedCollaborators.filter(
+        (u) => u.id !== user.id
+      );
     } else {
       this.selectedCollaborators.push(user);
     }
+
+    this.syncCollaboratorsWithForm();
+  }
+
+  isSelected(user: any): boolean {
+    return this.selectedCollaborators.some((u) => u.id === user.id);
+  }
+
+  removeCollaborator(user: any): void {
+    this.selectedCollaborators = this.selectedCollaborators.filter(
+      (u) => u.id !== user.id
+    );
+    this.syncCollaboratorsWithForm();
+  }
+
+  clearCollaborators(): void {
+    this.selectedCollaborators = [];
+    this.syncCollaboratorsWithForm();
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
+  }
+
+  syncCollaboratorsWithForm(): void {
     this.projectForm.patchValue({
-      collaborators: this.selectedCollaborators.map(u => u.id)
+      collaborators: this.selectedCollaborators.map((u) => u.id)
     });
   }
 
-  isSelected(user: any) {
-    return this.selectedCollaborators.some(u => u.id === user.id);
-  }
+  createProject(): void {
+    this.error = null;
 
-  removeCollaborator(user: any) {
-    this.selectedCollaborators = this.selectedCollaborators.filter(u => u.id !== user.id);
-    this.projectForm.patchValue({
-      collaborators: this.selectedCollaborators.map(u => u.id)
-    });
-  }
-
-  /** Crear proyecto */
-  createProject() {
-    if (this.projectForm.invalid) return;
+    if (this.projectForm.invalid) {
+      this.projectForm.markAllAsTouched();
+      return;
+    }
 
     const payload = {
       ...this.projectForm.value,
@@ -90,18 +126,49 @@ export class Create implements OnInit {
 
     this.projectsService.createProject(payload).subscribe({
       next: () => this.goBack(),
-      error: () => this.error = 'No se pudo crear el proyecto'
+      error: () => {
+        this.error = 'No se pudo crear el proyecto. Intenta nuevamente.';
+      }
     });
   }
-  // Método para auto-redimensionar el textarea
-  autoResize(event: Event) {
+
+  autoResize(event: Event): void {
     const target = event.target as HTMLTextAreaElement;
-    target.style.height = 'auto'; // Resetear altura
-    target.style.height = target.scrollHeight + 'px'; // Ajustar según contenido
+    target.style.height = 'auto';
+    target.style.height = `${target.scrollHeight}px`;
   }
 
-  goBack() {
-    this.router.navigate(['/projects']); // 👈 redirige a la lista de proyectos
+  goBack(): void {
+    this.router.navigate(['/projects']);
+  }
+
+  get statusLabel(): string {
+    const status = this.projectForm.get('status')?.value;
+
+    switch (status) {
+      case 'active':
+        return 'Activo';
+      case 'completed':
+        return 'Completado';
+      case 'archived':
+        return 'Archivado';
+      default:
+        return 'Sin estado';
+    }
+  }
+
+  get statusClass(): string {
+    const status = this.projectForm.get('status')?.value;
+
+    switch (status) {
+      case 'active':
+        return 'status-active';
+      case 'completed':
+        return 'status-completed';
+      case 'archived':
+        return 'status-archived';
+      default:
+        return 'status-archived';
+    }
   }
 }
-

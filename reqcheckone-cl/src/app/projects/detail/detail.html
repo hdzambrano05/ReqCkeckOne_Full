@@ -1,183 +1,232 @@
-<div
-  class="project-header d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 p-4 rounded-4 shadow-sm bg-white"
->
-  <div class="d-flex align-items-start gap-3 flex-wrap">
-    <button class="btn btn-light rounded-pill shadow-sm" (click)="goBack()">
-      <i class="bi bi-arrow-left"></i>
-      Regresar
-    </button>
+<div class="project-view-shell">
+  <div class="project-view-container">
+    <!-- =====================================================
+         HERO DEL PROYECTO
+    ===================================================== -->
+    <section class="project-hero-panel">
+      <div class="hero-top-bar">
+        <button class="btn-back-project" (click)="goBack()">
+          <i class="bi bi-arrow-left"></i>
+          <span>Regresar</span>
+        </button>
 
-    <div>
-      <h1 class="h3 fw-bold mb-1 text-primary">
-        <i class="bi bi-folder2-open me-2"></i>
-        {{ project?.name }}
-      </h1>
-      <p class="text-muted mb-0">
-        {{ project?.description || 'Sin descripción disponible' }}
-      </p>
-    </div>
-  </div>
-
-  <div class="d-flex align-items-center gap-3">
-    <button
-      class="btn btn-light position-relative rounded-circle shadow-sm"
-      (click)="openTasksModal()"
-    >
-      <i class="bi bi-bell-fill"></i>
-      <span
-        *ngIf="unreadTasks > 0"
-        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-      >
-        {{ unreadTasks }}
-      </span>
-    </button>
-
-    <button class="btn btn-danger rounded-pill shadow-sm" (click)="generatePDF()">
-      <i class="bi bi-file-earmark-pdf me-2"></i>
-      Exportar PDF
-    </button>
-  </div>
-</div>
-
-<div class="row g-3 mb-4">
-  <div class="col-md-4">
-    <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
-      <div class="d-flex align-items-center gap-3">
-        <i class="bi bi-check2-circle fs-3 text-success"></i>
-        <div>
-          <small class="text-muted">Estado</small>
-          <div class="fw-semibold">{{ project?.status || '—' }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-4">
-    <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
-      <div class="d-flex align-items-center gap-3">
-        <i class="bi bi-calendar-event fs-3 text-warning"></i>
-        <div>
-          <small class="text-muted">Fecha límite</small>
-          <div class="fw-semibold">{{ project?.deadline || '—' }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-4">
-    <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
-      <div class="d-flex align-items-center gap-3">
-        <i class="bi bi-person-circle fs-3 text-primary"></i>
-        <div>
-          <small class="text-muted">Creador</small>
-          <div class="fw-semibold">{{ project?.owner?.username }}</div>
-          <small class="text-muted">{{ project?.owner?.email }}</small>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<section class="card border-0 shadow-sm rounded-4 mb-4 p-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h5 class="fw-bold mb-0">
-      <i class="bi bi-people me-2 text-primary"></i>
-      Colaboradores
-    </h5>
-  </div>
-
-  <div *ngIf="project?.collaborators?.length; else noCollabs" class="row g-3">
-    <div *ngFor="let c of project?.collaborators" class="col-md-4">
-      <div class="card border-0 bg-light rounded-4 p-3 h-100 shadow-sm">
-        <div class="d-flex align-items-center gap-3">
-          <div
-            class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
-            style="width: 50px; height: 50px"
+        <div class="hero-actions">
+          <button
+            class="btn-icon-action notification-btn modern-bell-btn"
+            (click)="openTasksModal()"
           >
-            {{ c.username.charAt(0) | uppercase }}
+            <div class="bell-icon-wrap">
+              <i class="bi bi-bell-fill"></i>
+              <span *ngIf="unreadTasks > 0" class="notification-counter">
+                {{ unreadTasks }}
+              </span>
+            </div>
+          </button>
+
+          <button class="btn-export-pdf" (click)="generatePDF()">
+            <i class="bi bi-file-earmark-pdf"></i>
+            <span>Exportar PDF</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="hero-main-grid">
+        <div class="hero-main-content">
+          <div class="project-mark">
+            <div class="project-mark-icon">
+              <i class="bi bi-folder2-open"></i>
+            </div>
+
+            <div class="project-mark-copy">
+              <div class="project-label-mini">Workspace del proyecto</div>
+              <h1>{{ project?.name }}</h1>
+              <p>
+                {{ project?.description || 'Sin descripción disponible para este proyecto.' }}
+              </p>
+            </div>
           </div>
 
+          <div class="hero-summary-grid">
+            <div class="summary-pill-card">
+              <div class="summary-pill-icon success-tone">
+                <i class="bi bi-check2-circle"></i>
+              </div>
+              <div>
+                <span class="summary-label">Estado</span>
+                <strong>{{ project?.status || '—' }}</strong>
+              </div>
+            </div>
+
+            <div class="summary-pill-card">
+              <div class="summary-pill-icon warning-tone">
+                <i class="bi bi-calendar-event"></i>
+              </div>
+              <div>
+                <span class="summary-label">Fecha límite</span>
+                <strong>{{ project?.deadline || '—' }}</strong>
+              </div>
+            </div>
+
+            <div class="summary-pill-card">
+              <div class="summary-pill-icon primary-tone">
+                <i class="bi bi-person-circle"></i>
+              </div>
+              <div>
+                <span class="summary-label">Creador</span>
+                <strong>{{ project?.owner?.username || '—' }}</strong>
+                <small>{{ project?.owner?.email || '' }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="hero-side-card">
+          <div class="hero-side-header">
+            <span class="status-tag-main">{{ project?.status || 'Sin estado' }}</span>
+          </div>
+
+          <div class="hero-side-body">
+            <h4>Resumen rápido</h4>
+            <ul class="side-insight-list">
+              <li>
+                <i class="bi bi-list-task"></i>
+                <span>{{ requirements.length || 0 }} requisitos registrados</span>
+              </li>
+              <li>
+                <i class="bi bi-people"></i>
+                <span>{{ project?.collaborators?.length || 0 }} colaboradores asignados</span>
+              </li>
+              <li>
+                <i class="bi bi-bell"></i>
+                <span>{{ unreadTasks || 0 }} tareas pendientes por revisar</span>
+              </li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         CONTENIDO PRINCIPAL
+    ===================================================== -->
+    <div class="project-content-grid">
+      <!-- ================= COLABORADORES ================= -->
+      <section class="content-panel collaborators-panel">
+        <div class="panel-header-modern">
           <div>
-            <div class="fw-semibold">{{ c.username }}</div>
-            <span class="badge bg-secondary-subtle text-dark">
-              {{ c.role }}
-            </span>
+            <span class="panel-kicker">Equipo</span>
+            <h3>
+              <i class="bi bi-people-fill"></i>
+              Colaboradores
+            </h3>
+          </div>
+
+          <div class="panel-count-badge">
+            {{ project?.collaborators?.length || 0 }}
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <ng-template #noCollabs>
-    <div class="text-center text-muted py-4">No hay colaboradores asignados.</div>
-  </ng-template>
-</section>
+        <div
+          *ngIf="project?.collaborators?.length; else noCollabs"
+          class="collaborators-grid-modern"
+        >
+          <article *ngFor="let c of project?.collaborators" class="collaborator-card-modern">
+            <div class="collaborator-avatar-modern">
+              {{ c.username.charAt(0) | uppercase }}
+            </div>
 
-<section class="card border-0 shadow-sm rounded-4 p-4">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="fw-bold mb-0">
-      <i class="bi bi-list-check me-2 text-primary"></i>
-      Requisitos
-    </h5>
-
-    <button class="btn btn-primary rounded-pill shadow-sm" (click)="goToAddRequirement()">
-      <i class="bi bi-plus-circle me-2"></i>
-      Nuevo requisito
-    </button>
-  </div>
-
-  <div *ngIf="requirements.length; else noRequirements" class="row g-3">
-    <div *ngFor="let req of requirements" class="col-md-6">
-      <div class="card border-0 rounded-4 shadow-sm p-3 h-100">
-        <h6 class="fw-bold">
-          <i class="bi bi-file-earmark-text me-2 text-primary"></i>
-          {{ req.title }}
-        </h6>
-
-        <p class="text-muted small">
-          {{ req.text }}
-        </p>
-
-        <div class="d-flex justify-content-between align-items-center mt-3">
-          <div class="d-flex gap-2">
-            <span class="badge bg-warning text-dark">
-              {{ req.priority }}
-            </span>
-
-            <span class="badge bg-info text-dark">
-              {{ req.status }}
-            </span>
-          </div>
-
-          <div class="d-flex gap-2">
-            <button class="btn btn-sm btn-light rounded-circle" (click)="viewRequirement(req.id)">
-              <i class="bi bi-eye"></i>
-            </button>
-
-            <button class="btn btn-sm btn-light rounded-circle" (click)="editRequirement(req.id)">
-              <i class="bi bi-pencil"></i>
-            </button>
-
-            <button
-              class="btn btn-sm btn-light rounded-circle text-danger"
-              (click)="deleteRequirement(req.id)"
-            >
-              <i class="bi bi-trash"></i>
-            </button>
-          </div>
+            <div class="collaborator-info-modern">
+              <h4>{{ c.username }}</h4>
+              <span class="role-chip-modern">{{ c.role }}</span>
+            </div>
+          </article>
         </div>
-      </div>
+
+        <ng-template #noCollabs>
+          <div class="empty-section-box">
+            <div class="empty-section-icon">
+              <i class="bi bi-person-x"></i>
+            </div>
+            <h4>No hay colaboradores asignados</h4>
+            <p>Cuando agregues miembros al proyecto aparecerán en esta sección.</p>
+          </div>
+        </ng-template>
+      </section>
+
+      <!-- ================= REQUISITOS ================= -->
+      <section class="content-panel requirements-panel">
+        <div class="panel-header-modern requirements-header">
+          <div>
+            <span class="panel-kicker">Estructura funcional</span>
+            <h3>
+              <i class="bi bi-ui-checks-grid"></i>
+              Requisitos
+            </h3>
+          </div>
+
+          <button class="btn-new-requirement" (click)="goToAddRequirement()">
+            <i class="bi bi-plus-circle"></i>
+            <span>Nuevo requisito</span>
+          </button>
+        </div>
+
+        <div *ngIf="requirements.length; else noRequirements" class="requirements-grid-modern">
+          <article *ngFor="let req of requirements" class="requirement-card-modern">
+            <div class="requirement-top">
+              <div class="requirement-icon-box">
+                <i class="bi bi-file-earmark-text"></i>
+              </div>
+
+              <div class="requirement-badges">
+                <span class="req-badge priority-badge">{{ req.priority }}</span>
+                <span class="req-badge status-badge">{{ req.status }}</span>
+              </div>
+            </div>
+
+            <div class="requirement-body">
+              <h4>{{ req.title }}</h4>
+              <p>{{ req.text }}</p>
+            </div>
+
+            <div class="requirement-actions">
+              <button class="req-action-btn" (click)="viewRequirement(req.id)" title="Ver">
+                <i class="bi bi-eye"></i>
+              </button>
+
+              <button class="req-action-btn" (click)="editRequirement(req.id)" title="Editar">
+                <i class="bi bi-pencil"></i>
+              </button>
+
+              <button
+                class="req-action-btn danger"
+                (click)="deleteRequirement(req.id)"
+                title="Eliminar"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </article>
+        </div>
+
+        <ng-template #noRequirements>
+          <div class="empty-section-box">
+            <div class="empty-section-icon">
+              <i class="bi bi-journal-x"></i>
+            </div>
+            <h4>No hay requisitos aún</h4>
+            <p>Comienza creando el primer requisito para estructurar este proyecto.</p>
+          </div>
+        </ng-template>
+      </section>
     </div>
   </div>
+</div>
 
-  <ng-template #noRequirements>
-    <div class="text-center text-muted py-4">No hay requisitos aún.</div>
-  </ng-template>
-</section>
-
-<!-- 🧾 Modal de Tareas Profesional -->
+<!-- =====================================================
+     MODAL DE TAREAS
+===================================================== -->
 <div
-  class="modal fade"
+  class="modal fade premium-modal"
   id="tasksModal"
   tabindex="-1"
   aria-labelledby="tasksModalLabel"
@@ -185,142 +234,160 @@
   data-bs-backdrop="static"
 >
   <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered">
-    <div class="modal-content border-0 shadow-lg rounded-4">
-      <!-- HEADER MODERNO -->
-      <div class="modal-header border-0 pb-0">
-        <div class="d-flex align-items-center gap-3">
-          <div
-            class="d-flex align-items-center justify-content-center rounded-circle"
-            style="width: 55px; height: 55px; background: linear-gradient(135deg, #0d6efd, #4dabf7)"
-          >
-            <i class="bi bi-check2-square text-white fs-4"></i>
+    <div class="modal-content premium-modal-content task-hub-modal">
+      <div class="modal-header premium-modal-header task-hub-header">
+        <div class="modal-header-mark">
+          <div class="modal-header-icon blue-gradient">
+            <i class="bi bi-bell-fill"></i>
           </div>
 
           <div>
-            <h5 class="modal-title fw-bold mb-0" id="tasksModalLabel">Gestión de Tareas</h5>
-            <small class="text-muted"> Seguimiento y control del proyecto </small>
+            <h5 class="modal-title mb-0" id="tasksModalLabel">Centro de tareas</h5>
+            <small>Actividad, seguimiento y respuestas del proyecto</small>
           </div>
         </div>
 
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 
-      <!-- BODY -->
-      <div class="modal-body pt-4">
-        <!-- Loader elegante -->
-        <div *ngIf="loadingTasks" class="text-center py-5">
-          <div class="spinner-border text-primary mb-3"></div>
-          <div class="text-muted small">Cargando tareas...</div>
+      <div class="modal-body premium-modal-body task-hub-body">
+        <div *ngIf="loadingTasks" class="tasks-loader-state">
+          <div class="loader-ring"></div>
+          <p>Cargando tareas...</p>
         </div>
 
-        <!-- Empty State moderno -->
-        <div *ngIf="!loadingTasks && tasks.length === 0" class="text-center py-5">
-          <i class="bi bi-inbox display-5 text-secondary mb-3"></i>
-          <h6 class="fw-semibold text-secondary">No hay tareas asignadas</h6>
-          <small class="text-muted"> Cuando se creen tareas aparecerán aquí. </small>
-        </div>
-
-        <!-- Lista moderna -->
-        <div *ngIf="tasks.length > 0" class="d-flex flex-column gap-3">
-          <div
-            *ngFor="let task of tasks"
-            class="card border-0 shadow-sm rounded-4 p-3 hover-shadow transition"
-            style="background: #f9fafb"
-          >
-            <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
-              <!-- Información -->
-              <div class="flex-grow-1">
-                <div class="d-flex align-items-center gap-2 mb-2">
-                  <h6 class="fw-bold mb-0 text-dark">
-                    {{ task.title }}
-                  </h6>
-
-                  <span *ngIf="!task.read_by_user" class="badge rounded-pill bg-success">
-                    Nuevo
-                  </span>
-                </div>
-
-                <p class="text-secondary small mb-2">
-                  {{ task.description }}
-                </p>
-
-                <div class="d-flex flex-wrap gap-3 small text-muted">
-                  <div>
-                    <i class="bi bi-person-circle me-1"></i>
-                    <strong class="text-dark">
-                      {{ task.assignedUser?.username || 'Sin asignar' }}
-                    </strong>
-                  </div>
-
-                  <div>
-                    <i class="bi bi-calendar-event me-1"></i>
-                    {{ task.due_date | date: 'mediumDate' }}
-                  </div>
-
-                  <div>
-                    <i class="bi bi-info-circle me-1"></i>
-                    <span class="fw-semibold text-primary">
-                      {{ task.status | titlecase }}
-                    </span>
-                  </div>
-                </div>
+        <ng-container *ngIf="!loadingTasks">
+          <div class="task-stats-grid">
+            <div class="task-stat-card total-card">
+              <div class="task-stat-icon">
+                <i class="bi bi-kanban-fill"></i>
               </div>
+              <div>
+                <span>Total</span>
+                <strong>{{ visibleTasks.length }}</strong>
+              </div>
+            </div>
 
-              <!-- Acciones -->
-              <div class="d-flex flex-column align-items-end gap-2">
-                <!-- Pendiente -->
-                <div
-                  *ngIf="task.assignee_id === userId && task.status === 'pending'"
-                  class="d-flex gap-2"
-                >
-                  <button class="btn btn-sm btn-success px-3" (click)="respondTask(task.id, true)">
-                    <i class="bi bi-check-lg me-1"></i>
-                    Aceptar
-                  </button>
+            <div class="task-stat-card pending-card">
+              <div class="task-stat-icon">
+                <i class="bi bi-hourglass-split"></i>
+              </div>
+              <div>
+                <span>Pendientes</span>
+                <strong>{{ getPendingCount() }}</strong>
+              </div>
+            </div>
 
-                  <button
-                    class="btn btn-sm btn-outline-danger px-3"
-                    (click)="respondTask(task.id, false)"
-                  >
-                    <i class="bi bi-x-lg me-1"></i>
-                    Rechazar
-                  </button>
-                </div>
+            <div class="task-stat-card accepted-card">
+              <div class="task-stat-icon">
+                <i class="bi bi-check-circle-fill"></i>
+              </div>
+              <div>
+                <span>Aceptadas</span>
+                <strong>{{ getAcceptedCount() }}</strong>
+              </div>
+            </div>
 
-                <!-- Estado no pendiente -->
-                <span
-                  *ngIf="task.status !== 'pending'"
-                  class="badge bg-light text-dark border px-3 py-2"
-                >
-                  {{ task.status | titlecase }}
-                </span>
+            <div class="task-stat-card rejected-card">
+              <div class="task-stat-icon">
+                <i class="bi bi-x-circle-fill"></i>
+              </div>
+              <div>
+                <span>Rechazadas</span>
+                <strong>{{ getRejectedCount() }}</strong>
               </div>
             </div>
           </div>
-        </div>
+
+          <div *ngIf="visibleTasks.length === 0" class="tasks-empty-state premium-empty">
+            <div class="tasks-empty-icon">
+              <i class="bi bi-inbox"></i>
+            </div>
+            <h4>No hay tareas registradas</h4>
+            <p>Cuando se creen o asignen tareas aparecerán en este centro de actividad.</p>
+          </div>
+
+          <div *ngIf="visibleTasks.length > 0" class="task-board-modern">
+            <article
+              *ngFor="let task of visibleTasks"
+              class="task-card-modern-pro"
+              [ngClass]="getTaskStatusClass(task.status)"
+            >
+              <div class="task-card-accent"></div>
+
+              <div class="task-card-content">
+                <div class="task-top-row">
+                  <div class="task-title-group">
+                    <h4>{{ task.title }}</h4>
+                    <p>{{ task.description }}</p>
+                  </div>
+
+                  <span class="task-status-chip" [ngClass]="getTaskStatusClass(task.status)">
+                    {{ task.status | titlecase }}
+                  </span>
+                </div>
+
+                <div class="task-meta-modern">
+                  <div class="task-meta-pill">
+                    <i class="bi bi-person-circle"></i>
+                    <span>{{ task.assignedUser?.username || 'Sin asignar' }}</span>
+                  </div>
+
+                  <div class="task-meta-pill">
+                    <i class="bi bi-calendar-event"></i>
+                    <span>{{ task.due_date ? (task.due_date | date: 'mediumDate') : 'Sin fecha límite' }}</span>
+                  </div>
+
+                  <div class="task-meta-pill">
+                    <i class="bi bi-hash"></i>
+                    <span>ID: {{ task.id }}</span>
+                  </div>
+                </div>
+
+                <div
+                  *ngIf="task.assignee_id === userId && task.status === 'pending'"
+                  class="task-actions-modern"
+                >
+                  <button class="btn-task-accept" (click)="respondTask(task.id, true)">
+                    <i class="bi bi-check-lg"></i>
+                    <span>Aceptar</span>
+                  </button>
+
+                  <button class="btn-task-reject" (click)="respondTask(task.id, false)">
+                    <i class="bi bi-x-lg"></i>
+                    <span>Rechazar</span>
+                  </button>
+                </div>
+              </div>
+            </article>
+          </div>
+        </ng-container>
       </div>
 
-      <!-- FOOTER -->
-      <div class="modal-footer border-0 pt-0 d-flex justify-content-between">
-        <div class="text-muted small">Total de tareas: {{ tasks.length }}</div>
+      <div class="modal-footer premium-modal-footer task-hub-footer">
+        <div class="footer-hint">
+          Las notificaciones desaparecen de la campana apenas abras este centro de actividad.
+        </div>
 
         <button
           *ngIf="project?.owner_id === userId"
-          class="btn btn-primary rounded-pill px-4 shadow-sm"
+          class="btn-create-task-modal"
           data-bs-toggle="modal"
           data-bs-target="#createTaskModal"
         >
-          <i class="bi bi-plus-circle me-2"></i>
-          Crear nueva tarea
+          <i class="bi bi-plus-circle"></i>
+          <span>Crear nueva tarea</span>
         </button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 📋 Modal Profesional para Crear Tarea -->
+<!-- =====================================================
+     MODAL CREAR TAREA
+===================================================== -->
 <div
-  class="modal fade"
+  class="modal fade premium-modal"
   id="createTaskModal"
   tabindex="-1"
   aria-labelledby="createTaskModalLabel"
@@ -328,31 +395,24 @@
   data-bs-backdrop="static"
 >
   <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content border-0 shadow-lg rounded-4">
-      <!-- HEADER MODERNO -->
-      <div class="modal-header border-0 pb-0">
-        <div class="d-flex align-items-center gap-3">
-          <!-- Icono con gradiente -->
-          <div
-            class="d-flex align-items-center justify-content-center rounded-circle"
-            style="width: 55px; height: 55px; background: linear-gradient(135deg, #198754, #20c997)"
-          >
-            <i class="bi bi-plus-circle text-white fs-4"></i>
+    <div class="modal-content premium-modal-content">
+      <div class="modal-header premium-modal-header">
+        <div class="modal-header-mark">
+          <div class="modal-header-icon green-gradient">
+            <i class="bi bi-plus-circle"></i>
           </div>
 
           <div>
-            <h5 class="modal-title fw-bold mb-0" id="createTaskModalLabel">Nueva Tarea</h5>
-            <small class="text-muted"> Asigna responsabilidades dentro del proyecto </small>
+            <h5 class="modal-title mb-0" id="createTaskModalLabel">Nueva Tarea</h5>
+            <small>Asigna responsabilidades dentro del proyecto</small>
           </div>
         </div>
 
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 
-      <!-- BODY -->
-      <div class="modal-body pt-4">
-        <!-- Contenedor tipo card interno -->
-        <div class="card border-0 shadow-sm rounded-4 p-4 bg-light-subtle">
+      <div class="modal-body premium-modal-body">
+        <div class="task-create-wrapper">
           <app-task-create
             *ngIf="project?.id"
             [projectId]="project!.id"
@@ -361,47 +421,36 @@
         </div>
       </div>
 
-      <!-- FOOTER MODERNO -->
-      <div class="modal-footer border-0 pt-0 d-flex justify-content-between align-items-center">
-        <small class="text-muted"> Complete la información requerida para crear la tarea. </small>
+      <div class="modal-footer premium-modal-footer">
+        <div class="footer-hint">Complete la información requerida para crear la tarea.</div>
 
-        <button
-          type="button"
-          class="btn btn-outline-secondary rounded-pill px-4"
-          data-bs-dismiss="modal"
-        >
-          Cancelar
-        </button>
+        <button type="button" class="btn-modal-cancel" data-bs-dismiss="modal">Cancelar</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Modal Confirmación Eliminación -->
+<!-- =====================================================
+     MODAL CONFIRMAR ELIMINACIÓN
+===================================================== -->
 <div
-  class="modal fade"
+  class="modal fade premium-modal"
   id="confirmDeleteModal"
   tabindex="-1"
   aria-labelledby="confirmDeleteModalLabel"
   aria-hidden="true"
 >
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow-lg rounded-4">
-      <!-- HEADER -->
-      <div class="modal-header border-0 pb-0">
-        <div class="d-flex align-items-center gap-3">
-          <div
-            class="d-flex align-items-center justify-content-center rounded-circle"
-            style="width: 50px; height: 50px; background-color: #ffe5e5"
-          >
-            <i class="bi bi-exclamation-triangle-fill text-danger fs-4"></i>
+    <div class="modal-content premium-modal-content delete-modal-content">
+      <div class="modal-header premium-modal-header">
+        <div class="modal-header-mark">
+          <div class="modal-header-icon red-soft">
+            <i class="bi bi-exclamation-triangle-fill"></i>
           </div>
 
           <div>
-            <h5 class="modal-title fw-bold mb-0" id="confirmDeleteModalLabel">
-              Confirmar eliminación
-            </h5>
-            <small class="text-muted"> Acción irreversible </small>
+            <h5 class="modal-title mb-0" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
+            <small>Esta acción es irreversible</small>
           </div>
         </div>
 
@@ -413,31 +462,31 @@
         ></button>
       </div>
 
-      <!-- BODY -->
-      <div class="modal-body pt-3 pb-2">
-        <p class="text-secondary mb-3">Estás a punto de eliminar este requisito del proyecto.</p>
+      <div class="modal-body premium-modal-body">
+        <div class="delete-warning-box">
+          <p>Estás a punto de eliminar este requisito del proyecto.</p>
 
-        <div class="alert alert-light border rounded-3 small">
-          <i class="bi bi-info-circle me-2 text-danger"></i>
-          Esta acción no se puede deshacer. Toda la información asociada será eliminada
-          permanentemente.
+          <div class="delete-warning-note">
+            <i class="bi bi-info-circle"></i>
+            <span>
+              Esta acción no se puede deshacer. Toda la información asociada será eliminada
+              permanentemente.
+            </span>
+          </div>
         </div>
       </div>
 
-      <!-- FOOTER -->
-      <div class="modal-footer border-0 pt-0 d-flex justify-content-end gap-2">
-        <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
-          Cancelar
-        </button>
+      <div class="modal-footer premium-modal-footer align-end">
+        <button type="button" class="btn-modal-cancel" data-bs-dismiss="modal">Cancelar</button>
 
         <button
           type="button"
-          class="btn btn-danger px-4 shadow-sm"
+          class="btn-modal-delete"
           (click)="confirmDelete()"
           data-bs-dismiss="modal"
         >
-          <i class="bi bi-trash me-2"></i>
-          Eliminar definitivamente
+          <i class="bi bi-trash"></i>
+          <span>Eliminar definitivamente</span>
         </button>
       </div>
     </div>

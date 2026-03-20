@@ -81,6 +81,7 @@ export class List implements OnInit {
 
   // Abrir modal de eliminar
   openDeleteModal(project: Project) {
+
     if (!this.isOwner(project)) {
       this.notOwnerModalInstance?.show();
       return;
@@ -92,28 +93,25 @@ export class List implements OnInit {
 
   // Confirmar eliminación
   confirmDelete() {
-    if (!this.projectToDelete) return;
-
+    if (!this.projectToDelete) {
+      console.log('No hay proyecto seleccionado para eliminar');
+      return;
+    }
     this.projectsService.deleteProject(this.projectToDelete.id).subscribe({
-      next: () => {
-        // Eliminar del array local
+      next: (resp) => {
         this.projects = this.projects.filter(
           (p) => p.id !== this.projectToDelete!.id
         );
-        this.filterProjects(); // actualizar lista filtrada
-
-        // Cerrar modal
+        this.filterProjects();
         this.deleteModalInstance?.hide();
         this.projectToDelete = null;
       },
       error: (err) => {
-        console.error(err);
-        alert('No se pudo eliminar el proyecto.');
+        alert(err?.error?.message || 'No se pudo eliminar el proyecto.');
         this.projectToDelete = null;
       }
     });
   }
-
   // Cancelar eliminación
   cancelDelete() {
     this.deleteModalInstance?.hide();

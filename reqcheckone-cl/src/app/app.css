@@ -40,3 +40,32 @@
   margin-left: 0;
   padding: 0;
 }
+
+/* 🔥 Quitar recuadro blanco */
+html, body, app-root {
+  background: #f8fafc !important;
+  margin: 0;
+  padding: 0;
+}
+
+/* 🔥 Hace que el contenido cubra completamente */
+.content {
+  background: #f8fafc;
+}
+
+/* 🔥 Evita línea blanca entre sidebar y contenido */
+.layout {
+  background: #f8fafc;
+}
+
+/* 🔥 Extra: elimina cualquier espacio fantasma */
+.content::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100vh;
+  background: transparent;
+  pointer-events: none;
+}

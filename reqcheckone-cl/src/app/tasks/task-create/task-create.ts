@@ -11,7 +11,7 @@ interface Task {
   title: string;
   description: string;
   project_id: number;
-  assignee_id: number; // ✅ CAMBIO AQUÍ: nombre correcto del campo
+  assignee_id: number;
   requirement_id?: number;
   due_date?: string;
 }
@@ -43,9 +43,9 @@ export class TaskCreate implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required],
-      assignee_id: ['', Validators.required], // ✅ CAMBIO AQUÍ
+      title: ['', [Validators.required, Validators.minLength(3)]],
+      description: ['', [Validators.required, Validators.minLength(8)]],
+      assignee_id: ['', Validators.required],
       requirement_id: [''],
       due_date: [''],
     });
@@ -53,7 +53,7 @@ export class TaskCreate implements OnInit {
     this.loadProjectData();
   }
 
-  loadProjectData() {
+  loadProjectData(): void {
     this.projectsService.getProjectById(this.projectId).subscribe({
       next: (project) => {
         this.project = project;
@@ -65,7 +65,9 @@ export class TaskCreate implements OnInit {
         this.collaborators = project.collaborators || [];
 
         this.requirementsService.getByProject(this.projectId).subscribe({
-          next: (reqs) => (this.requirements = reqs),
+          next: (reqs) => {
+            this.requirements = reqs || [];
+          },
           error: (err) => console.error('Error cargando requisitos', err),
         });
       },
@@ -73,16 +75,21 @@ export class TaskCreate implements OnInit {
     });
   }
 
-  onSubmit() {
-    if (this.form.invalid || !this.isOwner) return;
+  onSubmit(): void {
+    if (this.form.invalid || !this.isOwner) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
     const payload: Task = {
-      title: this.form.value.title,
-      description: this.form.value.description,
+      title: this.form.value.title?.trim(),
+      description: this.form.value.description?.trim(),
       project_id: this.projectId,
-      assignee_id: this.form.value.assignee_id, // ✅ CAMBIO AQUÍ
-      requirement_id: this.form.value.requirement_id,
-      due_date: this.form.value.due_date,
+      assignee_id: Number(this.form.value.assignee_id),
+      requirement_id: this.form.value.requirement_id
+        ? Number(this.form.value.requirement_id)
+        : undefined,
+      due_date: this.form.value.due_date || undefined,
     };
 
     this.loading = true;
@@ -94,22 +101,27 @@ export class TaskCreate implements OnInit {
     this.http.post(`${environment.apiUrl}/tasks`, payload, { headers }).subscribe({
       next: () => {
         this.loading = false;
+
         Swal.fire({
           icon: 'success',
           title: 'Tarea creada con éxito',
-          timer: 1500,
+          text: 'La tarea fue registrada correctamente.',
+          timer: 1800,
           showConfirmButton: false,
         });
 
+        this.form.reset();
         this.taskCreated.emit();
 
-        // Cierra el modal correctamente
         const modalElement = document.getElementById('createTaskModal');
-        if (modalElement) (window as any).bootstrap.Modal.getInstance(modalElement)?.hide();
+        if (modalElement) {
+          (window as any).bootstrap.Modal.getInstance(modalElement)?.hide();
+        }
       },
       error: (err) => {
         this.loading = false;
         console.error(err);
+
         Swal.fire({
           icon: 'error',
           title: 'Error al crear la tarea',
@@ -117,5 +129,9 @@ export class TaskCreate implements OnInit {
         });
       },
     });
+  }
+
+  get f() {
+    return this.form.controls;
   }
 }

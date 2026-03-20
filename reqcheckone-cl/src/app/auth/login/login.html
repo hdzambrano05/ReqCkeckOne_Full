@@ -3,7 +3,7 @@
     <!-- Lado Branding -->
     <div class="auth-brand">
       <div class="brand-logo">
-        <div class="brand-icon">R</div>
+        <div class="brand-icon">JH</div>
         <span>ReqCheckOne</span>
       </div>
 
@@ -35,9 +35,13 @@
             <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
           </button>
         </div>
+        <div class="forgot-password">
+          <a routerLink="/forgot-password">¿Olvidaste tu contraseña?</a>
+        </div>
 
-        <button class="btn-modern" [disabled]="form.invalid || loading">
-          {{ loading ? 'Validando...' : 'Ingresar' }}
+        <button class="btn-modern" type="submit" [disabled]="form.invalid || loading">
+          <span>Ingresar</span>
+          <i class="bi bi-arrow-right"></i>
         </button>
       </form>
 
@@ -50,5 +54,13 @@
         <a routerLink="/register">Crear cuenta</a>
       </div>
     </div>
+  </div>
+</div>
+<!-- MODAL DE CARGA -->
+<div class="loading-overlay" *ngIf="loading">
+  <div class="loading-modal">
+    <div class="spinner"></div>
+    <h3>Validando credenciales</h3>
+    <p>Por favor espera un momento...</p>
   </div>
 </div>

@@ -1,69 +1,91 @@
-<div class="history-container">
-  <h2>Historial de Cambios</h2>
-
-  <!-- Loading -->
-  <div *ngIf="loading" class="loading d-flex align-items-center">
-    <div class="spinner-border text-primary me-2" role="status">
-      <span class="visually-hidden">Cargando...</span>
+<div class="history-wrapper container-fluid py-4">
+  <!-- Header -->
+  <div class="history-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-1 fw-bold">Historial de Cambios</h2>
+      <small class="text-muted"> Registro detallado de modificaciones por proyecto </small>
     </div>
-    Cargando historial...
+
+    <div class="history-stats badge rounded-pill bg-dark px-3 py-2">
+      {{ groupedHistory.length }} Proyectos
+    </div>
   </div>
 
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-state text-center py-5">
+    <div class="spinner-border text-primary mb-3" role="status"></div>
+    <p class="fw-semibold text-muted">Cargando historial...</p>
+  </div>
 
-  <!-- Historial agrupado por proyecto -->
-  <div *ngIf="!loading && groupedHistory.length > 0">
-    <div *ngFor="let project of groupedHistory" class="project-group mb-3">
-      <!-- Nombre del proyecto con toggle -->
-      <h3
-        (click)="toggleProject(project)"
-        class="project-title p-2 rounded text-primary"
-        style="cursor: pointer; user-select: none"
-      >
-        <i
-          [ngClass]="
-            project.expanded ? 'bi bi-caret-down-fill me-2' : 'bi bi-caret-right-fill me-2'
-          "
-        ></i>
-        {{ project.projectName }}
-      </h3>
+  <!-- Historial -->
+  <div *ngIf="!loading && groupedHistory.length > 0" class="accordion custom-accordion">
+    <div *ngFor="let project of groupedHistory; let i = index" class="accordion-item project-card">
+      <h2 class="accordion-header">
+        <button
+          class="accordion-button collapsed project-toggle"
+          type="button"
+          (click)="toggleProject(project)"
+        >
+          <div class="d-flex w-100 justify-content-between align-items-center">
+            <div>
+              <span class="project-name">{{ project.projectName }}</span>
+              <div class="project-meta">{{ project.requirements.length }} cambios registrados</div>
+            </div>
 
-      <!-- Tabla de requisitos solo si expanded -->
-      <div *ngIf="project.expanded" class="table-responsive mt-2">
-        <table class="history-table table align-middle table-hover">
-          <thead class="table-light">
-            <tr>
-              <th>Requisito</th>
-              <th>Versión</th>
-              <th>Cambio</th>
-              <th>Modificado por</th>
-              <th>Fecha</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let item of project.requirements"
-              [ngClass]="{
-                'table-danger': item.currentStatus === 'eliminado',
-                'table-info':
-                  item.currentStatus === 'modificado' || item.currentStatus === 'activo',
-              }"
-            >
-              <td data-label="Requisito">{{ item.requirement?.title || '—' }}</td>
-              <td data-label="Versión">
-                <span class="badge bg-secondary">{{ item.version }}</span>
-              </td>
-              <td data-label="Cambio">{{ item.text }}</td>
-              <td data-label="Modificado por">{{ item.changer?.username || 'Desconocido' }}</td>
-              <td data-label="Fecha">{{ item.updated_at | date: 'short' }}</td>
-            </tr>
-          </tbody>
-        </table>
+            <span class="badge bg-primary rounded-pill">
+              v{{ project.requirements[0]?.version || '—' }}
+            </span>
+          </div>
+        </button>
+      </h2>
+
+      <div *ngIf="project.expanded" class="accordion-body">
+        <div class="change-log">
+          <div
+            *ngFor="let item of project.requirements"
+            class="change-entry"
+            [ngClass]="{
+              'status-deleted': item.currentStatus === 'eliminado',
+              'status-modified': item.currentStatus === 'modificado',
+              'status-active': item.currentStatus === 'activo',
+            }"
+          >
+            <!-- Línea timeline -->
+            <div class="timeline-dot"></div>
+
+            <div class="change-content">
+              <div class="change-top d-flex justify-content-between flex-wrap">
+                <div>
+                  <h6 class="requirement-title mb-1">
+                    {{ item.requirement?.title || 'Requisito sin título' }}
+                  </h6>
+                  <span class="version-badge"> Versión {{ item.version }} </span>
+                </div>
+
+                <div class="text-end change-meta">
+                  <div class="changer">
+                    <i class="bi bi-person-circle me-1"></i>
+                    {{ item.changer?.username || 'Desconocido' }}
+                  </div>
+                  <div class="date">
+                    {{ item.updated_at | date: 'medium' }}
+                  </div>
+                </div>
+              </div>
+
+              <p class="change-text mt-2">
+                {{ item.text }}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Sin historial -->
-  <div *ngIf="!loading && groupedHistory.length === 0" class="no-data text-muted">
-    <i class="bi bi-info-circle me-2"></i> No hay cambios registrados.
+  <!-- Sin datos -->
+  <div *ngIf="!loading && groupedHistory.length === 0" class="empty-state text-center py-5">
+    <i class="bi bi-clock-history display-4 text-muted"></i>
+    <p class="mt-3 text-muted fw-semibold">No hay cambios registrados aún.</p>
   </div>
 </div>
